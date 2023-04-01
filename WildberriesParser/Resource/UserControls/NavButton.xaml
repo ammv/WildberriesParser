@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="WildberriesParser.Resource.UserControls.NavButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WildberriesParser.Resource.UserControls" xmlns:intr="http://schemas.microsoft.com/xaml/behaviors" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <RadioButton
+        Command="{Binding Command}"
+        IsChecked="{Binding IsChecked}"
+        Style="{StaticResource MaterialDesignFlatLightButton}">
+        <intr:Interaction.Triggers>
+            <intr:DataTrigger Value="True" Binding="{Binding IsChecked}">
+                <intr:ChangePropertyAction PropertyName="Style" Value="{Binding IfCheckedTrueStyle}" />
+            </intr:DataTrigger>
+            <intr:DataTrigger Value="False" Binding="{Binding IsChecked}">
+                <intr:ChangePropertyAction PropertyName="Style" Value="{Binding IfCheckedFalseStyle}" />
+            </intr:DataTrigger>
+        </intr:Interaction.Triggers>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <materialDesign:PackIcon Kind="{Binding Kind}" VerticalAlignment="Center"
+                                                     Height="{Binding KindHeight}" Width="{Binding KindWidth}"
+                                                     Margin="{Binding KindMargin}" />
+            <TextBlock Text="{Binding Text}" VerticalAlignment="Center" FontSize="{Binding TextSize}" />
+        </StackPanel>
+    </RadioButton>
+</UserControl>

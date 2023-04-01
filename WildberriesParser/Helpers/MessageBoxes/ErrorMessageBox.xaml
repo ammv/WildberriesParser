@@ -1,0 +1,92 @@
+﻿<Window x:Class="WildberriesParser.Helpers.MessageBoxes.ErrorMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WildberriesParser.Helpers.MessageBoxes"
+        mc:Ignorable="d"
+        Title="ErrorView" Height="Auto" MinWidth="300" MaxWidth="300"
+        MinHeight="200"
+        ShowInTaskbar="True"
+        WindowStyle="None"
+        SizeToContent="WidthAndHeight"
+        AllowsTransparency="True"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light"  PrimaryColor="Red" SecondaryColor="Amber" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <materialDesign:Card
+        Margin="5"
+
+        BorderThickness="0"
+        materialDesign:BottomDashedLineAdorner.Thickness="0"
+        materialDesign:ShadowAssist.Darken="True"
+        materialDesign:ShadowAssist.ShadowDepth="Depth2"
+        UniformCornerRadius="10">
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="MouseLeftButtonDown">
+                <i:CallMethodAction MethodName="DragMove"
+                                TargetObject="{Binding RelativeSource={
+                RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="35" />
+            </Grid.RowDefinitions>
+            <materialDesign:Card
+                  HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                  Background="{DynamicResource PrimaryHueDarkBrush}"
+                  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                  Padding="4"
+                Grid.Row="0"
+                  UniformCornerRadius="6">
+                <StackPanel
+                        Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Error"
+                                        Height="32"
+                                         Width="32"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Center" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="Ошибка"
+                        Grid.Row="0"
+                        Margin="10 0 0 0"
+                        Style="{StaticResource MaterialDesignSubtitle2TextBlock }" />
+                </StackPanel>
+            </materialDesign:Card>
+
+            <TextBlock
+                Grid.Row="1"
+                Margin="0 10 0 10"
+                Text="{Binding ErrorMessage}"
+                TextWrapping="Wrap"
+                FontSize="12"
+                Style="{StaticResource MaterialDesignBody2TextBlock}" />
+
+            <Button Grid.Row="2"
+                    Width="60"
+                    Content="Ок"
+                    Style="{StaticResource MaterialDesignOutlinedDarkButton}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:CallMethodAction MethodName="Close"
+                                            TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </Grid>
+    </materialDesign:Card>
+</Window>
