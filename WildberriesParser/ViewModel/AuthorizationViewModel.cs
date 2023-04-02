@@ -71,6 +71,7 @@ namespace WildberriesParser.ViewModel
                 Properties.Settings.Default.rememberLogin = _login;
                 Properties.Settings.Default.rememberPassword = _password;
             }
+            App.CurrentUser = user;
             Properties.Settings.Default.Save();
             IsWorking = false;
             curr.Hide();

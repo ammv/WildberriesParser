@@ -6,12 +6,15 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resource/Styles/WindowButtons.xaml" />
-                <materialDesign:BundledTheme BaseTheme="Light"  PrimaryColor="Purple"  SecondaryColor="DeepPurple" />
+                <materialDesign:BundledTheme BaseTheme="Light"
+                                             PrimaryColor="Purple"
+                                             SecondaryColor="DeepPurple" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="/Resource/Styles/Page.xaml" />
                 <ResourceDictionary Source="/Resource/Styles/Base.xaml" />
                 <ResourceDictionary Source="/Resource/Styles/Sidebar.xaml" />
                 <ResourceDictionary Source="/Resource/DataTemplate.xaml" />
+                <ResourceDictionary Source="/Resource/Images/SVG.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
