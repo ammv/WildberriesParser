@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WildberriesParser.View.Admin"
         xmlns:vm="clr-namespace:WildberriesParser.ViewModel"
-        xmlns:custom="clr-namespace:WildberriesParser.Resource.UserControls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:intr="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
@@ -97,7 +96,6 @@
                             HorizontalContentAlignment="Left"
                             Style="{StaticResource MaterialDesignFlatButton}">
                         <StackPanel Orientation="Horizontal"
-
                                     Grid.Row="0">
 
                             <Image Source="/WildberriesParser;component/Resource/Images/LightLogo.png"
