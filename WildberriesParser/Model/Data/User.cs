@@ -17,7 +17,7 @@ namespace WildberriesParser.Model.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.Logs = new HashSet<Logs>();
+            this.Log = new HashSet<Log>();
         }
     
         public int ID { get; set; }
@@ -26,7 +26,7 @@ namespace WildberriesParser.Model.Data
         public Nullable<int> RoleID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Logs> Logs { get; set; }
+        public virtual ICollection<Log> Log { get; set; }
         public virtual Role Role { get; set; }
     }
 }

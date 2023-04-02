@@ -12,18 +12,15 @@ namespace WildberriesParser.Model.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class LogType
+    public partial class Log
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public LogType()
-        {
-            this.Log = new HashSet<Log>();
-        }
-    
         public int ID { get; set; }
-        public string Name { get; set; }
+        public Nullable<int> UserID { get; set; }
+        public Nullable<int> TypeID { get; set; }
+        public string Description { get; set; }
+        public System.DateTime Date { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Log> Log { get; set; }
+        public virtual LogType LogType { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -11,6 +11,10 @@ namespace WildberriesParser.Model.Data
             context = new DBEntities(connectionString);
         }
 
+        public DBEntities(string connectionString) : base(connectionString)
+        {
+        }
+
         public static bool CheckConnectionString(string connectionString)
         {
             try

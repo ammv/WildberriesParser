@@ -10,17 +10,13 @@
 namespace WildberriesParser.Model.Data
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Logs
+    public partial class sp_helpdiagrams_Result
     {
+        public string Database { get; set; }
+        public string Name { get; set; }
         public int ID { get; set; }
-        public Nullable<int> UserID { get; set; }
-        public Nullable<int> Type { get; set; }
-        public string Description { get; set; }
-        public System.DateTime Date { get; set; }
-    
-        public virtual LogType LogType { get; set; }
-        public virtual User User { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }
