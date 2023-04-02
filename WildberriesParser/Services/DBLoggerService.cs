@@ -10,11 +10,12 @@ namespace WildberriesParser.Services
 {
     public interface ILoggerService
     {
+        void AddLog(string message = null, LogTypeEnum logType = LogTypeEnum.COMMON);
     }
 
     public class DBLoggerService : ILoggerService
     {
-        public void AddLog(string message, LogTypeEnum logType = LogTypeEnum.COMMON)
+        public void AddLog(string message = null, LogTypeEnum logType = LogTypeEnum.COMMON)
         {
             DBEntities.GetContext().Log.Add(new Log
             {
@@ -23,6 +24,7 @@ namespace WildberriesParser.Services
                 TypeID = (int)logType,
                 Date = DateTime.Now
             });
+            DBEntities.GetContext().SaveChanges();
         }
     }
 }
