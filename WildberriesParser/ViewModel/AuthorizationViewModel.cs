@@ -14,6 +14,7 @@ namespace WildberriesParser.ViewModel
         private bool _isWorking = false;
         private bool _rememberMe = Properties.Settings.Default.rememberMe;
         private INavigationService _navigationService;
+        private ILoggerService _loggerService;
 
         public string Login
         {
@@ -33,14 +34,16 @@ namespace WildberriesParser.ViewModel
             set => Set(ref _password, value);
         }
 
-        public AuthorizationViewModel(INavigationService navigationService)
+        public AuthorizationViewModel(INavigationService navigationService, ILoggerService loggerService)
         {
+            _navigationService = navigationService;
+            _loggerService = loggerService;
+
             if (RememberMe)
             {
                 Login = Properties.Settings.Default.rememberLogin;
                 Password = Properties.Settings.Default.rememberPassword;
             }
-            _navigationService = navigationService;
         }
 
         public User GetUser()
@@ -72,6 +75,8 @@ namespace WildberriesParser.ViewModel
                 Properties.Settings.Default.rememberPassword = _password;
             }
             App.CurrentUser = user;
+            _loggerService.AddLog(logType: Model.LogTypeEnum.AUTH_USER);
+
             Properties.Settings.Default.Save();
             IsWorking = false;
             curr.Hide();

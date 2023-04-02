@@ -33,35 +33,32 @@
                 <TextBlock Text="Добавить" />
             </StackPanel>
         </Button>
-        <TextBox FontSize="16"
+        <TextBox FontSize="14"
                  Grid.Row="1"
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                  VerticalAlignment="Center"
+                 MaxLength="45"
+                 materialDesign:HintAssist.Hint="Поиск"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-            <materialDesign:HintAssist.Hint>
-                <StackPanel Margin="-2,0,0,0"
-                            Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Search"
-                                             Width="32"
-                                             Height="32" />
-                    <TextBlock VerticalAlignment="Center"
-                               Text="Поиск" />
-                </StackPanel>
-            </materialDesign:HintAssist.Hint>
         </TextBox>
 
         <DataGrid Grid.Row="2"
                   Grid.ColumnSpan="3"
                   AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  Style="{StaticResource MaterialDesignDataGrid}"
+                  IsReadOnly="True"
+                  materialDesign:DataGridAssist.EnableEditBoxAssist="False"
                   ItemsSource="{Binding Users}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"
-                                    Binding="{Binding User.ID}" />
+                                    Binding="{Binding ID}" />
                 <DataGridTextColumn Header="Логин"
-                                    Binding="{Binding User.Login}" />
+                                    Binding="{Binding Login}" />
                 <DataGridTextColumn Header="Пароль"
-                                    Binding="{Binding User.Password}" />
+                                    Binding="{Binding Password}" />
                 <DataGridTextColumn Header="Роль"
-                                    Binding="{Binding User.Role.Name}" />
+                                    Binding="{Binding Role.Name}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

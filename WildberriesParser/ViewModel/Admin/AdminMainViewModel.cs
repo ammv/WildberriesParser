@@ -1,11 +1,18 @@
-﻿using WildberriesParser.Infastructure.Commands;
+﻿using System.Windows;
+using WildberriesParser.Infastructure.Commands;
 using WildberriesParser.Infastructure.Core;
+using WildberriesParser.Model.Data;
 using WildberriesParser.Services;
 
 namespace WildberriesParser.ViewModel.Admin
 {
     internal class AdminMainViewModel : ViewModelWithWindowButtonsBase
     {
+        public User CurrentUser
+        {
+            get => App.CurrentUser;
+        }
+
         private INavigationService _navigationService;
 
         public INavigationService NavigationService
@@ -64,6 +71,26 @@ namespace WildberriesParser.ViewModel.Admin
                     ((obj) =>
                     {
                         NavigationService.NavigateTo<HistoryViewModel>();
+                    }
+                    ));
+            }
+        }
+
+        private RelayCommand _exitAccountCommand;
+
+        public RelayCommand ExitAccountCommand
+        {
+            get
+            {
+                return _exitAccountCommand ??
+                    (_exitAccountCommand = new RelayCommand
+                    ((obj) =>
+                    {
+                        Window window = obj as Window;
+                        window.Hide();
+                        NavigationService.NavigateTo<AuthorizationViewModel>();
+                        (App.ServiceProvider.GetService(typeof(View.StartView)) as Window).Show();
+                        window.Close();
                     }
                     ));
             }

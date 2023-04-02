@@ -24,15 +24,17 @@ namespace WildberriesParser
 
         private void ConfigureServices(IServiceCollection services)
         {
-            // Configurere base services
+            // Configurere services
+            services.AddSingleton<Services.INavigationService, Services.NavigationService>();
+            services.AddSingleton<Services.ILoggerService, Services.DBLoggerService>();
+
+            // Configurere base
             services.AddSingleton<ViewModel.LoadingViewModel>();
             services.AddSingleton<ViewModel.AuthorizationViewModel>();
             services.AddSingleton<ViewModel.AdminRegistrationViewModel>();
             services.AddSingleton<ViewModel.StartViewModel>();
             services.AddSingleton<ViewModel.SettingDatabaseServerViewModel>();
             services.AddSingleton<ViewModel.NeedSettingErrorViewModel>();
-
-            services.AddSingleton<Services.INavigationService, Services.NavigationService>();
 
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType =>
                 (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));

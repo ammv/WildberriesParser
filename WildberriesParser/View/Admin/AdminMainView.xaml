@@ -17,11 +17,12 @@
         WindowStartupLocation="CenterScreen"
         Title="MainView"
         Height="800"
-        TextElement.
         Width="1280">
     <materialDesign:Card UniformCornerRadius="10"
+                         ClipToBounds="True"
                          Margin="5"
                          Background="White">
+
         <intr:Interaction.Triggers>
             <intr:EventTrigger EventName="MouseLeftButtonDown">
                 <intr:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
@@ -45,8 +46,7 @@
                         Orientation="Horizontal"
                         Margin="0 0 20 0">
 
-                <materialDesign:Chip Content="{Binding Source={x:Static Application.Current},
-                              Path=CurrentUser.Login, FallbackValue=None}"
+                <materialDesign:Chip Content="{Binding CurrentUser.Login}"
                                      Icon="{materialDesign:PackIcon Kind=Security}"
                                      Margin="0 0 40 0"
                                      Style="{StaticResource MaterialDesignOutlineChip}" />
@@ -95,7 +95,7 @@
                         <RowDefinition Height="50" />
                     </Grid.RowDefinitions>
 
-                    <Button Height="40"
+                    <Button Height="60"
                             IsHitTestVisible="False"
                             IsEnabled="True"
                             FocusVisualStyle="{x:Null}"
@@ -110,9 +110,10 @@
                                   Stretch="Uniform"
                                   Margin="0 0 10 0" />
 
-                            <TextBlock Text="WB Parser"
+                            <TextBlock Text="WB&#10;Parser"
+                                       FontFamily="Play"
                                        VerticalAlignment="Center"
-                                       FontSize="16"
+                                       FontSize="20"
                                        Foreground="White" />
                         </StackPanel>
                     </Button>
@@ -217,6 +218,7 @@
 
                     <Button Grid.Row="2"
                             Grid.Column="1"
+                            Command="{Binding ExitAccountCommand}"
                             Height="40"
                             Style="{StaticResource MaterialDesignFlatButton}"
                             Content="{materialDesign:PackIcon Kind=ExitToApp,Size=32}" />

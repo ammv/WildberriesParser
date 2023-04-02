@@ -11,6 +11,7 @@ namespace WildberriesParser.ViewModel
         private string _password;
         private bool _isWorking = false;
         private string _repeatPassword;
+        private ILoggerService _loggerService;
         private INavigationService _navigationService;
 
         public bool IsWorking
@@ -37,9 +38,10 @@ namespace WildberriesParser.ViewModel
             set => Set(ref _repeatPassword, value);
         }
 
-        public AdminRegistrationViewModel(INavigationService navigationService)
+        public AdminRegistrationViewModel(INavigationService navigationService, ILoggerService loggerService)
         {
             NavigationService = navigationService;
+            _loggerService = loggerService;
         }
 
         private AsyncRelayCommand _createAdminCommand;
@@ -55,14 +57,21 @@ namespace WildberriesParser.ViewModel
                             IsWorking = true;
                             return App.Current.Dispatcher.InvokeAsync(() =>
                                 {
-                                    DBEntities.GetContext().User.Add(new User
+                                    User user = new User
                                     {
                                         Login = _login,
                                         Password = _password,
                                         RoleID = 1,
-                                    });
-
+                                    };
+                                    DBEntities.GetContext().User.Add(user);
                                     DBEntities.GetContext().SaveChanges();
+
+                                    App.CurrentUser = user;
+
+                                    _loggerService.AddLog(
+                                        $"Создание аккаунта администратора. Password: {_password}, Login: {_login}",
+                                        Model.LogTypeEnum.CREATE_USER);
+
                                     Window curr = App.ServiceProvider.GetService(typeof(View.StartView)) as Window;
                                     IsWorking = false;
                                     curr.Hide();

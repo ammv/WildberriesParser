@@ -17,7 +17,6 @@
         WindowStartupLocation="CenterScreen"
         Title="MainView"
         Height="800"
-        TextElement.
         Width="1280">
     <materialDesign:Card UniformCornerRadius="10"
                          Margin="5"

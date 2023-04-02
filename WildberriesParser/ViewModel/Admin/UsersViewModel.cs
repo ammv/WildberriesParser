@@ -9,6 +9,7 @@ namespace WildberriesParser.ViewModel.Admin
     public class UsersViewModel : ViewModelBase
     {
         private List<User> _users;
+        private string _searchText;
         private INavigationService _navigationService;
 
         public List<User> Users
@@ -21,6 +22,18 @@ namespace WildberriesParser.ViewModel.Admin
         {
             get => _navigationService;
             set => Set(ref _navigationService, value);
+        }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (Set(ref _searchText, value))
+                {
+                    Helpers.MessageBoxHelper.Information(_searchText);
+                }
+            }
         }
 
         public UsersViewModel(INavigationService navigationService)
