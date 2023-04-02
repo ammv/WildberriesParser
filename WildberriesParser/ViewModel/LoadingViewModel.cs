@@ -69,8 +69,9 @@ namespace WildberriesParser.ViewModel
             _navigationService = navigationService;
         }
 
-        private async void Load()
+        private async Task Load()
         {
+            return;
             await Task.Delay(0);
             State = "Получение представлений...";
             GetViews();
@@ -121,25 +122,24 @@ namespace WildberriesParser.ViewModel
             }
         }
 
-        private RelayCommand _windowLoadedCommand;
+        private AsyncRelayCommand _windowLoadedCommand;
         private readonly INavigationService _navigationService;
 
-        public RelayCommand WindowLoadedCommand
+        public AsyncRelayCommand WindowLoadedCommand
         {
             get
             {
                 return _windowLoadedCommand ??
-                    (_windowLoadedCommand = new RelayCommand(obj =>
+                    (_windowLoadedCommand = new AsyncRelayCommand(obj =>
                     {
                         ShowFacts();
-                        Load();
+                        return Load();
                     }));
             }
         }
 
         private void ShowFacts()
         {
-            LoadFacts();
             DispatcherTimer timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(15)
@@ -147,10 +147,6 @@ namespace WildberriesParser.ViewModel
             timer.Tick += ChangeFact_Tick;
             ChangeFact_Tick(null, null);
             timer.Start();
-        }
-
-        private void LoadFacts()
-        {
         }
 
         private void ChangeFact_Tick(object sender, EventArgs e)

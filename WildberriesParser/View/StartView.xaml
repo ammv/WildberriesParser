@@ -17,23 +17,20 @@
         WindowStartupLocation="CenterScreen"
         d:DesignHeight="650"
         d:DesignWidth="400">
-    <Border CornerRadius="10">
+    <materialDesign:Card UniformCornerRadius="10"
+            Margin="2"
+            materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                         
+            materialDesign:ShadowAssist.ShadowEdges="All">
         <intr:Interaction.Triggers>
             <intr:EventTrigger EventName="MouseLeftButtonDown">
                 <intr:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                                        MethodName="DragMove" />
             </intr:EventTrigger>
         </intr:Interaction.Triggers>
-        <Border.Effect>
-            <DropShadowEffect Color="Black"
-                              Direction="320"
-                              ShadowDepth="3"
-                              BlurRadius="5"
-                              Opacity="0.5" />
-        </Border.Effect>
-        <Border.Background>
+        <materialDesign:Card.Background>
             <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/AuthorizationBackground.png" />
-        </Border.Background>
+        </materialDesign:Card.Background>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.25*" />
@@ -81,5 +78,5 @@
                                   Grid.Row="1" />
             </Grid>
         </Grid>
-    </Border>
+    </materialDesign:Card>
 </Window>

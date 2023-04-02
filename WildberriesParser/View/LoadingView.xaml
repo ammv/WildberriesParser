@@ -14,7 +14,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="NoResize"
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen">
 
     <intr:Interaction.Triggers>
@@ -132,21 +132,14 @@
         </Style>
     </Window.Resources>
 
-    <Border ClipToBounds="True"
-            UseLayoutRounding="True"
-            CornerRadius="10">
-        <Border.Effect>
-            <DropShadowEffect Color="Black"
-                              Direction="320"
-                              ShadowDepth="3"
-                              BlurRadius="5"
-                              Opacity="0.5" />
-        </Border.Effect>
-        <Border.Background>
+    <materialDesign:Card UniformCornerRadius="10">
+        <materialDesign:Card.Background>
             <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/LoadingBackground.png"
                         Stretch="Uniform" />
-        </Border.Background>
+        </materialDesign:Card.Background>
+
         <Grid>
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" />
                 <RowDefinition />
@@ -197,10 +190,9 @@
                              BorderThickness="0"
                              VerticalAlignment="Bottom"
                              Background="White"
-                             Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType=Border, Mode=FindAncestor}}"
                              Foreground="#FD94FF">
                 </ProgressBar>
             </Grid>
         </Grid>
-    </Border>
+    </materialDesign:Card>
 </Window>

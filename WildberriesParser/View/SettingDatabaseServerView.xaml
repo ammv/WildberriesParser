@@ -10,14 +10,12 @@
              xmlns:core="clr-namespace:WildberriesParser.Infastructure.Core"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             Opacity="{Binding Opacity}"
-             IsEnabled="{Binding IsEnabled}"
              d:DesignHeight="650"
              d:DesignWidth="400"
              Background="White">
     <intr:Interaction.Triggers>
         <intr:EventTrigger EventName="Loaded">
-            <intr:InvokeCommandAction Command="{Binding CheckRunAsAdministratorCommand}" />
+            <intr:InvokeCommandAction />
         </intr:EventTrigger>
     </intr:Interaction.Triggers>
 
