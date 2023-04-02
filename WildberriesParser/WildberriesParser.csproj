@@ -378,6 +378,8 @@
       <DependentUpon>DBModel.edmx</DependentUpon>
       <LastGenOutput>DBModel.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resource\Images\DarkLogo.png" />
+    <Resource Include="Resource\Images\LightLogo.png" />
     <Resource Include="Resource\Images\RunAsAdmin.png" />
     <Resource Include="Resource\Images\LogoDownText.png" />
     <Resource Include="Resource\Images\Logo285x125.png" />
