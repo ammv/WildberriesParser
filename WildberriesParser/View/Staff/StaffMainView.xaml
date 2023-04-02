@@ -121,7 +121,7 @@
 
                     <StackPanel Grid.Row="1">
                         <RadioButton materialDesign:ButtonAssist.CornerRadius="10"
-                                     Command="{Binding UsersCommand}"
+                                     Command="{Binding SearchProductsMainCommand}"
                                      IsChecked="True"
                                      Height="40"
                                      HorizontalAlignment="Stretch"
@@ -152,7 +152,7 @@
                                            FontSize="16" />
                             </StackPanel>
                         </RadioButton>
-                        <RadioButton Command="{Binding HistoryCommand}"
+                        <RadioButton Command="{Binding TraceProductCommand}"
                                      materialDesign:ButtonAssist.CornerRadius="10"
                                      Height="40"
                                      HorizontalAlignment="Stretch"
@@ -205,12 +205,12 @@
                             </intr:Interaction.Triggers>
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Left">
-                                <materialDesign:PackIcon Kind="ListBox"
+                                <materialDesign:PackIcon Kind="RobotIndustrial"
                                                          VerticalAlignment="Center"
                                                          Height="32"
                                                          Width="32"
                                                          Margin="0 0 10 0" />
-                                <TextBlock Text="Процессы сбора"
+                                <TextBlock Text="Автоматизация"
                                            VerticalAlignment="Center"
                                            FontSize="16" />
                             </StackPanel>
@@ -252,6 +252,7 @@
                     <Button Grid.Row="2"
                             Grid.Column="1"
                             Command="{Binding ExitAccountCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"
                             Height="40"
                             Style="{StaticResource MaterialDesignFlatButton}"
                             Content="{materialDesign:PackIcon Kind=ExitToApp,Size=32}" />

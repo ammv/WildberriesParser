@@ -11,6 +11,7 @@ namespace WildberriesParser.ViewModel
     {
         private string _login;
         private string _password;
+        private Window _curr;
         private bool _isWorking = false;
         private bool _rememberMe = Properties.Settings.Default.rememberMe;
         private INavigationService _navigationService;
@@ -53,7 +54,7 @@ namespace WildberriesParser.ViewModel
 
         private void SettingNavigationAfterAuth(User user)
         {
-            Window window, curr = App.ServiceProvider.GetService(typeof(View.StartView)) as Window;
+            Window window;
             if (user.Role.Name == "admin")
             {
                 window = App.ServiceProvider.GetService(typeof(View.Admin.AdminMainView)) as Window;
@@ -76,17 +77,18 @@ namespace WildberriesParser.ViewModel
             }
             App.CurrentUser = user;
             _loggerService.AddLog(
-                $"Устройство: {System.Environment.MachineName}\n" +
-                $"Имя пользователя: {System.Environment.UserName}\n" +
-                $"Версия ОС: {System.Environment.OSVersion}\n" +
+                $"Устройство: {System.Environment.MachineName}|" +
+                $"Имя пользователя: {System.Environment.UserName}|" +
+                $"Версия ОС: {System.Environment.OSVersion}|" +
                 $"Имя сетевого домена: {System.Environment.UserDomainName}",
                 Model.LogTypeEnum.AUTH_USER);
 
             Properties.Settings.Default.Save();
             IsWorking = false;
-            curr.Hide();
+            _curr.Hide();
             window.Show();
-            curr.Close();
+            _curr.Close();
+            _curr = null;
         }
 
         private AsyncRelayCommand _authCommand;
@@ -99,6 +101,11 @@ namespace WildberriesParser.ViewModel
                     (
                         (obj) =>
                         {
+                            if (_curr == null)
+                            {
+                                _curr = obj as Window;
+                            }
+
                             IsWorking = true;
 
                             return App.Current.Dispatcher.InvokeAsync(() =>

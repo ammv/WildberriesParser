@@ -27,21 +27,26 @@ namespace WildberriesParser
             // Configurere services
             services.AddSingleton<Services.INavigationService, Services.NavigationService>();
             services.AddSingleton<Services.ILoggerService, Services.DBLoggerService>();
+            services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType =>
+                (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
 
             // Configurere base
             services.AddSingleton<ViewModel.LoadingViewModel>();
+            services.AddSingleton<ViewModel.StartViewModel>();
+
             services.AddSingleton<ViewModel.AuthorizationViewModel>();
             services.AddSingleton<ViewModel.AdminRegistrationViewModel>();
-            services.AddSingleton<ViewModel.StartViewModel>();
             services.AddSingleton<ViewModel.SettingDatabaseServerViewModel>();
             services.AddSingleton<ViewModel.NeedSettingErrorViewModel>();
-
-            services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType =>
-                (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
 
             services.AddSingleton(provider => new View.LoadingView
             {
                 DataContext = provider.GetRequiredService<ViewModel.LoadingViewModel>()
+            });
+
+            services.AddTransient(provider => new View.StartView
+            {
+                DataContext = provider.GetRequiredService<ViewModel.StartViewModel>()
             });
 
             services.AddSingleton(provider => new View.AuthorizationView
@@ -52,11 +57,6 @@ namespace WildberriesParser
             services.AddSingleton(provider => new View.AdminRegistrationView
             {
                 DataContext = provider.GetRequiredService<ViewModel.AdminRegistrationViewModel>()
-            });
-
-            services.AddSingleton(provider => new View.StartView
-            {
-                DataContext = provider.GetRequiredService<ViewModel.StartViewModel>()
             });
 
             services.AddSingleton(provider => new View.SettingDatabaseServerView
@@ -70,12 +70,13 @@ namespace WildberriesParser
             });
 
             // Configurere Admin services
-            services.AddSingleton<ViewModel.Admin.AdminMainViewModel>();
+            services.AddTransient<ViewModel.Admin.AdminMainViewModel>();
+
             services.AddSingleton<ViewModel.Admin.UsersViewModel>();
             services.AddSingleton<ViewModel.Admin.HistoryViewModel>();
             services.AddSingleton<ViewModel.Admin.SettingsViewModel>();
 
-            services.AddSingleton(provider => new View.Admin.AdminMainView
+            services.AddTransient(provider => new View.Admin.AdminMainView
             {
                 DataContext = provider.GetRequiredService<ViewModel.Admin.AdminMainViewModel>()
             });
@@ -96,11 +97,36 @@ namespace WildberriesParser
             });
 
             // Configurere Staff services
-            services.AddSingleton<ViewModel.Staff.StaffMainViewModel>();
+            services.AddTransient<ViewModel.Staff.StaffMainViewModel>();
 
-            services.AddSingleton(provider => new View.Staff.StaffMainView
+            services.AddSingleton<ViewModel.Staff.SettingsViewModel>();
+            services.AddSingleton<ViewModel.Staff.SearchProductsViewModel>();
+            services.AddSingleton<ViewModel.Staff.AutomatizationViewModel>();
+            services.AddSingleton<ViewModel.Staff.TraceProductsViewModel>();
+
+            services.AddTransient(provider => new View.Staff.StaffMainView
             {
                 DataContext = provider.GetRequiredService<ViewModel.Staff.StaffMainViewModel>()
+            });
+
+            services.AddSingleton(provider => new View.Staff.SettingsView
+            {
+                DataContext = provider.GetRequiredService<ViewModel.Staff.SettingsViewModel>()
+            });
+
+            services.AddSingleton(provider => new View.Staff.SearchProductsView
+            {
+                DataContext = provider.GetRequiredService<ViewModel.Staff.SearchProductsViewModel>()
+            });
+
+            services.AddSingleton(provider => new View.Staff.AutomatizationView
+            {
+                DataContext = provider.GetRequiredService<ViewModel.Staff.AutomatizationViewModel>()
+            });
+
+            services.AddSingleton(provider => new View.Staff.TraceProductsView
+            {
+                DataContext = provider.GetRequiredService<ViewModel.Staff.TraceProductsViewModel>()
             });
         }
 

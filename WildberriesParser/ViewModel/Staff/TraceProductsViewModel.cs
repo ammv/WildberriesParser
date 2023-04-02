@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using WildberriesParser.Infastructure.Core;
 
-namespace WildberriesParser.ViewModel.Staff.SearchProducts
+namespace WildberriesParser.ViewModel.Staff
 {
-    internal class SearchProductsMainView : ViewModelBase
+    public class TraceProductsViewModel : ViewModelBase
     {
     }
 }

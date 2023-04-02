@@ -2,6 +2,7 @@
 using System.Windows.Navigation;
 using WildberriesParser.Infastructure.Commands;
 using WildberriesParser.Infastructure.Core;
+using WildberriesParser.Model.Data;
 using WildberriesParser.Services;
 
 namespace WildberriesParser.ViewModel.Staff
@@ -30,7 +31,7 @@ namespace WildberriesParser.ViewModel.Staff
 
         private RelayCommand _searchProductsMainCommand;
 
-        public RelayCommand UsersCommand
+        public RelayCommand SearchProductsMainCommand
         {
             get
             {
@@ -38,7 +39,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_searchProductsMainCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<SearchProductsMainView>();
+                        NavigationService.NavigateTo<SearchProducts.SearchProductsMainView>();
                     }
                     ));
             }
@@ -60,17 +61,33 @@ namespace WildberriesParser.ViewModel.Staff
             }
         }
 
-        private RelayCommand _HistoryCommand;
+        private RelayCommand _traceProductCommand;
 
-        public RelayCommand HistoryCommand
+        public RelayCommand TraceProductCommand
         {
             get
             {
-                return _HistoryCommand ??
-                    (_HistoryCommand = new RelayCommand
+                return _traceProductCommand ??
+                    (_traceProductCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<HistoryViewModel>();
+                        NavigationService.NavigateTo<TraceProductsViewModel>();
+                    }
+                    ));
+            }
+        }
+
+        private RelayCommand _automatizationCommand;
+
+        public RelayCommand AutomatizationCommand
+        {
+            get
+            {
+                return _automatizationCommand ??
+                    (_automatizationCommand = new RelayCommand
+                    ((obj) =>
+                    {
+                        NavigationService.NavigateTo<AutomatizationViewModel>();
                     }
                     ));
             }
@@ -94,10 +111,6 @@ namespace WildberriesParser.ViewModel.Staff
                     }
                     ));
             }
-        }
-
-        public StaffMainViewModel()
-        {
         }
     }
 }

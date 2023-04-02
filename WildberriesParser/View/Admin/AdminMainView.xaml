@@ -220,6 +220,7 @@
                     <Button Grid.Row="2"
                             Grid.Column="1"
                             Command="{Binding ExitAccountCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                             Height="40"
                             Style="{StaticResource MaterialDesignFlatButton}"
                             Content="{materialDesign:PackIcon Kind=ExitToApp,Size=32}" />
