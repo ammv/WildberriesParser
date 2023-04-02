@@ -71,7 +71,6 @@ namespace WildberriesParser.ViewModel
 
         private async Task Load()
         {
-            return;
             await Task.Delay(0);
             State = "Получение представлений...";
             GetViews();
@@ -82,7 +81,7 @@ namespace WildberriesParser.ViewModel
             await PrettyIncrementValue(12);
 
             State = "Проверка подключения к базе данных...";
-            bool hasDbConnection = hasDbConnectionString ? DBEntities.CheckConnectionString(Properties.Settings.Default.ConnectionString) : false;
+            bool hasDbConnection = hasDbConnectionString && DBEntities.CheckConnectionString(Properties.Settings.Default.ConnectionString);
             await PrettyIncrementValue(36);
 
             State = "Соеденение с базой данных...";
