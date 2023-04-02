@@ -21,6 +21,7 @@
     <materialDesign:Card UniformCornerRadius="10"
                          ClipToBounds="True"
                          Margin="5"
+                         materialDesign:ShadowAssist.ShadowDepth="Depth2"
                          Background="White">
 
         <intr:Interaction.Triggers>

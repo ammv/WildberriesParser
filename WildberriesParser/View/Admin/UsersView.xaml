@@ -27,10 +27,15 @@
                    HorizontalAlignment="Left" />
 
         <Button Grid.Row="1"
+                Command="{Binding AddUserCommand}"
                 Grid.Column="2"
                 Height="40">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Добавить" />
+                <materialDesign:PackIcon Kind="UserAdd"
+                                         Margin="0 0 10 0"
+                                         VerticalAlignment="Center" />
+                <TextBlock Text="Добавить"
+                           VerticalAlignment="Center" />
             </StackPanel>
         </Button>
         <TextBox FontSize="14"

@@ -75,7 +75,12 @@ namespace WildberriesParser.ViewModel
                 Properties.Settings.Default.rememberPassword = _password;
             }
             App.CurrentUser = user;
-            _loggerService.AddLog(logType: Model.LogTypeEnum.AUTH_USER);
+            _loggerService.AddLog(
+                $"Устройство: {System.Environment.MachineName}\n" +
+                $"Имя пользователя: {System.Environment.UserName}\n" +
+                $"Версия ОС: {System.Environment.OSVersion}\n" +
+                $"Имя сетевого домена: {System.Environment.UserDomainName}",
+                Model.LogTypeEnum.AUTH_USER);
 
             Properties.Settings.Default.Save();
             IsWorking = false;
