@@ -25,14 +25,14 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Авторизация"
-                   FontFamily="Lato"
+
                    HorizontalAlignment="Center"
                    Grid.Row="0"
                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
                    Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
 
         <TextBlock Text="Войдите в свой аккаунт, чтобы продолжить"
-                   FontFamily="Lato"
+
                    Grid.Row="1"
                    HorizontalAlignment="Center"
                    Opacity="0.6"
@@ -51,7 +51,7 @@
             </materialDesign:HintAssist.Hint>
         </TextBox>
 
-        <PasswordBox FontFamily="Lato"
+        <PasswordBox
                      materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
                      Style="{StaticResource MaterialDesignOutlinedRevealPasswordBox}"
                      Grid.Row="5">
@@ -70,13 +70,13 @@
 
         <CheckBox IsChecked="{Binding RememberMe, Mode=TwoWay}"
                   Grid.Row="7"
-                  FontFamily="Lato"
+
                   Style="{StaticResource MaterialDesignCheckBox}">
             <TextBlock Text="Запомнить меня"
                        Margin="5 0 0 0" />
         </CheckBox>
 
-        <Button FontFamily="Lato"
+        <Button
                 Command="{Binding AuthCommand}"
                 Grid.Row="9"
                 Height="40"

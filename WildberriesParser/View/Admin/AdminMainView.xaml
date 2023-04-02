@@ -17,7 +17,7 @@
         WindowStartupLocation="CenterScreen"
         Title="MainView"
         Height="800"
-        TextElement.FontFamily="Lato"
+        TextElement.
         Width="1280">
     <materialDesign:Card UniformCornerRadius="10"
                          Margin="5"
@@ -47,7 +47,7 @@
 
                 <materialDesign:Chip Content="{Binding Source={x:Static Application.Current},
                               Path=CurrentUser.Login, FallbackValue=None}"
-                                     Icon="{materialDesign:PackIcon Kind=Administrator}"
+                                     Icon="{materialDesign:PackIcon Kind=Security}"
                                      Margin="0 0 40 0"
                                      Style="{StaticResource MaterialDesignOutlineChip}" />
 

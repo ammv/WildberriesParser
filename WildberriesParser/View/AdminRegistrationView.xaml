@@ -27,13 +27,13 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Админ"
-                   FontFamily="Lato"
+
                    HorizontalAlignment="Center"
                    Grid.Row="0"
                    Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
 
         <TextBlock Text="Создайте аккаунт администратора"
-                   FontFamily="Lato"
+
                    Grid.Row="1"
                    HorizontalAlignment="Center"
                    Opacity="0.6"
@@ -52,7 +52,7 @@
             </materialDesign:HintAssist.Hint>
         </TextBox>
 
-        <PasswordBox FontFamily="Lato"
+        <PasswordBox
                      materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
                      Style="{StaticResource MaterialDesignOutlinedRevealPasswordBox}"
                      Grid.Row="6">
@@ -69,7 +69,7 @@
             </materialDesign:HintAssist.Hint>
         </PasswordBox>
 
-        <PasswordBox FontFamily="Lato"
+        <PasswordBox
                      materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
                      Style="{StaticResource MaterialDesignOutlinedRevealPasswordBox}"
                      Grid.Row="8">
@@ -86,7 +86,7 @@
             </materialDesign:HintAssist.Hint>
         </PasswordBox>
 
-        <Button FontFamily="Lato"
+        <Button
                 Command="{Binding CreateAdminCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                 Grid.Row="10"
@@ -98,7 +98,7 @@
             <TextBlock Text="Создать" />
         </Button>
 
-        <Button FontFamily="Lato"
+        <Button
                 Command="{Binding SettingDatabaseServerCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                 Grid.Row="12"

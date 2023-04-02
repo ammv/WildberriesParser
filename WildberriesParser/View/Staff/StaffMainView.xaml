@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WildberriesParser.View.Staff"
         xmlns:vm="clr-namespace:WildberriesParser.ViewModel"
+        xmlns:app="clr-namespace:WildberriesParser"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:intr="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
@@ -16,7 +17,7 @@
         WindowStartupLocation="CenterScreen"
         Title="MainView"
         Height="800"
-        TextElement.FontFamily="Lato"
+        TextElement.
         Width="1280">
     <materialDesign:Card UniformCornerRadius="10"
                          Margin="5"
@@ -42,7 +43,13 @@
                         Grid.Column="1"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal"
-                        Margin="0 20 20 0">
+                        Margin="0 0 20 0">
+
+                <materialDesign:Chip Content="{Binding Source={x:Static Application.Current},
+                              Path=CurrentUser.Login, FallbackValue=None}"
+                                     Icon="{materialDesign:PackIcon Kind=Account}"
+                                     Margin="0 0 40 0"
+                                     Style="{StaticResource MaterialDesignOutlineChip}" />
 
                 <Button Style="{DynamicResource windowTopButton}"
                         Command="{Binding WrapWindowCommand}"
@@ -98,10 +105,10 @@
                         <StackPanel Orientation="Horizontal"
                                     Grid.Row="0">
 
-                            <Image Source="/WildberriesParser;component/Resource/Images/LightLogo.png"
-                                   Width="32"
-                                   Height="32"
-                                   Margin="0 0 10 0" />
+                            <Path Fill="White"
+                                  Data="{StaticResource LightLogo}"
+                                  Stretch="Uniform"
+                                  Margin="0 0 10 0" />
 
                             <TextBlock Text="WB Parser"
                                        VerticalAlignment="Center"

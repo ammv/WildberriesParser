@@ -12,7 +12,7 @@
         <TextBlock Text="Settings"
                    Style="{StaticResource MaterialDesignHeadline1TextBlock}"
                    Foreground="Purple"
-                   FontFamily="Lato"
+
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center" />
     </Grid>

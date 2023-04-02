@@ -25,14 +25,14 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Ошибка"
-                   FontFamily="Lato"
+
                    HorizontalAlignment="Center"
                    Grid.Row="0"
                    Foreground="Red"
                    Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
 
         <StackPanel Grid.Row="1">
-            <TextBlock FontFamily="Lato"
+            <TextBlock
                        Grid.Row="1"
                        FontSize="14"
                        HorizontalAlignment="Center"
@@ -40,7 +40,7 @@
                        Style="{StaticResource MaterialDesignBody1TextBlock}">
             Программа требует первоначальной настройки.
             </TextBlock>
-            <TextBlock FontFamily="Lato"
+            <TextBlock
                        Grid.Row="1"
                        FontSize="14"
                        HorizontalAlignment="Center"

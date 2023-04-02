@@ -23,15 +23,16 @@
         <TextBlock Text="Пользователи"
                    Style="{StaticResource MaterialDesignHeadline3TextBlock}"
                    Foreground="Purple"
-                   FontFamily="Lato"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left" />
 
         <Button Grid.Row="1"
                 Grid.Column="2"
-                Height="40"
-                Content="Добавить"
-                materialDesign:HintAssist.Hint="" />
+                Height="40">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Добавить" />
+            </StackPanel>
+        </Button>
         <TextBox FontSize="16"
                  Grid.Row="1"
                  VerticalAlignment="Center"
@@ -49,7 +50,19 @@
         </TextBox>
 
         <DataGrid Grid.Row="2"
-                  Grid.ColumnSpan="3">
+                  Grid.ColumnSpan="3"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Users}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"
+                                    Binding="{Binding User.ID}" />
+                <DataGridTextColumn Header="Логин"
+                                    Binding="{Binding User.Login}" />
+                <DataGridTextColumn Header="Пароль"
+                                    Binding="{Binding User.Password}" />
+                <DataGridTextColumn Header="Роль"
+                                    Binding="{Binding User.Role.Name}" />
+            </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </UserControl>
