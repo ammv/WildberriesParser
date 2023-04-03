@@ -130,6 +130,7 @@
     <Compile Include="Infastructure\Commands\AsyncRelayCommand.cs" />
     <Compile Include="Infastructure\Commands\Base\Command.cs" />
     <Compile Include="Infastructure\Commands\RelayCommand.cs" />
+    <Compile Include="Infastructure\Convertors\StringToIntConverter.cs" />
     <Compile Include="Infastructure\Core\ObservableObject.cs" />
     <Compile Include="Infastructure\Core\PasswordBoxBehavior.cs" />
     <Compile Include="Infastructure\Core\ViewModelWithWindowButtonsBase.cs" />

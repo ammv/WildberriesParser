@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WildberriesParser.Services
 {
-    public class WbRequesterService : IWbRequesterService
+    public class WbRequesterService
     {
         private string _GenerateUserAgent()
         {
@@ -27,7 +27,7 @@ namespace WildberriesParser.Services
             }
             else
             {
-                throw new Exception("Ошибка! Ответ от сервера: " + response.StatusCode);
+                throw new HttpRequestException("Ошибка! Ответ от сервера: " + response.StatusCode);
             }
         }
 
@@ -46,7 +46,7 @@ namespace WildberriesParser.Services
             }
             else
             {
-                throw new Exception("Ошибка! Ответ от сервера: " + response.StatusCode);
+                throw new HttpRequestException("Ошибка! Ответ от сервера: " + response.StatusCode);
             }
         }
     }

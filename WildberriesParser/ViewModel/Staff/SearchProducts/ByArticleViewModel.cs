@@ -13,7 +13,8 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
     public class ByArticleViewModel : ViewModelBase
     {
-        private string _searchText;
+        private string _article;
+        private string _result = "Htess";
         private bool _isWorking;
 
         public INavigationService NavigationService
@@ -22,23 +23,25 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             set => Set(ref _navigationService, value);
         }
 
-        public string SearchText
+        public string Article
         {
-            get => _searchText;
+            get => _article;
             set
             {
-                Set(ref _searchText, value);
+                Set(ref _article, value);
             }
         }
 
-        public ByArticleViewModel(INavigationService navigationService)
+        public ByArticleViewModel(INavigationService navigationService, WbRequesterService wbRequesterService)
         {
             NavigationService = navigationService;
+            _wbRequesterService = wbRequesterService;
         }
 
         private INavigationService _navigationService;
 
         private AsyncRelayCommand _SearchCommand;
+        private readonly WbRequesterService _wbRequesterService;
 
         public AsyncRelayCommand SearchCommand
         {
@@ -48,8 +51,14 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     (_SearchCommand = new AsyncRelayCommand
                     ((obj) =>
                     {
-                        return Task.Delay(1);
-                    }
+                        return App.Current.Dispatcher.InvokeAsync(async () =>
+                        {
+                            IsWorking = true;
+                            Result = await _wbRequesterService.GetProductByArticleBasket(Int32.Parse(_article));
+                            IsWorking = false;
+                        }).Task;
+                    },
+                    (obj) => !string.IsNullOrEmpty(_article) && Int32.TryParse(_article, out int _)
                     ));
             }
         }
@@ -58,6 +67,12 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         {
             get => _isWorking;
             set => Set(ref _isWorking, value);
+        }
+
+        public string Result
+        {
+            get => _result;
+            set => Set(ref _result, value);
         }
     }
 }

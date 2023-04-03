@@ -24,6 +24,8 @@ namespace WildberriesParser
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<Services.WbRequesterService>();
+
             ConfigureOtherServices(services);
             ConfigureBaseServices(services);
             ConfigureAdminServices(services);
