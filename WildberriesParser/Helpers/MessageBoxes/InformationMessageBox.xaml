@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WildberriesParser.Helpers.MessageBoxes"
         mc:Ignorable="d"
-        Title="ErrorView" Height="Auto" MinWidth="300" MaxWidth="300"
+        Title="ErrorView"
+        Height="Auto"
+        MinWidth="300"
+        MaxWidth="300"
         MinHeight="200"
         ShowInTaskbar="True"
         WindowStyle="None"
@@ -18,22 +21,23 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <materialDesign:BundledTheme BaseTheme="Light"  PrimaryColor="Purple" SecondaryColor="Blue" />
+                <materialDesign:BundledTheme BaseTheme="Light"
+                                             PrimaryColor="Purple"
+                                             SecondaryColor="Blue" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <materialDesign:Card
-        BorderThickness="0"
-        Margin="5"
-        materialDesign:BottomDashedLineAdorner.Thickness="0"
-        materialDesign:ShadowAssist.Darken="True"
-        materialDesign:ShadowAssist.ShadowDepth="Depth2"
-        UniformCornerRadius="10">
+    <materialDesign:Card BorderThickness="0"
+                         Margin="3"
+                         materialDesign:BottomDashedLineAdorner.Thickness="0"
+                         materialDesign:ShadowAssist.Darken="True"
+                         materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                         UniformCornerRadius="10">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseLeftButtonDown">
                 <i:CallMethodAction MethodName="DragMove"
-                                TargetObject="{Binding RelativeSource={
+                                    TargetObject="{Binding RelativeSource={
                 RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
@@ -43,44 +47,41 @@
                 <RowDefinition />
                 <RowDefinition Height="35" />
             </Grid.RowDefinitions>
-            <materialDesign:Card
-                  HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                  Background="{DynamicResource PrimaryHueDarkBrush}"
-                  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                  Padding="4"
-                Grid.Row="0"
-                  UniformCornerRadius="6">
-                <StackPanel
-                        Orientation="Horizontal">
+            <materialDesign:Card HorizontalAlignment="Stretch"
+                                 HorizontalContentAlignment="Left"
+                                 Background="{DynamicResource PrimaryHueDarkBrush}"
+                                 Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                 Padding="4"
+                                 Grid.Row="0"
+                                 UniformCornerRadius="6">
+                <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="Information"
-                                        Height="32"
-                                         Width="32"
-                                         VerticalAlignment="Center"
-                                         HorizontalAlignment="Center" />
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Text="Информация"
-                        Grid.Row="0"
-                        Margin="10 0 0 0"
-                        Style="{StaticResource MaterialDesignSubtitle2TextBlock }" />
+                                             Height="32"
+                                             Width="32"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Center" />
+                    <TextBlock VerticalAlignment="Center"
+                               Text="Информация"
+                               Grid.Row="0"
+                               Margin="10 0 0 0"
+                               Style="{StaticResource MaterialDesignSubtitle2TextBlock }" />
                 </StackPanel>
             </materialDesign:Card>
 
-            <TextBlock
-                Grid.Row="1"
-                Margin="0 10 0 10"
-                Text="{Binding InformationMessage}"
-                TextWrapping="Wrap"
-                FontSize="12"
-                Style="{StaticResource MaterialDesignBody2TextBlock}" />
+            <TextBlock Grid.Row="1"
+                       Margin="0 10 0 10"
+                       Text="{Binding InformationMessage}"
+                       TextWrapping="Wrap"
+                       FontSize="12"
+                       Style="{StaticResource MaterialDesignBody2TextBlock}" />
 
-            <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
-                <Button
-                    Width="60"
-                    Content="Ок"
-                    Style="{StaticResource MaterialDesignOutlinedDarkButton}"
-                    Click="ButtonOk_Click">
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="2"
+                        HorizontalAlignment="Center">
+                <Button Width="60"
+                        Content="Ок"
+                        Style="{StaticResource MaterialDesignOutlinedDarkButton}"
+                        Click="ButtonOk_Click">
                 </Button>
             </StackPanel>
         </Grid>
