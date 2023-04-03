@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              d:DesignHeight="700"
              d:DesignWidth="980"
-             Background="White">
+             Background="Transparent">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*" />
@@ -45,7 +45,7 @@
                 <DataGridTextColumn Header="Пользователь"
                                     Binding="{Binding User.Login}" />
                 <DataGridTextColumn Header="Тип"
-                                    Binding="{Binding Type.Name}" />
+                                    Binding="{Binding LogType.Name}" />
                 <DataGridTextColumn Header="Описание"
                                     Binding="{Binding Description}" />
                 <DataGridTextColumn Header="Дата"

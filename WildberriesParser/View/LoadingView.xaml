@@ -16,7 +16,6 @@
         ResizeMode="NoResize"
         ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen">
-
     <intr:Interaction.Triggers>
         <intr:EventTrigger EventName="Loaded">
             <intr:InvokeCommandAction Command="{Binding WindowLoadedCommand}" />
@@ -72,14 +71,15 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
 
-                            <Border x:Name="MaskBorder"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="0 0 10 10" />
-
                             <Grid>
+
                                 <Grid.OpacityMask>
                                     <VisualBrush Visual="{Binding ElementName=MaskBorder}" />
                                 </Grid.OpacityMask>
+
+                                <Border x:Name="MaskBorder"
+                                        Background="{TemplateBinding Background}"
+                                        CornerRadius="0 0 10 10" />
 
                                 <Border BorderBrush="{TemplateBinding BorderBrush}"
                                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -132,11 +132,11 @@
         </Style>
     </Window.Resources>
 
-    <materialDesign:Card UniformCornerRadius="10">
-        <materialDesign:Card.Background>
+    <Border CornerRadius="10">
+        <Border.Background>
             <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/LoadingBackground.png"
                         Stretch="Uniform" />
-        </materialDesign:Card.Background>
+        </Border.Background>
 
         <Grid>
 
@@ -194,5 +194,5 @@
                 </ProgressBar>
             </Grid>
         </Grid>
-    </materialDesign:Card>
+    </Border>
 </Window>

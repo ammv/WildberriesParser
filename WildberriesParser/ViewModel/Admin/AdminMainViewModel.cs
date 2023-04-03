@@ -54,7 +54,7 @@ namespace WildberriesParser.ViewModel.Admin
                     (_SettingsCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<SettingsViewModel>();
+                        NavigationService.NavigateTo<NotImplementedViewModel>();
                     }
                     ));
             }

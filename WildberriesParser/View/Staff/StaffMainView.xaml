@@ -18,12 +18,19 @@
         Title="MainView"
         Height="800"
         Width="1280">
-    <materialDesign:Card UniformCornerRadius="10"
-                         ClipToBounds="True"
-                         Margin="5"
-                         materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                         Background="White">
-
+    <Border CornerRadius="10"
+            Margin="3">
+        <Border.Effect>
+            <DropShadowEffect Color="#3F000000"
+                              Direction="300"
+                              ShadowDepth="3"
+                              BlurRadius="5"
+                              Opacity="0.5" />
+        </Border.Effect>
+        <Border.Background>
+            <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/WindowsBackground.png"
+                        Stretch="None" />
+        </Border.Background>
         <intr:Interaction.Triggers>
             <intr:EventTrigger EventName="MouseLeftButtonDown">
                 <intr:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
@@ -82,13 +89,12 @@
                 </Button>
             </StackPanel>
 
-            <materialDesign:ColorZone Grid.RowSpan="2"
-                                      Mode="PrimaryDark"
-                                      Padding="20"
-                                      CornerRadius="10 0 0 10"
-                                      Opacity="1"
-                                      VerticalAlignment="Stretch"
-                                      materialDesign:ShadowAssist.ShadowDepth="Depth2">
+            <Border Grid.RowSpan="2"
+                    Background="{StaticResource PrimaryHueDarkBrush}"
+                    Padding="20"
+                    CornerRadius="10 0 0 10"
+                    Opacity="1"
+                    VerticalAlignment="Stretch">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -257,12 +263,12 @@
                             Style="{StaticResource MaterialDesignFlatButton}"
                             Content="{materialDesign:PackIcon Kind=ExitToApp,Size=32}" />
                 </Grid>
-            </materialDesign:ColorZone>
+            </Border>
 
             <ContentPresenter Content="{Binding NavigationService.CurrentView}"
                               Grid.Row="1"
                               Grid.Column="1"
                               Margin="20" />
         </Grid>
-    </materialDesign:Card>
+    </Border>
 </Window>

@@ -4,6 +4,7 @@ using WildberriesParser.Infastructure.Commands;
 using WildberriesParser.Infastructure.Core;
 using WildberriesParser.Model.Data;
 using WildberriesParser.Services;
+using WildberriesParser.View;
 
 namespace WildberriesParser.ViewModel.Staff
 {
@@ -55,7 +56,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_SettingsCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<SettingsViewModel>();
+                        NavigationService.NavigateTo<NotImplementedViewModel>();
                     }
                     ));
             }
@@ -71,7 +72,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_traceProductCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<TraceProductsViewModel>();
+                        NavigationService.NavigateTo<NotImplementedViewModel>();
                     }
                     ));
             }
@@ -87,7 +88,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_automatizationCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<AutomatizationViewModel>();
+                        NavigationService.NavigateTo<NotImplementedViewModel>();
                     }
                     ));
             }

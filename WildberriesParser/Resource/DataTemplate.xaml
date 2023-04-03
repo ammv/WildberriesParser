@@ -5,7 +5,9 @@
                     xmlns:vmA="clr-namespace:WildberriesParser.ViewModel.Admin"
                     xmlns:viewA="clr-namespace:WildberriesParser.View.Admin"
                     xmlns:vmS="clr-namespace:WildberriesParser.ViewModel.Staff"
-                    xmlns:viewS="clr-namespace:WildberriesParser.View.Staff">
+                    xmlns:viewS="clr-namespace:WildberriesParser.View.Staff"
+                    xmlns:vmSS="clr-namespace:WildberriesParser.ViewModel.Staff.SearchProducts"
+                    xmlns:viewSS="clr-namespace:WildberriesParser.View.Staff.SearchProducts">
 
     <!--Bases-->
     <DataTemplate DataType="{x:Type vm:AdminRegistrationViewModel}">
@@ -22,6 +24,10 @@
 
     <DataTemplate DataType="{x:Type vm:NeedSettingErrorViewModel}">
         <view:NeedSettingErrorView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NotImplementedViewModel}">
+        <view:NotImplementedView />
     </DataTemplate>
 
     <!--Admin-->
@@ -54,5 +60,10 @@
 
     <DataTemplate DataType="{x:Type vmS:TraceProductsViewModel}">
         <viewS:TraceProductsView />
+    </DataTemplate>
+
+    <!--Staff.SearchProduct-->
+    <DataTemplate DataType="{x:Type vmSS:ByArticleViewModel}">
+        <viewSS:ByArticleView />
     </DataTemplate>
 </ResourceDictionary>

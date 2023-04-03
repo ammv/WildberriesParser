@@ -66,6 +66,12 @@ namespace WildberriesParser
             });
 
             // Configurere Staff.SearchProducts services.
+            services.AddSingleton<ViewModel.Staff.SearchProducts.ByArticleViewModel>();
+
+            services.AddTransient(provider => new View.Staff.SearchProductsView
+            {
+                DataContext = provider.GetRequiredService<ViewModel.Staff.SearchProducts.ByArticleViewModel>()
+            });
         }
 
         private static void ConfigureAdminServices(IServiceCollection services)
@@ -145,8 +151,14 @@ namespace WildberriesParser
             // Configurere services
             services.AddSingleton<Services.INavigationService, Services.NavigationService>();
             services.AddSingleton<Services.ILoggerService, Services.DBLoggerService>();
+            services.AddSingleton<ViewModel.NotImplementedViewModel>();
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType =>
                 (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
+
+            services.AddSingleton(provider => new View.NotImplementedView
+            {
+                DataContext = provider.GetRequiredService<ViewModel.NotImplementedViewModel>()
+            });
         }
 
         protected override void OnStartup(StartupEventArgs e)

@@ -201,6 +201,7 @@
     <Compile Include="ViewModel\Admin\SettingsViewModel.cs" />
     <Compile Include="ViewModel\Admin\UsersViewModel.cs" />
     <Compile Include="ViewModel\NeedSettingErrorViewModel.cs" />
+    <Compile Include="ViewModel\NotImplementedViewModel.cs" />
     <Compile Include="ViewModel\SettingDatabaseServerViewModel.cs" />
     <Compile Include="ViewModel\AdminRegistrationViewModel.cs" />
     <Compile Include="ViewModel\AuthorizationViewModel.cs" />
@@ -235,6 +236,9 @@
     </Compile>
     <Compile Include="View\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NotImplementedView.xaml.cs">
+      <DependentUpon>NotImplementedView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SettingDatabaseServerView.xaml.cs">
       <DependentUpon>SettingDatabaseServerView.xaml</DependentUpon>
@@ -335,6 +339,10 @@
     <Page Include="View\LoadingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NotImplementedView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\SettingDatabaseServerView.xaml">
       <SubType>Designer</SubType>

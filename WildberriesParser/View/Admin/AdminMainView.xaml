@@ -18,14 +18,20 @@
         Title="MainView"
         Height="800"
         Width="1280">
-    <materialDesign:Card UniformCornerRadius="10"
-                         ClipToBounds="True"
-                         Margin="5"
-                         materialDesign:ShadowAssist.ShadowDepth="Depth2">
-        <materialDesign:Card.Background>
+
+    <Border CornerRadius="10"
+            Margin="3">
+        <Border.Effect>
+            <DropShadowEffect Color="#3F000000"
+                              Direction="300"
+                              ShadowDepth="3"
+                              BlurRadius="5"
+                              Opacity="0.5" />
+        </Border.Effect>
+        <Border.Background>
             <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/WindowsBackground.png"
                         Stretch="None" />
-        </materialDesign:Card.Background>
+        </Border.Background>
 
         <intr:Interaction.Triggers>
             <intr:EventTrigger EventName="MouseLeftButtonDown">
@@ -235,5 +241,5 @@
                               Grid.Column="1"
                               Margin="20" />
         </Grid>
-    </materialDesign:Card>
+    </Border>
 </Window>

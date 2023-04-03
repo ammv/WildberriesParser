@@ -9,7 +9,7 @@ using WildberriesParser.Infastructure.Commands;
 using System;
 using System.Threading.Tasks;
 
-namespace WildberriesParser.ViewModel.Admin
+namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
     public class ByArticleViewModel : ViewModelBase
     {
