@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace WildberriesParser.Infastructure.Convertors
+namespace WildberriesParser.Infastructure.Converters
 {
     internal class StringToInt32Converter : IValueConverter
     {

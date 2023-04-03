@@ -1,6 +1,6 @@
 ﻿namespace WildberriesParser
 {
-    internal class WbParams
+    public class WbParams
     {
         public string Curr { get; set; }
         public int Spp { get; set; }

@@ -5,10 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WildberriesParser.View.Staff.SearchProducts"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:WildberriesParser.Infastructure.Converters"
              mc:Ignorable="d"
              d:DesignHeight="700"
              d:DesignWidth="980"
              Background="Transparent">
+    <UserControl.Resources>
+        <converters:TextBlockRunsConverter x:Key="runsConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*" />
@@ -50,16 +54,15 @@
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}">
         </TextBox>
 
-        <TextBox Grid.Row="2"
-                 FontSize="16"
-                 FontStretch="SemiCondensed"
-                 BorderThickness="0"
-                 TextWrapping="Wrap"
-                 Background="Transparent"
-                 TextAlignment="Left"
-                 Style="{x:Null}"
-                 Text="{Binding Result}"
-                 IsReadOnly="True"
-                 Grid.ColumnSpan="3" />
+        <TextBlock Grid.Row="2"
+                   Grid.ColumnSpan="3"
+                   Style="{x:Null}">
+            <TextBlock.Inlines>
+                <MultiBinding Converter="{StaticResource runsConverter}"
+                              Mode="OneWay">
+                    <Binding Path="ProductProperties" />
+                </MultiBinding>
+            </TextBlock.Inlines>
+        </TextBlock>
     </Grid>
 </UserControl>

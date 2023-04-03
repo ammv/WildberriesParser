@@ -3,7 +3,7 @@ using WildberriesParser.Model;
 
 namespace WildberriesParser
 {
-    internal class WbSize
+    public class WbSize
     {
         public string Name { get; set; }
         public string OriginalName { get; set; }

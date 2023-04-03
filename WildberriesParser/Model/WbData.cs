@@ -2,7 +2,7 @@
 
 namespace WildberriesParser
 {
-    internal class WbData
+    public class WbData
     {
         public List<WbProduct> Products { get; set; }
     }

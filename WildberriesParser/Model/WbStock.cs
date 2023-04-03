@@ -1,6 +1,6 @@
 ﻿namespace WildberriesParser.Model
 {
-    internal class WbStock
+    public class WbStock
     {
         public int wh { get; set; }
         public int qty { get; set; }

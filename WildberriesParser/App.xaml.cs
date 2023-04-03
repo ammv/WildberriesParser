@@ -24,12 +24,18 @@ namespace WildberriesParser
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<Services.WbRequesterService>();
+            ConfigureWbServices(services);
 
             ConfigureOtherServices(services);
             ConfigureBaseServices(services);
             ConfigureAdminServices(services);
             ConfigureStaffServices(services);
+        }
+
+        private static void ConfigureWbServices(IServiceCollection services)
+        {
+            services.AddSingleton<Services.WbRequesterService>();
+            services.AddSingleton<Services.WbParser>();
         }
 
         private static void ConfigureStaffServices(IServiceCollection services)

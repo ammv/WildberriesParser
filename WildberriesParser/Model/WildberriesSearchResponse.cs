@@ -1,6 +1,6 @@
 ﻿namespace WildberriesParser
 {
-    internal class WildberriesSearchResponse
+    public class WildberriesSearchResponse
     {
         public WbMetadata Metadata { get; set; }
         public int State { get; set; }
