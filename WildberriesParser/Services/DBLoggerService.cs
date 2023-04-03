@@ -8,11 +8,6 @@ using WildberriesParser.Model.Data;
 
 namespace WildberriesParser.Services
 {
-    public interface ILoggerService
-    {
-        void AddLog(string message = null, LogTypeEnum logType = LogTypeEnum.COMMON);
-    }
-
     public class DBLoggerService : ILoggerService
     {
         public void AddLog(string message = null, LogTypeEnum logType = LogTypeEnum.COMMON)

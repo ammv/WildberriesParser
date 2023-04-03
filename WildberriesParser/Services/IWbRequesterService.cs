@@ -1,6 +1,7 @@
 ﻿namespace WildberriesParser.Services
 {
-    internal class WbRequester
+    public interface IWbRequesterService
     {
+
     }
 }

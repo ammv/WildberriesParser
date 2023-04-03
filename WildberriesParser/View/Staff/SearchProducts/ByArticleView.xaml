@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="WildberriesParser.View.Admin.HistoryView"
+﻿<UserControl x:Class="WildberriesParser.View.Staff.SearchProductsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:WildberriesParser.View.Admin"
+             xmlns:local="clr-namespace:WildberriesParser.View.Staff.SearchProducts"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="700"
@@ -17,16 +17,33 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
+            <ColumnDefinition Width="15" />
+            <ColumnDefinition Width="0.2*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="История"
+        <TextBlock Text="Поиск по артикулу"
+                   Grid.ColumnSpan="3"
                    Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                    Foreground="Purple"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center" />
+
+        <Button Grid.Row="1"
+                Command="{Binding AddUserCommand}"
+                Grid.Column="2"
+                Height="40">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="TagSearch"
+                                         Margin="0 0 10 0"
+                                         VerticalAlignment="Center" />
+                <TextBlock Text="Искать"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+        </Button>
         <TextBox FontSize="14"
                  Grid.Row="1"
                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                  VerticalAlignment="Center"
+                 MaxLength="45"
                  materialDesign:HintAssist.Hint="Поиск"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}">
         </TextBox>
@@ -38,18 +55,16 @@
                   Style="{StaticResource MaterialDesignDataGrid}"
                   IsReadOnly="True"
                   materialDesign:DataGridAssist.EnableEditBoxAssist="False"
-                  ItemsSource="{Binding Logs}">
+                  ItemsSource="{Binding Users}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"
                                     Binding="{Binding ID}" />
-                <DataGridTextColumn Header="Пользователь"
-                                    Binding="{Binding User.Login}" />
-                <DataGridTextColumn Header="Тип"
-                                    Binding="{Binding Type.Name}" />
-                <DataGridTextColumn Header="Описание"
-                                    Binding="{Binding Description}" />
-                <DataGridTextColumn Header="Дата"
-                                    Binding="{Binding Date}" />
+                <DataGridTextColumn Header="Логин"
+                                    Binding="{Binding Login}" />
+                <DataGridTextColumn Header="Пароль"
+                                    Binding="{Binding Password}" />
+                <DataGridTextColumn Header="Роль"
+                                    Binding="{Binding Role.Name}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -21,10 +21,11 @@
             <ColumnDefinition Width="0.2*" />
         </Grid.ColumnDefinitions>
         <TextBlock Text="Пользователи"
-                   Style="{StaticResource MaterialDesignHeadline3TextBlock}"
+                   Grid.ColumnSpan="3"
+                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                    Foreground="Purple"
                    VerticalAlignment="Center"
-                   HorizontalAlignment="Left" />
+                   HorizontalAlignment="Center" />
 
         <Button Grid.Row="1"
                 Command="{Binding AddUserCommand}"

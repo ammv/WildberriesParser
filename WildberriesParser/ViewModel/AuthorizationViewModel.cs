@@ -77,9 +77,9 @@ namespace WildberriesParser.ViewModel
             }
             App.CurrentUser = user;
             _loggerService.AddLog(
-                $"Устройство: {System.Environment.MachineName}|" +
-                $"Имя пользователя: {System.Environment.UserName}|" +
-                $"Версия ОС: {System.Environment.OSVersion}|" +
+                $"Устройство: {System.Environment.MachineName}\n" +
+                $"Имя пользователя: {System.Environment.UserName}\n" +
+                $"Версия ОС: {System.Environment.OSVersion}\n" +
                 $"Имя сетевого домена: {System.Environment.UserDomainName}",
                 Model.LogTypeEnum.AUTH_USER);
 

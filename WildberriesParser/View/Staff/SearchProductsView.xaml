@@ -17,10 +17,10 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Поиск товаров"
-                   Style="{StaticResource MaterialDesignHeadline3TextBlock}"
+                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                    Foreground="Purple"
                    VerticalAlignment="Center"
-                   HorizontalAlignment="Left" />
+                   HorizontalAlignment="Center" />
 
         <UniformGrid Grid.Row="1"
                      Margin="25 50"

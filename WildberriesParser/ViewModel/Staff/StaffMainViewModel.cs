@@ -26,7 +26,7 @@ namespace WildberriesParser.ViewModel.Staff
         {
             WindowState = System.Windows.WindowState.Normal;
             NavigationService = navigationService;
-            NavigationService.NavigateTo<SearchProducts.SearchProductsMainView>();
+            NavigationService.NavigateTo<SearchProductsViewModel>();
         }
 
         private RelayCommand _searchProductsMainCommand;
@@ -39,7 +39,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_searchProductsMainCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<SearchProducts.SearchProductsMainView>();
+                        NavigationService.NavigateTo<SearchProductsViewModel>();
                     }
                     ));
             }

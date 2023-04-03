@@ -7,20 +7,14 @@ using System.Data.Entity;
 using System.Collections.ObjectModel;
 using WildberriesParser.Infastructure.Commands;
 using System;
+using System.Threading.Tasks;
 
 namespace WildberriesParser.ViewModel.Admin
 {
-    public class HistoryViewModel : ViewModelBase
+    public class ByArticleViewModel : ViewModelBase
     {
-        private ObservableCollection<Log> _logs;
         private string _searchText;
-        private INavigationService _navigationService;
-
-        public ObservableCollection<Log> Logs
-        {
-            get => _logs;
-            set => Set(ref _logs, value);
-        }
+        private bool _isWorking;
 
         public INavigationService NavigationService
         {
@@ -37,11 +31,33 @@ namespace WildberriesParser.ViewModel.Admin
             }
         }
 
-        public HistoryViewModel(INavigationService navigationService)
+        public ByArticleViewModel(INavigationService navigationService)
         {
             NavigationService = navigationService;
-            DBEntities.GetContext().Log.Load();
-            _logs = DBEntities.GetContext().Log.Local;
+        }
+
+        private INavigationService _navigationService;
+
+        private AsyncRelayCommand _SearchCommand;
+
+        public AsyncRelayCommand SearchCommand
+        {
+            get
+            {
+                return _SearchCommand ??
+                    (_SearchCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return Task.Delay(1);
+                    }
+                    ));
+            }
+        }
+
+        public bool IsWorking
+        {
+            get => _isWorking;
+            set => Set(ref _isWorking, value);
         }
     }
 }

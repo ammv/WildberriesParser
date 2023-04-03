@@ -51,4 +51,26 @@
         <Path Fill="#33000000"
               Data="M7.70401 120.144C5.58477 118.49 3.80753 116.418 2.49609 114.051L29.1271 88.2901C14.6054 70.3667 15.9448 43.9987 32.8387 27.6565C50.7015 10.377 79.19 10.8499 96.4695 28.7127C113.749 46.5756 113.276 75.0641 95.4133 92.3436C78.5192 108.686 52.1207 109.149 34.6892 94.0401L7.70401 120.144ZM37.5324 85.7252C51.74 100.412 75.1639 100.801 89.8511 86.5936C104.538 72.386 104.927 48.9621 90.7196 34.2749C76.512 19.5877 53.0881 19.1989 38.4009 33.4065C23.7136 47.6141 23.3248 71.0379 37.5324 85.7252Z" />
     </Canvas>
+
+    <DrawingBrush x:Key="Group221"
+                  Stretch="Uniform">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="#FFFFFF"
+                                     Geometry="M1020 0H0V740H1020V0Z" />
+                    <GeometryDrawing Brush="#A6AC00AC"
+                                     Geometry="M207.4 558.112L226.033 709.863L377.784 691.23L359.151 539.479L207.4 558.112Z" />
+                    <GeometryDrawing Brush="#A6AC00AC"
+                                     Geometry="M257.888 -33.1498L100.449 -27.6519L105.947 129.787L263.386 124.289L257.888 -33.1498Z" />
+                    <GeometryDrawing Brush="#A6AC00AC"
+                                     Geometry="M626.434 600.776L521.262 682.946L697.102 799.619L626.434 600.776Z" />
+                    <GeometryDrawing Brush="#A6AC00AC"
+                                     Geometry="M981.63 131.337L812.289 146.152L827.104 315.494L996.446 300.678L981.63 131.337Z" />
+                    <GeometryDrawing Brush="#A6AC00AC"
+                                     Geometry="M53.5234 453.487L107.683 655.615L255.651 399.328L53.5234 453.487Z" />
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
 </ResourceDictionary>

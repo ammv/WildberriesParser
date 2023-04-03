@@ -21,8 +21,11 @@
     <materialDesign:Card UniformCornerRadius="10"
                          ClipToBounds="True"
                          Margin="5"
-                         materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                         Background="White">
+                         materialDesign:ShadowAssist.ShadowDepth="Depth2">
+        <materialDesign:Card.Background>
+            <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/WindowsBackground.png"
+                        Stretch="None" />
+        </materialDesign:Card.Background>
 
         <intr:Interaction.Triggers>
             <intr:EventTrigger EventName="MouseLeftButtonDown">
