@@ -10,13 +10,15 @@
              d:DesignHeight="700"
              d:DesignWidth="980"
              Background="Transparent">
-    <UserControl.Resources>
-        <converters:TextBlockRunsConverter x:Key="runsConverter" />
-    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding SearchCommand}"
+                    Key="Return" />
+    </UserControl.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*" />
             <RowDefinition Height="75" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="0.8*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -40,6 +42,8 @@
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="TagSearch"
                                          Margin="0 0 10 0"
+                                         Width="20"
+                                         Height="20"
                                          VerticalAlignment="Center" />
                 <TextBlock Text="Искать"
                            VerticalAlignment="Center" />
@@ -49,20 +53,79 @@
                  Grid.Row="1"
                  Text="{Binding Article, UpdateSourceTrigger=PropertyChanged}"
                  VerticalAlignment="Center"
-                 MaxLength="45"
                  materialDesign:HintAssist.Hint="Поиск"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}">
         </TextBox>
 
-        <TextBlock Grid.Row="2"
-                   Grid.ColumnSpan="3"
-                   Style="{x:Null}">
-            <TextBlock.Inlines>
-                <MultiBinding Converter="{StaticResource runsConverter}"
-                              Mode="OneWay">
-                    <Binding Path="ProductProperties" />
-                </MultiBinding>
-            </TextBlock.Inlines>
-        </TextBlock>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="2">
+            <Button Style="{StaticResource MaterialDesignOutlinedButton}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="FileExport"
+                                             Margin="0 0 10 0"
+                                             VerticalAlignment="Center"
+                                             Width="20"
+                                             Height="20" />
+                    <TextBlock Text="Экспорт"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <Border Grid.Row="3"
+                CornerRadius="10"
+                Grid.ColumnSpan="3">
+            <Border.Effect>
+                <DropShadowEffect Color="#3F000000"
+                                  Direction="300"
+                                  ShadowDepth="3"
+                                  BlurRadius="1"
+                                  Opacity="0.2" />
+            </Border.Effect>
+            <DataGrid ItemsSource="{Binding Products}"
+                      IsReadOnly="True"
+                      SelectionUnit="FullRow"
+                      AutoGenerateColumns="False"
+                      AlternatingRowBackground="#44CCCCCC"
+                      Style="{StaticResource MaterialDesignDataGrid}"
+                      FocusVisualStyle="{x:Null}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Артикул"
+                                        Binding="{Binding id}" />
+                    <DataGridTemplateColumn Header="Название">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding name}"
+                                           TextWrapping="Wrap"
+                                           Style="{StaticResource MaterialDesignDataGridTextColumnStyle}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Бренд"
+                                        Binding="{Binding brand}" />
+                    <DataGridTextColumn Header="Скидка"
+                                        Binding="{Binding sale, StringFormat={}{0}%}" />
+                    <DataGridTextColumn Header="Цена без скидка"
+                                        Binding="{Binding priceU, StringFormat={}₽{0}}" />
+                    <DataGridTextColumn Header="Цена со скидкой"
+                                        Binding="{Binding salePriceU, StringFormat={}₽{0}}" />
+                    <DataGridTemplateColumn Header="Рейтинг">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Star" />
+                                    <TextBlock Text="{Binding rating}"
+                                               Style="{StaticResource MaterialDesignDataGridTextColumnStyle}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Отзывы"
+                                        Binding="{Binding feedbacks}" />
+                    <DataGridTextColumn Header="Промо текст"
+                                        Binding="{Binding promoTextCat }" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </Grid>
 </UserControl>

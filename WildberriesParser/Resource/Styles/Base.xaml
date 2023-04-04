@@ -25,4 +25,93 @@
         <Setter Property="TextElement.FontFamily"
                 Value="Lato" />
     </Style>
+
+    <Style x:Key="MyDataGridStyle"
+           TargetType="DataGrid">
+        <Setter Property="Background"
+                Value="#FFFFFFFF" />
+        <Setter Property="Foreground"
+                Value="#FF000000" />
+        <Setter Property="BorderBrush"
+                Value="#FFDADADA" />
+        <Setter Property="AlternatingRowBackground"
+                Value="#FFF5F5F5" />
+        <Setter Property="HorizontalGridLinesBrush"
+                Value="#FFDADADA" />
+        <Setter Property="VerticalGridLinesBrush"
+                Value="#FFDADADA" />
+        <Setter Property="RowBackground"
+                Value="#00BFA5D6" />
+        <Setter Property="CanUserSortColumns"
+                Value="True" />
+        <Setter Property="ColumnHeaderHeight"
+                Value="40" />
+        <Setter Property="RowHeight"
+                Value="30" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="Margin"
+                Value="0" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="HeadersVisibility"
+                Value="Column" />
+        <Setter Property="GridLinesVisibility"
+                Value="All" />
+        <Setter Property="RowHeaderWidth"
+                Value="0" />
+        <Setter Property="CellStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding"
+                            Value="10" />
+                    <Setter Property="BorderThickness"
+                            Value="0" />
+                    <Setter Property="FontFamily"
+                            Value="Segoe UI" />
+                    <Setter Property="TextBlock.Foreground"
+                            Value="#FF000000" />
+                    <Setter Property="TextBlock.FontSize"
+                            Value="12" />
+                    <Setter Property="TextBlock.FontWeight"
+                            Value="Normal" />
+                    <Setter Property="TextBlock.TextTrimming"
+                            Value="CharacterEllipsis" />
+                    <Setter Property="Background"
+                            Value="Transparent" />
+                    <Setter Property="HorizontalAlignment"
+                            Value="Stretch" />
+                    <Setter Property="VerticalAlignment"
+                            Value="Center" />
+                    <Setter Property="FocusVisualStyle"
+                            Value="{x:Null}" />
+                    <Setter Property="IsTabStop"
+                            Value="False" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Padding="{TemplateBinding Padding}">
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="-10 0 -10 0">
+                                        <TextBlock Text="{TemplateBinding Content}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   HorizontalAlignment="Left"
+                                                   VerticalAlignment="Center"
+                                                   Margin="10 0 0 0" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

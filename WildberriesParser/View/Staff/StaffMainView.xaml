@@ -13,7 +13,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         WindowStyle="None"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Title="MainView"
         Height="800"

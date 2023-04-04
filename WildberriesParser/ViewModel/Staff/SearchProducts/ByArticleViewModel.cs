@@ -13,6 +13,7 @@ using System.Text;
 using System.Windows.Documents;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
@@ -22,12 +23,12 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         private string _result = "Htess";
         private bool _isWorking;
 
-        private ObservableCollection<Run> _productProperties;
+        private ObservableCollection<WbProduct> _products = new ObservableCollection<WbProduct>();
 
-        public ObservableCollection<Run> ProductProperties
+        public ObservableCollection<WbProduct> Products
         {
-            get => _productProperties;
-            set { Set(ref _productProperties, value); }
+            get => _products;
+            set { Set(ref _products, value); }
         }
 
         public INavigationService NavigationService
@@ -58,22 +59,16 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         private readonly WbRequesterService _wbRequesterService;
         private readonly WbParser _wbParser;
 
-        private async Task _Search()
+        private async Task<WbProduct> _Search()
         {
-            IsWorking = true;
             string responseJson = await _wbRequesterService.GetProductByArticleBasket(Int32.Parse(_article));
             var response = _wbParser.ParseResponse(responseJson);
+            WbProduct product = null;
             if (response.Data.Products.Count > 0)
             {
-                WbProduct wbProduct = response.Data.Products[0];
-                SetProductProperties(wbProduct);
+                product = response.Data.Products[0];
             }
-            else
-            {
-                Result = $"Товара с таким артикулом не существует!\nResponse: {responseJson}";
-            }
-
-            IsWorking = false;
+            return product;
         }
 
         public AsyncRelayCommand SearchCommand
@@ -86,7 +81,11 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     {
                         return App.Current.Dispatcher.InvokeAsync(async () =>
                        {
-                           await _Search();
+                           WbProduct product = await _Search();
+                           if (product != null)
+                           {
+                               Products.Insert(0, product);
+                           }
                        }).Task;
                     },
                     (obj) => !IsWorking && !string.IsNullOrEmpty(_article) && Int32.TryParse(_article, out int _)
@@ -98,27 +97,6 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         {
             get => _isWorking;
             set => Set(ref _isWorking, value);
-        }
-
-        public void SetProductProperties<T>(T instance)
-        {
-            ProductProperties = new ObservableCollection<Run>();
-            var properties = TypeDescriptor.GetProperties(instance);
-            for (int i = 0; i < properties.Count; i++)
-            {
-                PropertyDescriptor prop = properties[i];
-
-                if (prop.Category == "Important")
-                {
-                    Run description = new Run(prop.Description + ": ");
-                    description.FontWeight = FontWeights.Bold;
-
-                    Run value = new Run(prop.GetValue(instance).ToString());
-
-                    ProductProperties.Add(description);
-                    ProductProperties.Add(value);
-                }
-            }
         }
 
         public string Result

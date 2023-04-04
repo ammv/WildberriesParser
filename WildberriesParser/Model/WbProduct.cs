@@ -53,33 +53,51 @@ namespace WildberriesParser
         [Description("Название бренда")]
         public string brand { get; set; }
 
-        [Category("Important")]
+        [Category("NotImportant")]
         [Description("ID бренда")]
         public int brandId { get; set; }
 
         [Description("ID сайта бренда")]
-        [Category("Important")]
+        [Category("NotImportant")]
         public int siteBrandId { get; set; }
 
         [Description("ID поставщика")]
-        [Category("Important")]
+        [Category("NotImportant")]
         public int supplierId { get; set; }
 
         [Description("Скидка %")]
         [Category("Important")]
         public int sale { get; set; }
 
+        private double _priceU;
+
         [Category("Important")]
         [Description("Цена без скидки")]
-        public int priceU { get; set; }
+        public double priceU
+        {
+            get => _priceU;
+            set
+            {
+                _priceU = value / 10;
+            }
+        }
+
+        private double _salePriceU;
 
         [Category("Important")]
         [Description("Цена со скидкой")]
-        public int salePriceU { get; set; }
+        public double salePriceU
+        {
+            get => _salePriceU;
+            set
+            {
+                _salePriceU = value / 10;
+            }
+        }
 
         [Category("Important")]
         [Description("Логистическая стоимость")]
-        public int logisticsCost { get; set; }
+        public double logisticsCost { get; set; }
 
         [Category("Unknown")]
         [Description("Неизвестно")]
