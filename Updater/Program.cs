@@ -1,14 +1,18 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
 
 namespace Updater
 {
-    internal class Program
+    public class Program
     {
         private static void Main(string[] args)
         {
+            Console.WriteLine("Test!");
+            Console.ReadLine();
+
             while (Process.GetProcessesByName("WildberriesParser").Length > 0)
             {
                 Process[] myProcesses2 = Process.GetProcessesByName("WildberriesParser");
@@ -19,8 +23,8 @@ namespace Updater
 
             using (FileStream fs = new FileStream("update.zip", FileMode.Open))
             {
-                ZipArchive zipArchive = new ZipArchive(fs);
-                zipArchive.ExtractToDirectory(".", true);
+                ZipArchive zip = new ZipArchive(fs);
+                zip.ExtractToDirectory(".", true);
             }
 
             Process.Start("WildberriesParser.exe");
