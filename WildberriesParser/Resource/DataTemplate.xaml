@@ -66,4 +66,8 @@
     <DataTemplate DataType="{x:Type vmSS:ByArticleViewModel}">
         <viewSS:ByArticleView />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmSS:BySearchViewModel}">
+        <viewSS:BySearchView />
+    </DataTemplate>
 </ResourceDictionary>

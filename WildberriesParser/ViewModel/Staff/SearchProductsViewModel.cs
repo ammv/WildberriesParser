@@ -50,7 +50,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_searchByRequestViewCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<NotImplementedViewModel>();
+                        NavigationService.NavigateTo<SearchProducts.BySearchViewModel>();
                     }
                     ));
             }

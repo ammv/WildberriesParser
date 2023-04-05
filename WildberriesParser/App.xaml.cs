@@ -80,10 +80,16 @@ namespace WildberriesParser
 
             // Configurere Staff.SearchProducts services.
             services.AddSingleton<ViewModel.Staff.SearchProducts.ByArticleViewModel>();
+            services.AddSingleton<ViewModel.Staff.SearchProducts.BySearchViewModel>();
 
-            services.AddTransient(provider => new View.Staff.SearchProductsView
+            services.AddTransient(provider => new View.Staff.SearchProducts.ByArticleView
             {
                 DataContext = provider.GetRequiredService<ViewModel.Staff.SearchProducts.ByArticleViewModel>()
+            });
+
+            services.AddTransient(provider => new View.Staff.SearchProducts.BySearchView
+            {
+                DataContext = provider.GetRequiredService<ViewModel.Staff.SearchProducts.BySearchViewModel>()
             });
         }
 
@@ -165,6 +171,7 @@ namespace WildberriesParser
             services.AddSingleton<Services.INavigationService, Services.NavigationService>();
             services.AddSingleton<Services.ILoggerService, Services.DBLoggerService>();
             services.AddSingleton<ViewModel.NotImplementedViewModel>();
+            services.AddSingleton<ExcelService>();
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType =>
                 (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
 

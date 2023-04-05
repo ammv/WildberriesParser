@@ -18,9 +18,9 @@ using System.Diagnostics;
 
 namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
-    public class ByArticleViewModel : ViewModelBase
+    public class BySearchViewModel : ViewModelBase
     {
-        private string _article;
+        private string _searchPattern;
         private string _result = "Htess";
         private bool _isWorking;
         private ExcelService _excelService;
@@ -39,16 +39,16 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             set => Set(ref _navigationService, value);
         }
 
-        public string Article
+        public string SearchPattern
         {
-            get => _article;
+            get => _searchPattern;
             set
             {
-                Set(ref _article, value);
+                Set(ref _searchPattern, value);
             }
         }
 
-        public ByArticleViewModel(INavigationService navigationService,
+        public BySearchViewModel(INavigationService navigationService,
             WbRequesterService wbRequesterService, WbParser wbParser,
             ExcelService excelService)
         {
@@ -64,16 +64,23 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         private readonly WbRequesterService _wbRequesterService;
         private readonly WbParser _wbParser;
 
-        private async Task<WbProduct> _Search()
+        private async Task<List<WbProduct>> _Search()
         {
-            string responseJson = await _wbRequesterService.GetProductByArticleBasket(Int32.Parse(_article));
-            var response = _wbParser.ParseResponse(responseJson);
-            WbProduct product = null;
-            if (response.Data.Products.Count > 0)
+            List<WbProduct> products = new List<WbProduct>();
+            var responsesJson = await _wbRequesterService.GetProductCardsBySearch(_searchPattern, 1);
+            foreach (var responseJson in responsesJson)
             {
-                product = response.Data.Products[0];
+                var response = _wbParser.ParseResponse(responseJson);
+                if (response.Data.Products.Count > 0)
+                {
+                    foreach (var product in response.Data.Products)
+                    {
+                        products.Insert(0, product);
+                    }
+                }
             }
-            return product;
+
+            return products;
         }
 
         public AsyncRelayCommand SearchCommand
@@ -86,14 +93,17 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     {
                         return App.Current.Dispatcher.InvokeAsync(async () =>
                        {
-                           WbProduct product = await _Search();
-                           if (product != null)
+                           var products = await _Search();
+                           if (products.Count > 0)
                            {
-                               Products.Insert(0, product);
+                               foreach (var product in products)
+                               {
+                                   Products.Add(product);
+                               }
                            }
                        }).Task;
                     },
-                    (obj) => !IsWorking && !string.IsNullOrEmpty(_article) && Int32.TryParse(_article, out int _)
+                    (obj) => !IsWorking && !string.IsNullOrEmpty(_searchPattern)
                     ));
             }
         }
