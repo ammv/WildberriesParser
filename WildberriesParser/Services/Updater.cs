@@ -43,16 +43,11 @@ namespace WildberriesParser.Services
 
         public void Update()
         {
-            using (MemoryStream ms = new MemoryStream())
+            using (var fileStream = new FileStream("update.zip", FileMode.Create))
             {
                 _sftpClient.Connect();
-                _sftpClient.DownloadFile($"WBParser/{_newVersion}.zip", ms);
+                _sftpClient.DownloadFile($"WBParser/{_newVersion}.zip", fileStream);
                 _sftpClient.Disconnect();
-
-                using (var fileStream = new FileStream("update.zip", FileMode.Create, FileAccess.Write))
-                {
-                    ms.CopyTo(fileStream);
-                }
             }
 
             Process.Start("Updater.exe");
