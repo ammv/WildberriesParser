@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using WildberriesParser.Infastructure.Core;
 using WildberriesParser.Model.Data;
+using WildberriesParser.Services;
 
 namespace WildberriesParser
 {
@@ -36,6 +37,7 @@ namespace WildberriesParser
         {
             services.AddSingleton<Services.WbRequesterService>();
             services.AddSingleton<Services.WbParser>();
+            services.AddSingleton<Services.Updater>();
         }
 
         private static void ConfigureStaffServices(IServiceCollection services)

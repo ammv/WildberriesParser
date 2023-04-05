@@ -202,6 +202,7 @@
     <Compile Include="Infastructure\Core\ViewModelBase.cs" />
     <Compile Include="Services\WbRequesterService.cs" />
     <Compile Include="ViewModel\Admin\AdminMainViewModel.cs" />
+    <Compile Include="ViewModel\Admin\UserAddViewModel.cs" />
     <Compile Include="ViewModel\Admin\HistoryViewModel.cs" />
     <Compile Include="ViewModel\Admin\SettingsViewModel.cs" />
     <Compile Include="ViewModel\Admin\UsersViewModel.cs" />
@@ -218,6 +219,9 @@
     <Compile Include="ViewModel\Staff\StaffMainViewModel.cs" />
     <Compile Include="ViewModel\Staff\TraceProductsViewModel.cs" />
     <Compile Include="ViewModel\StartViewModel.cs" />
+    <Compile Include="View\Admin\UserAddView.xaml.cs">
+      <DependentUpon>UserAddView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\NeedSettingErrorView.xaml.cs">
       <DependentUpon>NeedSettingErrorView.xaml</DependentUpon>
     </Compile>
@@ -312,6 +316,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Admin\UserAddView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\NeedSettingErrorView.xaml">
       <Generator>MSBuild:Compile</Generator>

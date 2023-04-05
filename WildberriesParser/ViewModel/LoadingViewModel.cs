@@ -22,7 +22,8 @@ namespace WildberriesParser.ViewModel
         private double _value = 0;
         private double _maximum = 120;
         private readonly bool _isRunAsAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
-        private readonly Version _version = Services.Updater.GetCurrentVersion();
+        private readonly Version _version;
+        private readonly Updater _updater;
         private readonly Random _rnd = new Random();
 
         public double Value
@@ -64,13 +65,32 @@ namespace WildberriesParser.ViewModel
 
         #endregion fields
 
-        public LoadingViewModel(INavigationService navigationService)
+        public LoadingViewModel(INavigationService navigationService, Updater updater)
         {
+            _updater = updater;
+            _version = _updater.GetCurrentVersion();
             _navigationService = navigationService;
         }
 
         private async Task Load()
         {
+            State = "Проверка обновлений";
+            if (_updater.CheckNewVersion())
+            {
+                if (Helpers.MessageBoxHelper.Question("Обнаружена новая версия, обновить?") == Helpers.MessageBoxHelperResult.YES)
+                {
+                    if (_updater.HasUpdateZip())
+                    {
+                        Helpers.MessageBoxHelper.Information("Обновление...");
+                        _updater.Update();
+                        App.Current.Shutdown();
+                    }
+                    else
+                    {
+                        Helpers.MessageBoxHelper.Error("Файл обновления не найден!");
+                    }
+                }
+            }
             await Task.Delay(0);
             State = "Получение представлений...";
             GetViews();

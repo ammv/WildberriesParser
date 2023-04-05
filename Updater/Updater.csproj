@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,16 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\LogTypeEnum.cs" />
-    <Compile Include="Model\PageModel.cs" />
-    <Compile Include="Model\WbClothesColor.cs" />
-    <Compile Include="Model\WbData.cs" />
-    <Compile Include="Model\WbMetadata.cs" />
-    <Compile Include="Model\WbParams.cs" />
-    <Compile Include="Model\WbProduct.cs" />
-    <Compile Include="Model\WbSize.cs" />
-    <Compile Include="Model\WbStock.cs" />
-    <Compile Include="Model\WildberriesSearchResponse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
