@@ -14,7 +14,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="NoResize"
-        ShowInTaskbar="True"
+        ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen">
     <intr:Interaction.Triggers>
         <intr:EventTrigger EventName="Loaded">
@@ -138,7 +138,7 @@
                         Stretch="Uniform" />
         </Border.Background>
 
-        <Grid>
+        <Grid Background="#555555">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" />
