@@ -82,6 +82,7 @@ namespace WildberriesParser.ViewModel
                     if (_updater.HasUpdateZip())
                     {
                         Helpers.MessageBoxHelper.Information("Обновление...");
+                        State = "Скачивание обновления";
                         _updater.Update();
                         App.Current.Shutdown();
                     }
@@ -97,7 +98,8 @@ namespace WildberriesParser.ViewModel
             await PrettyIncrementValue(12);
 
             State = "Проверка настроек...";
-            bool hasDbConnectionString = !string.IsNullOrEmpty(Properties.Settings.Default.ConnectionString);
+            bool hasDbConnectionString = !(string.IsNullOrEmpty(Properties.Settings.Default.ConnectionString) ||
+                string.IsNullOrWhiteSpace(Properties.Settings.Default.ConnectionString));
             await PrettyIncrementValue(12);
 
             State = "Проверка подключения к базе данных...";
