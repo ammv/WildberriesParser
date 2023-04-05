@@ -81,7 +81,6 @@ namespace WildberriesParser.ViewModel
                 {
                     if (_updater.HasUpdateZip())
                     {
-                        Helpers.MessageBoxHelper.Information("Обновление...");
                         State = "Скачивание обновления";
                         _updater.Update();
                         App.Current.Shutdown();
@@ -114,7 +113,7 @@ namespace WildberriesParser.ViewModel
             await PrettyIncrementValue(36);
 
             State = "Проверка наличия пользователей...";
-            bool hasUsersInDb = HasUsersInDb();
+            bool hasUsersInDb = hasDbConnection && HasUsersInDb();
             await PrettyIncrementValue(24);
 
             State = "Настройка навигации...";

@@ -24,15 +24,15 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="25" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -97,7 +97,7 @@
             <materialDesign:HintAssist.Hint>
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Server" />
+                    <materialDesign:PackIcon Kind="DatabaseAdd" />
                     <Line Width="10" />
                     <TextBlock Text="Имя базы данных" />
                 </StackPanel>

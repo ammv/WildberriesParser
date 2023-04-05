@@ -10,23 +10,38 @@ namespace Updater
     {
         private static void Main(string[] args)
         {
-            try
+            string programName = args[0].Replace(".exe", "");
+            int attempts = 0;
+            while (attempts != 5)
             {
-                while (Process.GetProcessesByName("WildberriesParser").Length > 0)
+                try
                 {
-                    Process[] myProcesses2 = Process.GetProcessesByName("WildberriesParser");
-                    for (int i = 1; i < myProcesses2.Length; i++) { myProcesses2[i].Kill(); }
+                    while (Process.GetProcessesByName(programName).Length > 0)
+                    {
+                        Process[] myProcesses = Process.GetProcessesByName(programName);
+                        for (int i = 1; i < myProcesses.Length; i++) { myProcesses[i].Kill(); }
 
-                    Thread.Sleep(300);
+                        Thread.Sleep(300);
+                    }
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Попытка: {attempts}. Не удалось завершить процессы\n" + ex.Message);
+                    Console.ReadLine();
                 }
 
+                attempts++;
+            }
+            try
+            {
                 using (FileStream fs = new FileStream("update.zip", FileMode.Open))
                 {
                     ZipArchive zip = new ZipArchive(fs);
                     zip.ExtractToDirectory(Directory.GetCurrentDirectory(), true);
                 }
 
-                Process.Start("WildberriesParser.exe");
+                Process.Start(programName + ".exe");
             }
             catch (Exception ex)
             {

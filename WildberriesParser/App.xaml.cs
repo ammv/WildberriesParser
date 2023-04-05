@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OfficeOpenXml;
 using System;
 using System.Windows;
 using WildberriesParser.Infastructure.Core;
@@ -18,6 +19,8 @@ namespace WildberriesParser
 
         public App()
         {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
             IServiceCollection services = new ServiceCollection();
             ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider();
