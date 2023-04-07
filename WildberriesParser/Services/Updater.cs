@@ -41,6 +41,20 @@ namespace WildberriesParser.Services
             }
         }
 
+        public bool CheckConnection()
+        {
+            try
+            {
+                _sftpClient.Connect();
+                _sftpClient.Disconnect();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// Проверяет наличие файла содержащего обновление, например MyProject/1.0.5.0.zip
         /// </summary>

@@ -14,7 +14,6 @@ namespace WildberriesParser
     public partial class App : Application
     {
         public static ServiceProvider ServiceProvider { get; private set; }
-
         public static User CurrentUser { get; set; }
 
         public App()

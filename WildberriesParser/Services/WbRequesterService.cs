@@ -23,13 +23,14 @@ namespace WildberriesParser.Services
             client.DefaultRequestHeaders.Add("User-Agent", _GenerateUserAgent());
 
             var response = await client.GetAsync(url);
+            string content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                return await response.Content.ReadAsStringAsync();
+                return content;
             }
             else
             {
-                throw new HttpRequestException("Ошибка! Ответ от сервера: " + response.StatusCode);
+                throw new HttpRequestException($"Ошибка! Ответ от сервера: {content}");
             }
         }
 

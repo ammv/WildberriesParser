@@ -74,23 +74,31 @@ namespace WildberriesParser.ViewModel
 
         private async Task Load()
         {
-            State = "Проверка обновлений";
-            if (_updater.CheckNewVersion())
+            try
             {
-                if (Helpers.MessageBoxHelper.Question("Обнаружена новая версия, обновить?") == Helpers.MessageBoxHelperResult.YES)
+                State = "Проверка обновлений";
+                if (_updater.CheckConnection() && _updater.CheckNewVersion())
                 {
-                    if (_updater.HasUpdateZip())
+                    if (Helpers.MessageBoxHelper.Question("Обнаружена новая версия, обновить?") == Helpers.MessageBoxHelperResult.YES)
                     {
-                        State = "Скачивание обновления";
-                        _updater.Update();
-                        App.Current.Shutdown();
-                    }
-                    else
-                    {
-                        Helpers.MessageBoxHelper.Error("Файл обновления не найден!");
+                        if (_updater.HasUpdateZip())
+                        {
+                            State = "Скачивание обновления";
+                            _updater.Update();
+                            App.Current.Shutdown();
+                        }
+                        else
+                        {
+                            Helpers.MessageBoxHelper.Error("Файл обновления не найден!");
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Helpers.MessageBoxHelper.Error($"Не удалось выполнить обновление\n{ex.Message}");
+            }
+
             await Task.Delay(0);
             State = "Получение представлений...";
             GetViews();

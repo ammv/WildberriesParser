@@ -72,7 +72,7 @@ namespace WildberriesParser.ViewModel
                                         $"Создание аккаунта администратора. Password: {_password}, Login: {_login}",
                                         Model.LogTypeEnum.CREATE_USER);
 
-                                    Window curr = App.ServiceProvider.GetService(typeof(View.StartView)) as Window;
+                                    Window curr = obj as Window;
                                     IsWorking = false;
                                     curr.Hide();
                                     (App.ServiceProvider.GetService(typeof(View.Admin.AdminMainView)) as Window).Show();

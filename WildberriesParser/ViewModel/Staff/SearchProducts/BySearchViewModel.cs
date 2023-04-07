@@ -21,8 +21,9 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
     public class BySearchViewModel : ViewModelBase
     {
         private string _searchPattern;
+        private bool _isExportWorking;
         private string _result = "Htess";
-        private bool _isWorking;
+        private bool _isSearchWorking;
         private ExcelService _excelService;
 
         private ObservableCollection<WbProduct> _products = new ObservableCollection<WbProduct>();
@@ -31,6 +32,12 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         {
             get => _products;
             set { Set(ref _products, value); }
+        }
+
+        public bool IsExportWorking
+        {
+            get => _isExportWorking;
+            set => Set(ref _isExportWorking, value);
         }
 
         public INavigationService NavigationService
@@ -48,9 +55,8 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             }
         }
 
-        public BySearchViewModel(INavigationService navigationService,
-            WbRequesterService wbRequesterService, WbParser wbParser,
-            ExcelService excelService)
+        public BySearchViewModel(INavigationService navigationService, WbParser wbParser,
+            ExcelService excelService, WbRequesterService wbRequesterService)
         {
             NavigationService = navigationService;
             _wbRequesterService = wbRequesterService;
@@ -71,7 +77,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             foreach (var responseJson in responsesJson)
             {
                 var response = _wbParser.ParseResponse(responseJson);
-                if (response.Data.Products.Count > 0)
+                if (response.Data?.Products.Count > 0)
                 {
                     foreach (var product in response.Data.Products)
                     {
@@ -93,6 +99,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     {
                         return App.Current.Dispatcher.InvokeAsync(async () =>
                        {
+                           IsSearchWorking = true;
                            var products = await _Search();
                            if (products.Count > 0)
                            {
@@ -101,9 +108,26 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                                    Products.Add(product);
                                }
                            }
+                           IsSearchWorking = false;
                        }).Task;
                     },
-                    (obj) => !IsWorking && !string.IsNullOrEmpty(_searchPattern)
+                    (obj) => !IsSearchWorking && !string.IsNullOrEmpty(_searchPattern)
+                    ));
+            }
+        }
+
+        private RelayCommand _clearCommand;
+
+        public RelayCommand ClearCommand
+        {
+            get
+            {
+                return _clearCommand ??
+                    (_clearCommand = new RelayCommand
+                    ((obj) =>
+                    {
+                        Products.Clear();
+                    }
                     ));
             }
         }
@@ -126,6 +150,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                                 Helpers.MessageBoxHelper.Error("Вы не выбрали файл!");
                                 return;
                             }
+                            IsExportWorking = true;
                             Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
                             data.Add("Артикул", new List<object>());
                             data.Add("Название", new List<object>());
@@ -161,16 +186,20 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                             {
                                 Helpers.MessageBoxHelper.Error($"Во время экспорта произошла ошибка:\n{ex.Message}");
                             }
+                            finally
+                            {
+                                IsExportWorking = false;
+                            }
                         }).Task;
                     }
                     ));
             }
         }
 
-        public bool IsWorking
+        public bool IsSearchWorking
         {
-            get => _isWorking;
-            set => Set(ref _isWorking, value);
+            get => _isSearchWorking;
+            set => Set(ref _isSearchWorking, value);
         }
 
         public string Result

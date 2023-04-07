@@ -22,7 +22,8 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
     {
         private string _article;
         private string _result = "Htess";
-        private bool _isWorking;
+        private bool _isSearchWorking;
+        private bool _isExportWorking;
         private ExcelService _excelService;
 
         private ObservableCollection<WbProduct> _products = new ObservableCollection<WbProduct>();
@@ -86,14 +87,32 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     {
                         return App.Current.Dispatcher.InvokeAsync(async () =>
                        {
+                           IsSearchWorking = true;
                            WbProduct product = await _Search();
                            if (product != null)
                            {
                                Products.Insert(0, product);
                            }
+                           IsSearchWorking = false;
                        }).Task;
                     },
-                    (obj) => !IsWorking && !string.IsNullOrEmpty(_article) && Int32.TryParse(_article, out int _)
+                    (obj) => !IsSearchWorking && !string.IsNullOrEmpty(_article) && Int32.TryParse(_article, out int _)
+                    ));
+            }
+        }
+
+        private RelayCommand _clearCommand;
+
+        public RelayCommand ClearCommand
+        {
+            get
+            {
+                return _clearCommand ??
+                    (_clearCommand = new RelayCommand
+                    ((obj) =>
+                    {
+                        Products.Clear();
+                    }
                     ));
             }
         }
@@ -116,6 +135,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                                 Helpers.MessageBoxHelper.Error("Вы не выбрали файл!");
                                 return;
                             }
+                            IsExportWorking = true;
                             Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
                             data.Add("Артикул", new List<object>());
                             data.Add("Название", new List<object>());
@@ -151,22 +171,33 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                             {
                                 Helpers.MessageBoxHelper.Error($"Во время экспорта произошла ошибка:\n{ex.Message}");
                             }
+                            finally
+                            {
+                                IsExportWorking = false;
+                            }
                         }).Task;
-                    }
+                    },
+                    (obj) => !IsExportWorking
                     ));
             }
         }
 
-        public bool IsWorking
+        public bool IsSearchWorking
         {
-            get => _isWorking;
-            set => Set(ref _isWorking, value);
+            get => _isSearchWorking;
+            set => Set(ref _isSearchWorking, value);
         }
 
         public string Result
         {
             get => _result;
             set => Set(ref _result, value);
+        }
+
+        public bool IsExportWorking
+        {
+            get => _isExportWorking;
+            set => Set(ref _isExportWorking, value);
         }
     }
 }

@@ -14,7 +14,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="NoResize"
-        ShowInTaskbar="True"
+        ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen">
     <intr:Interaction.Triggers>
         <intr:EventTrigger EventName="Loaded">

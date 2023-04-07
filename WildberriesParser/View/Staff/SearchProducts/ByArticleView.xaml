@@ -34,7 +34,7 @@
                    HorizontalAlignment="Center" />
 
         <Button Grid.Row="1"
-                materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsWorking}"
+                materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsSearchWorking}"
                 materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
                 Command="{Binding SearchCommand}"
                 Grid.Column="2"
@@ -60,6 +60,9 @@
         <StackPanel Orientation="Horizontal"
                     Grid.Row="2">
             <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                    materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsExportWorking}"
+                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                    Margin="0 0 10 0"
                     Command="{Binding ExportCommand}">
                 <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="FileExport"
@@ -68,6 +71,18 @@
                                              Width="20"
                                              Height="20" />
                     <TextBlock Text="Экспорт"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding ClearCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Remove"
+                                             Margin="0 0 10 0"
+                                             VerticalAlignment="Center"
+                                             Width="20"
+                                             Height="20" />
+                    <TextBlock Text="Очистить"
                                VerticalAlignment="Center" />
                 </StackPanel>
             </Button>

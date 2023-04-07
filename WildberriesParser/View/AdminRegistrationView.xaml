@@ -27,13 +27,11 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Админ"
-
                    HorizontalAlignment="Center"
                    Grid.Row="0"
                    Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
 
         <TextBlock Text="Создайте аккаунт администратора"
-
                    Grid.Row="1"
                    HorizontalAlignment="Center"
                    Opacity="0.6"
@@ -52,8 +50,7 @@
             </materialDesign:HintAssist.Hint>
         </TextBox>
 
-        <PasswordBox
-                     materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
+        <PasswordBox materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
                      Style="{StaticResource MaterialDesignOutlinedRevealPasswordBox}"
                      Grid.Row="6">
             <intr:Interaction.Behaviors>
@@ -69,8 +66,7 @@
             </materialDesign:HintAssist.Hint>
         </PasswordBox>
 
-        <PasswordBox
-                     materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
+        <PasswordBox materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
                      Style="{StaticResource MaterialDesignOutlinedRevealPasswordBox}"
                      Grid.Row="8">
             <intr:Interaction.Behaviors>
@@ -86,8 +82,7 @@
             </materialDesign:HintAssist.Hint>
         </PasswordBox>
 
-        <Button
-                Command="{Binding CreateAdminCommand}"
+        <Button Command="{Binding CreateAdminCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                 Grid.Row="10"
                 Height="40"
@@ -98,8 +93,7 @@
             <TextBlock Text="Создать" />
         </Button>
 
-        <Button
-                Command="{Binding SettingDatabaseServerCommand}"
+        <Button Command="{Binding SettingDatabaseServerCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                 Grid.Row="12"
                 VerticalAlignment="Bottom"

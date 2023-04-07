@@ -32,6 +32,11 @@ namespace WildberriesParser.Model.Data
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<WbBrand> WbBrand { get; set; }
+        public virtual DbSet<WbProduct> WbProduct { get; set; }
+        public virtual DbSet<WbProductChanges> WbProductChanges { get; set; }
+        public virtual DbSet<WbProductPosChanges> WbProductPosChanges { get; set; }
+        public virtual DbSet<WbProductSales> WbProductSales { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

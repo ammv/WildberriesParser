@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WildberriesParser.Helpers.MessageBoxes"
         mc:Ignorable="d"
-        Title="ErrorView"
+        Title="Вопрос"
         Height="Auto"
         MinWidth="325"
         MaxWidth="325"
