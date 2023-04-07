@@ -11,6 +11,11 @@ namespace WildberriesParser.Model
         COMMON = 1,
         AUTH_USER,
         EXIT_USER,
-        CREATE_USER
+        CREATE_USER,
+        AUTH_USER_TRY = 5,
+        FIND_PRODUCTS = 10,
+        CHANGE_DB_SETTINGS,
+        DELETE_USER,
+        LOAD_UPDATE,
     }
 }

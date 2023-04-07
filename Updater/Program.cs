@@ -10,6 +10,18 @@ namespace Updater
     {
         private static void Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Вы указали путь к exe файлу для запуска после распаковки");
+            }
+            else
+            {
+                Extract(args);
+            }
+        }
+
+        private static void Extract(string[] args)
+        {
             string programName = args[0].Replace(".exe", "");
             int attempts = 0;
             while (attempts != 5)
