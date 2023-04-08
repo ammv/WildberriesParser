@@ -17,6 +17,9 @@ namespace WildberriesParser.ViewModel.Admin
     public class HistoryViewModel : ViewModelBase
     {
         private PagedList<Log> _logs;
+        private PagedListCommands<Log> _pagedCommands;
+        private int _selectedIndex = 0;
+        private int[] _pageSizes = new int[] { 25, 50, 100, 250 };
         private string _searchText;
         private INavigationService _navigationService;
 
@@ -46,6 +49,7 @@ namespace WildberriesParser.ViewModel.Admin
             NavigationService = navigationService;
             Logs = new PagedList<Log>(DBEntities.GetContext()
                                     .Log.OrderBy(u => u.ID), 25);
+            PagedCommands = new PagedListCommands<Log>(Logs);
         }
 
         private AsyncRelayCommand _SearchTextChangedCommand;
@@ -71,6 +75,7 @@ namespace WildberriesParser.ViewModel.Admin
                                     .Log.Where(u => u.User.Login.Contains(_searchText))
                                     .OrderBy(l => l.Date), 25);
                             }
+                            PagedCommands.Instance = Logs;
                         }).Task;
                         return Task.WhenAll(task2);
                     }
@@ -78,72 +83,29 @@ namespace WildberriesParser.ViewModel.Admin
             }
         }
 
-        private RelayCommand _firstPageCommand;
-
-        public RelayCommand FirstPageCommand
+        public PagedListCommands<Log> PagedCommands
         {
-            get
+            get => _pagedCommands;
+            set
             {
-                return _firstPageCommand ??
-                    (_firstPageCommand = new RelayCommand
-                    ((obj) =>
-                    {
-                        Logs.ToFirst();
-                    },
-                    (obj) => Logs.CanPrevious
-                    ));
+                Set(ref _pagedCommands, value);
             }
         }
 
-        private RelayCommand _lastPageCommand;
-
-        public RelayCommand LastPageCommand
+        public int SelectedIndex
         {
-            get
+            get => _selectedIndex;
+            set
             {
-                return _lastPageCommand ??
-                    (_lastPageCommand = new RelayCommand
-                    ((obj) =>
-                    {
-                        Logs.ToLast();
-                    },
-                    (obj) => Logs.CanNext
-                    ));
+                Set(ref _selectedIndex, value);
+                Logs.PageSize = _pageSizes[value];
             }
         }
 
-        private RelayCommand _previousPageCommand;
-
-        public RelayCommand PreviousPageCommand
+        public int[] PageSizes
         {
-            get
-            {
-                return _previousPageCommand ??
-                    (_previousPageCommand = new RelayCommand
-                    ((obj) =>
-                    {
-                        Logs.Previous();
-                    },
-                    (obj) => Logs.CanPrevious
-                    ));
-            }
-        }
-
-        private RelayCommand _nextPageCommand;
-
-        public RelayCommand NextPageCommand
-        {
-            get
-            {
-                return _nextPageCommand ??
-                    (_nextPageCommand = new RelayCommand
-                    ((obj) =>
-                    {
-                        Logs.Next();
-                    },
-                    (obj) => Logs.CanNext
-                    ));
-            }
+            get => _pageSizes;
+            set => _pageSizes = value;
         }
     }
 }
