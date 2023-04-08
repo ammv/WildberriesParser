@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System;
 using System.Windows;
 using WildberriesParser.Infastructure.Commands;
 using WildberriesParser.Infastructure.Core;
@@ -110,23 +111,31 @@ namespace WildberriesParser.ViewModel
 
                             return App.Current.Dispatcher.InvokeAsync(() =>
                             {
-                                User user = GetUser();
-                                if (user != null && user.Login == _login)
+                                try
                                 {
-                                    if (user.Password == _password)
+                                    User user = GetUser();
+                                    if (user != null && user.Login == _login)
                                     {
-                                        SettingNavigationAfterAuth(user);
+                                        if (user.Password == _password)
+                                        {
+                                            SettingNavigationAfterAuth(user);
+                                        }
+                                        else
+                                        {
+                                            _loggerService.AddLog($"Неудачная попытка авторизации в аккаунт пользователя с логином {user.Login}", Model.LogTypeEnum.AUTH_USER_TRY);
+                                            IsWorking = false;
+                                            Helpers.MessageBoxHelper.Error("Неверный пароль");
+                                        }
                                     }
                                     else
                                     {
                                         IsWorking = false;
-                                        Helpers.MessageBoxHelper.Error("Неверный пароль");
+                                        Helpers.MessageBoxHelper.Error("Пользователь с таким логином не найден");
                                     }
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    IsWorking = false;
-                                    Helpers.MessageBoxHelper.Error("Пользователь с таким логином не найден");
+                                    Helpers.MessageBoxHelper.Error($"Возникла ошибка во время авторизации:\n{ex.Message}");
                                 }
                             }).Task;
                         },

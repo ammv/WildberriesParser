@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Collections.ObjectModel;
 using WildberriesParser.Infastructure.Commands;
 using System;
+using System.Threading.Tasks;
 
 namespace WildberriesParser.ViewModel.Admin
 {
@@ -61,6 +62,37 @@ namespace WildberriesParser.ViewModel.Admin
                             Role = DBEntities.GetContext().Role.First(x => x.Name == "staff")
                         });
                         return DBEntities.GetContext().SaveChangesAsync();
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _SearchTextChangedCommand;
+
+        public AsyncRelayCommand SearchTextChangedCommand
+        {
+            get
+            {
+                return _SearchTextChangedCommand ??
+                    (_SearchTextChangedCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        Task task2 = App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            Users.Clear();
+
+                            if (string.IsNullOrEmpty(_searchText))
+                            {
+                                Users = new ObservableCollection<User>(DBEntities.GetContext()
+                                    .User.OrderBy(u => u.ID));
+                            }
+                            else
+                            {
+                                Users = new ObservableCollection<User>(DBEntities.GetContext()
+                                    .User.Where(u => u.Login.Contains(_searchText)).OrderBy(u => u.ID));
+                            }
+                        }).Task;
+                        return Task.WhenAll(task2);
                     }
                     ));
             }

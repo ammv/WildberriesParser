@@ -12,14 +12,20 @@ namespace WildberriesParser.Services
     {
         public void AddLog(string message = null, LogTypeEnum logType = LogTypeEnum.COMMON)
         {
-            DBEntities.GetContext().Log.Add(new Log
+            try
             {
-                UserID = App.CurrentUser.ID,
-                Description = message,
-                TypeID = (int)logType,
-                Date = DateTime.Now
-            });
-            DBEntities.GetContext().SaveChanges();
+                DBEntities.GetContext()?.Log.Add(new Log
+                {
+                    User = App.CurrentUser,
+                    Description = message,
+                    TypeID = (int)logType,
+                    Date = DateTime.Now
+                });
+                DBEntities.GetContext()?.SaveChanges();
+            }
+            catch
+            {
+            }
         }
     }
 }

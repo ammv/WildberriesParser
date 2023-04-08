@@ -17,6 +17,7 @@ namespace WildberriesParser.ViewModel
         private bool _isConnected = false;
         private bool _canCheck = false;
         private INavigationService _navigationService;
+        private ILoggerService _loggerService;
 
         public string Login
         {
@@ -81,9 +82,10 @@ namespace WildberriesParser.ViewModel
             }
         }
 
-        public SettingDatabaseServerViewModel(INavigationService navigationService)
+        public SettingDatabaseServerViewModel(INavigationService navigationService, ILoggerService loggerService)
         {
             NavigationService = navigationService;
+            _loggerService = loggerService;
         }
 
         private bool HasUsers()
@@ -136,6 +138,12 @@ namespace WildberriesParser.ViewModel
                                             Properties.Settings.Default.Save();
                                             IsConnected = true;
                                             CheckState = "Готово";
+
+                                            _loggerService.AddLog($"Соеденение настроено с БД настроено:\n" +
+                                                $"Логин: {_login}" +
+                                                $"Пароль: {_password}\n" +
+                                                $"Сервер: {_server}\n" +
+                                                $"База данных: {_databaseName}", Model.LogTypeEnum.CHANGE_DB_SETTINGS);
                                         }
                                         else
                                         {

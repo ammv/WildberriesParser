@@ -25,6 +25,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         private bool _isSearchWorking;
         private bool _isExportWorking;
         private ExcelService _excelService;
+        private ILoggerService _loggerService;
 
         private ObservableCollection<WbProduct> _products = new ObservableCollection<WbProduct>();
 
@@ -51,12 +52,13 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
 
         public ByArticleViewModel(INavigationService navigationService,
             WbRequesterService wbRequesterService, WbParser wbParser,
-            ExcelService excelService)
+            ExcelService excelService, ILoggerService loggerService)
         {
             NavigationService = navigationService;
             _wbRequesterService = wbRequesterService;
             _wbParser = wbParser;
             _excelService = excelService;
+            _loggerService = loggerService;
         }
 
         private INavigationService _navigationService;
@@ -135,6 +137,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                                 Helpers.MessageBoxHelper.Error("Вы не выбрали файл!");
                                 return;
                             }
+
                             IsExportWorking = true;
                             Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
                             data.Add("Артикул", new List<object>());

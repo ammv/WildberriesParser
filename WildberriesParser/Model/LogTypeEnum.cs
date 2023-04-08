@@ -17,5 +17,6 @@ namespace WildberriesParser.Model
         CHANGE_DB_SETTINGS,
         DELETE_USER,
         LOAD_UPDATE,
+        ERROR
     }
 }

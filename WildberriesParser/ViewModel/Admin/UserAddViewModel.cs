@@ -51,7 +51,7 @@ namespace WildberriesParser.ViewModel.Admin
             DBEntities.GetContext().User.Add(user);
 
             _loggerService.AddLog(
-                $"Создание пользователя: Логин: {_login}, Пароль: {_password}, Роль: {SelectedRole.Name}",
+                $"Создание пользователя\nЛогин: {_login}\nПароль: {_password}\nРоль: {SelectedRole.Name}",
                 Model.LogTypeEnum.CREATE_USER);
         }
 
