@@ -20,16 +20,24 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
     public class ByArticleViewModel : ViewModelBase
     {
+        public string Title { get; } = "Поиск по артикулу";
+
         private string _article;
+
         private string _result = "Htess";
         private bool _isSearchWorking;
         private bool _isExportWorking;
+        private int _selectedIndex = 0;
+        private int[] _pageSizes = new int[] { 25, 50, 100, 250 };
         private ExcelService _excelService;
         private ILoggerService _loggerService;
 
-        private ObservableCollection<WbProduct> _products = new ObservableCollection<WbProduct>();
+        private ObservableCollection<WbProduct> _originalProducts = new ObservableCollection<WbProduct>();
 
-        public ObservableCollection<WbProduct> Products
+        private PagedList<WbProduct> _products;
+        private PagedListCommands<WbProduct> _pagedCommands;
+
+        public PagedList<WbProduct> Products
         {
             get => _products;
             set { Set(ref _products, value); }
@@ -59,6 +67,9 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             _wbParser = wbParser;
             _excelService = excelService;
             _loggerService = loggerService;
+
+            _products = new PagedList<WbProduct>(_originalProducts, _pageSizes[_selectedIndex]);
+            _pagedCommands = new PagedListCommands<WbProduct>(_products);
         }
 
         private INavigationService _navigationService;
@@ -91,9 +102,12 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                        {
                            IsSearchWorking = true;
                            WbProduct product = await _Search();
+
                            if (product != null)
                            {
-                               Products.Insert(0, product);
+                               _originalProducts.Add(product);
+                               Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                               _pagedCommands.Instance = Products;
                            }
                            IsSearchWorking = false;
                        }).Task;
@@ -113,7 +127,9 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     (_clearCommand = new RelayCommand
                     ((obj) =>
                     {
-                        Products.Clear();
+                        _originalProducts.Clear();
+                        Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                        PagedCommands.Instance = Products;
                     }
                     ));
             }
@@ -150,7 +166,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                             data.Add("Отзывы", new List<object>());
                             data.Add("Промо текст", new List<object>());
 
-                            foreach (var product in _products)
+                            foreach (var product in _originalProducts)
                             {
                                 data["Артикул"].Add(product.id);
                                 data["Название"].Add(product.name);
@@ -197,10 +213,35 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             set => Set(ref _result, value);
         }
 
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set
+            {
+                Set(ref _selectedIndex, value);
+                Products.PageSize = _pageSizes[value];
+            }
+        }
+
         public bool IsExportWorking
         {
             get => _isExportWorking;
             set => Set(ref _isExportWorking, value);
+        }
+
+        public PagedListCommands<WbProduct> PagedCommands
+        {
+            get => _pagedCommands;
+            set
+            {
+                Set(ref _pagedCommands, value);
+            }
+        }
+
+        public int[] PageSizes
+        {
+            get => _pageSizes;
+            set => _pageSizes = value;
         }
     }
 }

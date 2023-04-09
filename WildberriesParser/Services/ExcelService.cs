@@ -37,13 +37,13 @@ namespace WildberriesParser.Services
             return null;
         }
 
-        public void Export(Dictionary<string, List<object>> data, string path)
+        public void Export(Dictionary<string, List<object>> data, string path, string sheetName = "Лист 1")
         {
             {
                 using (FileStream fs = File.Create(path))
                 {
                     ExcelPackage excelPackage = new ExcelPackage(fs);
-                    excelPackage.Workbook.Worksheets.Add("Поиск по артикулу");
+                    excelPackage.Workbook.Worksheets.Add(sheetName);
                     var worksheet = excelPackage.Workbook.Worksheets[0];
 
                     int i = 1, j = 1;

@@ -9,6 +9,8 @@ namespace WildberriesParser.ViewModel.Admin
 {
     public class UserAddViewModel : ViewModelBase
     {
+        public string Title { get; } = "Добавление пользователей";
+
         private string _login;
         private string _password;
         private Role SelectedRole;

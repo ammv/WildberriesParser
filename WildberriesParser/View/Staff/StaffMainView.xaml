@@ -89,6 +89,15 @@
                 </Button>
             </StackPanel>
 
+            <TextBlock Text="{Binding NavigationService.CurrentView.Title}"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       Foreground="Purple"
+                       Margin="20 0 0 0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left" />
+
             <Border Grid.RowSpan="2"
                     Background="{StaticResource PrimaryHueDarkBrush}"
                     Padding="20"

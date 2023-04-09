@@ -8,16 +8,24 @@ using System.Collections.ObjectModel;
 using WildberriesParser.Infastructure.Commands;
 using System;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace WildberriesParser.ViewModel.Admin
 {
     public class UsersViewModel : ViewModelBase
     {
-        private ObservableCollection<User> _users;
+        public string Title { get; } = "Пользователи";
+
+        private PagedList<User> _users;
+        private PagedListCommands<User> _pagedCommands;
+        private int _selectedIndex = 0;
+        private int[] _pageSizes = new int[] { 25, 50, 100, 250 };
+        private bool _isExportWorking;
+        private ExcelService _excelService;
         private string _searchText;
         private INavigationService _navigationService;
 
-        public ObservableCollection<User> Users
+        public PagedList<User> Users
         {
             get => _users;
             set => Set(ref _users, value);
@@ -38,11 +46,12 @@ namespace WildberriesParser.ViewModel.Admin
             }
         }
 
-        public UsersViewModel(INavigationService navigationService)
+        public UsersViewModel(INavigationService navigationService, ExcelService excelService)
         {
             NavigationService = navigationService;
-            DBEntities.GetContext().User.Load();
-            _users = DBEntities.GetContext().User.Local;
+            _excelService = excelService;
+            Users = new PagedList<User>(DBEntities.GetContext().User.OrderBy(u => u.ID), _pageSizes[_selectedIndex]);
+            PagedCommands = new PagedListCommands<User>(Users);
         }
 
         private AsyncRelayCommand _AddUserCommand;
@@ -79,23 +88,110 @@ namespace WildberriesParser.ViewModel.Admin
                     {
                         Task task2 = App.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            Users.Clear();
-
                             if (string.IsNullOrEmpty(_searchText))
                             {
-                                Users = new ObservableCollection<User>(DBEntities.GetContext()
-                                    .User.OrderBy(u => u.ID));
+                                Users = new PagedList<User>(DBEntities.GetContext()
+                                    .User.OrderBy(u => u.ID), 25);
                             }
                             else
                             {
-                                Users = new ObservableCollection<User>(DBEntities.GetContext()
-                                    .User.Where(u => u.Login.Contains(_searchText)).OrderBy(u => u.ID));
+                                Users = new PagedList<User>(DBEntities.GetContext()
+                                    .User.Where(u => u.Login.Contains(_searchText))
+                                    .OrderBy(l => l.ID), 25);
                             }
+                            PagedCommands.Instance = Users;
                         }).Task;
                         return Task.WhenAll(task2);
                     }
                     ));
             }
+        }
+
+        private AsyncRelayCommand _exportCommand;
+
+        public AsyncRelayCommand ExportCommand
+        {
+            get
+            {
+                return _exportCommand ??
+                    (_exportCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            string path = _excelService.ShowSaveAsFileDialog();
+                            if (path == null)
+                            {
+                                Helpers.MessageBoxHelper.Error("Вы не выбрали файл!");
+                                return;
+                            }
+
+                            IsExportWorking = true;
+                            Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
+                            data.Add("ID", new List<object>());
+                            data.Add("Логин", new List<object>());
+                            data.Add("Пароль", new List<object>());
+                            data.Add("Роль", new List<object>());
+
+                            foreach (var item in _users.ItemsSource)
+                            {
+                                data["ID"].Add(item.ID);
+                                data["Логин"].Add(item.Login);
+                                data["Пароль"].Add(item.Password);
+                                data["Роль"].Add(item.Role.Name);
+                            }
+                            try
+                            {
+                                _excelService.Export(data, path);
+                                if (Helpers.MessageBoxHelper.Question("Экcпортировано успешно! Открыть файл?") == Helpers.MessageBoxHelperResult.YES)
+                                {
+                                    Process.Start(path);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error($"Во время экспорта произошла ошибка:\n{ex.Message}");
+                            }
+                            finally
+                            {
+                                IsExportWorking = false;
+                            }
+                        }).Task;
+                    },
+                    (obj) => !IsExportWorking
+                    ));
+            }
+        }
+
+        public PagedListCommands<User> PagedCommands
+        {
+            get => _pagedCommands;
+            set
+            {
+                Set(ref _pagedCommands, value);
+            }
+        }
+
+        public bool IsExportWorking
+        {
+            get => _isExportWorking;
+            set => Set(ref _isExportWorking, value);
+        }
+
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set
+            {
+                Set(ref _selectedIndex, value);
+                Users.PageSize = _pageSizes[value];
+            }
+        }
+
+        public int[] PageSizes
+        {
+            get => _pageSizes;
+            set => _pageSizes = value;
         }
     }
 }

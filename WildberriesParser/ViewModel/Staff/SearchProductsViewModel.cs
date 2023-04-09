@@ -11,6 +11,8 @@ namespace WildberriesParser.ViewModel.Staff
 {
     internal class SearchProductsViewModel : ViewModelBase
     {
+        public string Title { get; } = "Поиск продуктов";
+
         private INavigationService _navigationService;
 
         public INavigationService NavigationService

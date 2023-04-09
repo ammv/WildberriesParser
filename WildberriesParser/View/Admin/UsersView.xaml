@@ -12,21 +12,17 @@
              Background="Transparent">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*" />
-            <RowDefinition Height="75" />
-            <RowDefinition Height="0.8*" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="15" />
             <ColumnDefinition Width="0.2*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Пользователи"
-                   Grid.ColumnSpan="3"
-                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                   Foreground="Purple"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center" />
 
         <Button Grid.Row="1"
                 Command="{Binding AddUserCommand}"
@@ -54,14 +50,33 @@
             </intr:Interaction.Triggers>
         </TextBox>
 
-        <DataGrid Grid.Row="2"
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="2">
+            <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                    materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsExportWorking}"
+                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                    Margin="0 0 10 0"
+                    Command="{Binding ExportCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="FileExport"
+                                             Margin="0 0 10 0"
+                                             VerticalAlignment="Center"
+                                             Width="20"
+                                             Height="20" />
+                    <TextBlock Text="Экспорт"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <DataGrid Grid.Row="3"
                   Grid.ColumnSpan="3"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   Style="{StaticResource MaterialDesignDataGrid}"
                   IsReadOnly="True"
                   materialDesign:DataGridAssist.EnableEditBoxAssist="False"
-                  ItemsSource="{Binding Users}">
+                  ItemsSource="{Binding Users.DisplayedItems}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"
                                     Binding="{Binding ID}" />
@@ -73,5 +88,47 @@
                                     Binding="{Binding Role.Name}" />
             </DataGrid.Columns>
         </DataGrid>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="4"
+                    Grid.ColumnSpan="5"
+                    Margin="0 10 0 0"
+                    HorizontalAlignment="Center">
+            <Button Margin="0 0 5 0"
+                    Command="{Binding PagedCommands.FirstPageCommand}">
+                <materialDesign:PackIcon Kind="ChevronDoubleLeft" />
+            </Button>
+            <Button Margin="0 0 5 0"
+                    Command="{Binding PagedCommands.PreviousPageCommand}">
+                <materialDesign:PackIcon Kind="ChevronLeft" />
+            </Button>
+            <TextBlock Width="100"
+                       Margin="0 0 5 0"
+                       TextAlignment="Center"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource MaterialDesignBody2TextBlock}">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} из {1}">
+                        <Binding Path="Users.CurrentPage" />
+                        <Binding Path="Users.TotalPages" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <Button Margin="0 0 5 0"
+                    Command="{Binding PagedCommands.NextPageCommand}">
+                <materialDesign:PackIcon Kind="ChevronRight" />
+            </Button>
+            <Button Margin="0 0 50 0"
+                    Command="{Binding PagedCommands.LastPageCommand}">
+                <materialDesign:PackIcon Kind="ChevronDoubleRight" />
+            </Button>
+            <ComboBox Width="50"
+                      HorizontalContentAlignment="Center"
+                      ItemsSource="{Binding PageSizes}"
+                      SelectedIndex="{Binding SelectedIndex, UpdateSourceTrigger=PropertyChanged}"
+                      Style="{StaticResource MaterialDesignComboBox}">
+            </ComboBox>
+        </StackPanel>
     </Grid>
 </UserControl>

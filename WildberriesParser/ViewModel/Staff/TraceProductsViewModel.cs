@@ -9,5 +9,6 @@ namespace WildberriesParser.ViewModel.Staff
 {
     public class TraceProductsViewModel : ViewModelBase
     {
+        public string Title { get; } = "Отслеживание продукта";
     }
 }

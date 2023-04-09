@@ -50,6 +50,15 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
+            <TextBlock Text="{Binding NavigationService.CurrentView.Title}"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       Foreground="Purple"
+                       Margin="20 0 0 0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left" />
+
             <StackPanel Grid.Row="0"
                         Grid.Column="1"
                         HorizontalAlignment="Right"

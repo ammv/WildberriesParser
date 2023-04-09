@@ -36,9 +36,9 @@ namespace WildberriesParser.Infastructure.Core
                     (_firstPageCommand = new RelayCommand
                     ((obj) =>
                     {
-                        _instance.ToFirst();
+                        _instance?.ToFirst();
                     },
-                    (obj) => _instance.CanPrevious
+                    (obj) => _instance?.CanPrevious == true
                     ));
             }
         }
@@ -53,9 +53,9 @@ namespace WildberriesParser.Infastructure.Core
                     (_lastPageCommand = new RelayCommand
                     ((obj) =>
                     {
-                        _instance.ToLast();
+                        _instance?.ToLast();
                     },
-                    (obj) => _instance.CanNext
+                    (obj) => _instance?.CanNext == true
                     ));
             }
         }
@@ -70,9 +70,9 @@ namespace WildberriesParser.Infastructure.Core
                     (_previousPageCommand = new RelayCommand
                     ((obj) =>
                     {
-                        _instance.Previous();
+                        _instance?.Previous();
                     },
-                    (obj) => _instance.CanPrevious
+                    (obj) => _instance?.CanPrevious == true
                     ));
             }
         }
@@ -87,9 +87,9 @@ namespace WildberriesParser.Infastructure.Core
                     (_nextPageCommand = new RelayCommand
                     ((obj) =>
                     {
-                        _instance.Next();
+                        _instance?.Next();
                     },
-                    (obj) => _instance.CanNext
+                    (obj) => _instance?.CanNext == true
                     ));
             }
         }

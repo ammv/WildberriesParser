@@ -9,5 +9,6 @@ namespace WildberriesParser.ViewModel.Staff
 {
     internal class SettingsViewModel : ViewModelBase
     {
+        public string Title { get; } = "Настройки";
     }
 }

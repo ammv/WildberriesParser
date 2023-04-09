@@ -16,12 +16,6 @@
             <RowDefinition Height="0.1*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Поиск товаров"
-                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                   Foreground="Purple"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center" />
-
         <UniformGrid Grid.Row="1"
                      Margin="25 50"
                      Grid.Column="2">

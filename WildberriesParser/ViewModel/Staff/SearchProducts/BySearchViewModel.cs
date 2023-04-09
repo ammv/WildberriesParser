@@ -20,15 +20,23 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
     public class BySearchViewModel : ViewModelBase
     {
+        public string Title { get; } = "Поиск по запросу";
+
         private string _searchPattern;
         private bool _isExportWorking;
         private string _result = "Htess";
         private bool _isSearchWorking;
         private ExcelService _excelService;
 
-        private ObservableCollection<WbProduct> _products = new ObservableCollection<WbProduct>();
+        private int _selectedIndex = 0;
+        private int[] _pageSizes = new int[] { 25, 50, 100, 250 };
 
-        public ObservableCollection<WbProduct> Products
+        private ObservableCollection<WbProduct> _originalProducts = new ObservableCollection<WbProduct>();
+
+        private PagedList<WbProduct> _products;
+        private PagedListCommands<WbProduct> _pagedCommands;
+
+        public PagedList<WbProduct> Products
         {
             get => _products;
             set { Set(ref _products, value); }
@@ -62,6 +70,9 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             _wbRequesterService = wbRequesterService;
             _wbParser = wbParser;
             _excelService = excelService;
+
+            _products = new PagedList<WbProduct>(_originalProducts, _pageSizes[_selectedIndex]);
+            _pagedCommands = new PagedListCommands<WbProduct>(_products);
         }
 
         private INavigationService _navigationService;
@@ -105,8 +116,10 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                            {
                                foreach (var product in products)
                                {
-                                   Products.Add(product);
+                                   _originalProducts.Add(product);
                                }
+                               Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                               _pagedCommands.Instance = Products;
                            }
                            IsSearchWorking = false;
                        }).Task;
@@ -126,7 +139,9 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     (_clearCommand = new RelayCommand
                     ((obj) =>
                     {
-                        Products.Clear();
+                        _originalProducts.Clear();
+                        Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                        PagedCommands.Instance = Products;
                     }
                     ));
             }
@@ -162,7 +177,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                             data.Add("Отзывы", new List<object>());
                             data.Add("Промо текст", new List<object>());
 
-                            foreach (var product in _products)
+                            foreach (var product in _originalProducts)
                             {
                                 data["Артикул"].Add(product.id);
                                 data["Название"].Add(product.name);
@@ -206,6 +221,31 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         {
             get => _result;
             set => Set(ref _result, value);
+        }
+
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set
+            {
+                Set(ref _selectedIndex, value);
+                Products.PageSize = _pageSizes[value];
+            }
+        }
+
+        public PagedListCommands<WbProduct> PagedCommands
+        {
+            get => _pagedCommands;
+            set
+            {
+                Set(ref _pagedCommands, value);
+            }
+        }
+
+        public int[] PageSizes
+        {
+            get => _pageSizes;
+            set => _pageSizes = value;
         }
     }
 }

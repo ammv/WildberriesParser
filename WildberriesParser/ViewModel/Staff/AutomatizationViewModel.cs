@@ -7,7 +7,8 @@ using WildberriesParser.Infastructure.Core;
 
 namespace WildberriesParser.ViewModel.Staff
 {
-    internal class AutomatizationViewModel : ViewModelBase
+    public class AutomatizationViewModel : ViewModelBase
     {
+        public string Title { get; } = "Автоматизация";
     }
 }
