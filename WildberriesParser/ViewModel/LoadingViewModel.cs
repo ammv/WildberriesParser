@@ -79,7 +79,7 @@ namespace WildberriesParser.ViewModel
                 State = "Проверка обновлений";
                 if (_updater.CheckConnection() && _updater.CheckNewVersion())
                 {
-                    if (Helpers.MessageBoxHelper.Question("Обнаружена новая версия, обновить?") == Helpers.MessageBoxHelperResult.YES)
+                    if (Helpers.MessageBoxHelper.Question($"Обнаружена новая версия - {_updater.GetNewVersion()}, обновить?") == Helpers.MessageBoxHelperResult.YES)
                     {
                         if (_updater.HasUpdateZip())
                         {

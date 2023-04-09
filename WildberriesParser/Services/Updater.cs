@@ -93,7 +93,11 @@ namespace WildberriesParser.Services
         /// <returns></returns>
         public Version GetCurrentVersion()
         {
-            return Assembly.GetExecutingAssembly().GetName().Version;
+            if (Version.TryParse(Properties.Settings.Default.Version, out Version result))
+            {
+                return result;
+            }
+            return new Version(1, 0, 0, 1);
         }
     }
 }
