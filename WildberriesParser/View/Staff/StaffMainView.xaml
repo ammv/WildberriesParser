@@ -21,7 +21,7 @@
         Width="1280">
     <Border CornerRadius="10"
             Margin="3"
-            Background="#FAFAFA">
+            Background="White">
         <Border.Effect>
             <DropShadowEffect Color="#3F000000"
                               Direction="300"
@@ -51,7 +51,7 @@
                         Orientation="Horizontal">
 
                 <materialDesign:Chip Content="{Binding CurrentUser.Login}"
-                                     Icon="{materialDesign:PackIcon Kind=Account}"
+                                     Icon="{materialDesign:PackIcon Kind=Shield}"
                                      Margin="0 0 60 0"
                                      Style="{StaticResource MaterialDesignOutlineChip}" />
 
@@ -238,15 +238,17 @@
                         Content="{materialDesign:PackIcon Kind=ExitToApp,Size=32}" />
             </Grid>
 
-            <materialDesign:Card Grid.Row="1"
-                                 Margin="20 20 0 0"
-                                 Grid.Column="1"
-                                 Padding="5"
-                                 UniformCornerRadius="10"
-                                 materialDesign:ShadowAssist.ShadowDepth="Depth2">
-                <ContentPresenter Content="{Binding NavigationService.CurrentView}">
-                </ContentPresenter>
-            </materialDesign:Card>
+            <TextBlock Grid.Column="1"
+                       Text="{Binding NavigationService.CurrentView.Title}"
+                       FontSize="16"
+                       Foreground="{StaticResource PrimaryHueMidBrush}"
+                       VerticalAlignment="Bottom"
+                       Margin="20 0 0 0" />
+
+            <ContentPresenter Content="{Binding NavigationService.CurrentView}"
+                              Grid.Row="1"
+                              Margin="20 20 0 0"
+                              Grid.Column="1" />
         </Grid>
     </Border>
 </Window>

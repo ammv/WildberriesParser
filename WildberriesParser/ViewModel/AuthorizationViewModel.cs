@@ -5,6 +5,10 @@ using WildberriesParser.Infastructure.Commands;
 using WildberriesParser.Infastructure.Core;
 using WildberriesParser.Model.Data;
 using WildberriesParser.Services;
+using System.Net;
+using System.Net.Sockets;
+using System.Net.NetworkInformation;
+using System.Text;
 
 namespace WildberriesParser.ViewModel
 {
@@ -53,6 +57,53 @@ namespace WildberriesParser.ViewModel
             return DBEntities.GetContext().User.FirstOrDefault(x => x.Login == _login);
         }
 
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            return null;
+        }
+
+        private string GetMacAddress()
+        {
+            const int MIN_MAC_ADDR_LENGTH = 12;
+            string macAddress = string.Empty;
+            long maxSpeed = -1;
+
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                string tempMac = nic.GetPhysicalAddress().ToString();
+                if (nic.Speed > maxSpeed &&
+                    !string.IsNullOrEmpty(tempMac) &&
+                    tempMac.Length >= MIN_MAC_ADDR_LENGTH)
+                {
+                    maxSpeed = nic.Speed;
+                    macAddress = tempMac;
+                }
+            }
+
+            //0A:00:27:00:00:0A
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 6; i++)
+            {
+                sb.Append(macAddress.Substring(i * 2, 2));
+                if(i != 5)
+                {
+                    sb.Append(":");
+                }
+                
+            }
+
+            return sb.ToString();
+        }
+
         private void SettingNavigationAfterAuth(User user)
         {
             Window window;
@@ -81,7 +132,9 @@ namespace WildberriesParser.ViewModel
                 $"Устройство: {System.Environment.MachineName}\n" +
                 $"Имя пользователя: {System.Environment.UserName}\n" +
                 $"Версия ОС: {System.Environment.OSVersion}\n" +
-                $"Имя сетевого домена: {System.Environment.UserDomainName}",
+                $"Имя сетевого домена: {System.Environment.UserDomainName}\n" +
+                $"IPv4: {GetLocalIPAddress()}\n" +
+                $"MAC: {GetMacAddress()}",
                 Model.LogTypeEnum.AUTH_USER);
 
             Properties.Settings.Default.Save();

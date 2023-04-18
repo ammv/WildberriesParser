@@ -118,24 +118,28 @@
                     <DataGridTextColumn Binding="{Binding ID}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="ID"
+                                       FontSize="18"
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding Login}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Логин"
+                                       FontSize="18"
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding Password}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Пароль"
+                                       FontSize="18"
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding Role.Name}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Роль"
+                                       FontSize="18"
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>

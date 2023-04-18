@@ -83,16 +83,41 @@
                       materialDesign:DataGridAssist.EnableEditBoxAssist="False"
                       ItemsSource="{Binding Logs.DisplayedItems}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID"
-                                        Binding="{Binding ID}" />
-                    <DataGridTextColumn Header="Пользователь"
-                                        Binding="{Binding User.Login}" />
-                    <DataGridTextColumn Header="Тип"
-                                        Binding="{Binding LogType.Name}" />
-                    <DataGridTextColumn Header="Описание"
-                                        Binding="{Binding Description}" />
-                    <DataGridTextColumn Header="Дата"
-                                        Binding="{Binding Date}" />
+                    <DataGridTextColumn Binding="{Binding ID}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="ID"
+                                       FontSize="18"
+                                       Foreground="#909090" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding User.Login}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Пользователь"
+                                       FontSize="18"
+                                       Foreground="#909090" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding LogType.Name}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Тип"
+                                       FontSize="18"
+                                       Foreground="#909090" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Description}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Описание"
+                                       FontSize="18"
+                                       Foreground="#909090" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Date}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Дата"
+                                       FontSize="18"
+                                       Foreground="#909090" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </materialDesign:Card>
@@ -116,8 +141,8 @@
                        Style="{StaticResource MaterialDesignBody2TextBlock}">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0} из {1}">
-                        <Binding Path="Users.CurrentPage" />
-                        <Binding Path="Users.TotalPages" />
+                        <Binding Path="Logs.CurrentPage" />
+                        <Binding Path="Logs.TotalPages" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>

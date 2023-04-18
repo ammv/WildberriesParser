@@ -50,6 +50,10 @@ namespace WildberriesParser.ViewModel.Admin
         {
             NavigationService = navigationService;
             _excelService = excelService;
+        }
+
+        private void LoadUsers()
+        {
             Users = new PagedList<User>(DBEntities.GetContext().User.OrderBy(u => u.ID), _pageSizes[_selectedIndex]);
             PagedCommands = new PagedListCommands<User>(Users);
         }
@@ -82,8 +86,7 @@ namespace WildberriesParser.ViewModel.Admin
                     {
                         return App.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            Users = new PagedList<User>(DBEntities.GetContext().User.OrderBy(u => u.ID), _pageSizes[_selectedIndex]);
-                            PagedCommands = new PagedListCommands<User>(Users);
+                            LoadUsers();
                         }).Task;
                     }
                     ));
@@ -105,13 +108,13 @@ namespace WildberriesParser.ViewModel.Admin
                             if (string.IsNullOrEmpty(_searchText))
                             {
                                 Users = new PagedList<User>(DBEntities.GetContext()
-                                    .User.OrderBy(u => u.ID), 25);
+                                    .User.OrderByDescending(u => u.ID), _pageSizes[_selectedIndex]);
                             }
                             else
                             {
                                 Users = new PagedList<User>(DBEntities.GetContext()
                                     .User.Where(u => u.Login.Contains(_searchText))
-                                    .OrderBy(l => l.ID), 25);
+                                    .OrderByDescending(l => l.ID), _pageSizes[_selectedIndex]);
                             }
                             PagedCommands.Instance = Users;
                         }).Task;
