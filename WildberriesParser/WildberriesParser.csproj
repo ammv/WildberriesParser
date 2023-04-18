@@ -517,6 +517,9 @@
       <DependentUpon>DBModel.edmx</DependentUpon>
       <LastGenOutput>DBModel.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resource\Images\AppLogo125x125.png" />
+    <Resource Include="Resource\Images\background.png" />
+    <Resource Include="Resource\Images\AppLogoWithText.png" />
     <Content Include="Updater.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

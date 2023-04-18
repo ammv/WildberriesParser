@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using WildberriesParser.Infastructure.Commands;
 using WildberriesParser.Infastructure.Core;
@@ -13,7 +14,7 @@ namespace WildberriesParser.ViewModel.Admin
 
         private string _login;
         private string _password;
-        private Role SelectedRole;
+        private int _selectedRoleId = 2;
         private bool _isWorking = false;
         private INavigationService _navigationService;
         private ILoggerService _loggerService;
@@ -47,13 +48,13 @@ namespace WildberriesParser.ViewModel.Admin
             {
                 Login = _login,
                 Password = _password,
-                Role = SelectedRole
+                RoleID = _selectedRoleId
             };
 
             DBEntities.GetContext().User.Add(user);
 
             _loggerService.AddLog(
-                $"Создание пользователя\nЛогин: {_login}\nПароль: {_password}\nРоль: {SelectedRole.Name}",
+                $"Создание пользователя\nЛогин: {_login}\nПароль: {_password}\nРоль: {DBEntities.GetContext().Role.FirstOrDefault(r => r.ID == _selectedRoleId).Name}",
                 Model.LogTypeEnum.CREATE_USER);
         }
 
@@ -71,21 +72,44 @@ namespace WildberriesParser.ViewModel.Admin
 
                             return App.Current.Dispatcher.InvokeAsync(() =>
                             {
-                                User user = GetUser();
-                                if (user != null && user.Login == _login)
+                                try
                                 {
-                                    _addUser();
-                                    IsWorking = false;
-                                    Helpers.MessageBoxHelper.Information("Пользватель добавлен");
+                                    if (GetUser() == null)
+                                    {
+                                        _addUser();
+                                        IsWorking = false;
+                                        Helpers.MessageBoxHelper.Information("Пользватель добавлен");
+                                        _navigationService.NavigateTo<UsersViewModel>();
+                                    }
+                                    else
+                                    {
+                                        IsWorking = false;
+                                        Helpers.MessageBoxHelper.Error("Пользователь с таким логином уже существует");
+                                    }
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    IsWorking = false;
-                                    Helpers.MessageBoxHelper.Error("Пользователь с таким логином уже существует");
+                                    Helpers.MessageBoxHelper.Error(ex.Message);
                                 }
                             }).Task;
                         },
                         (obj) => !string.IsNullOrEmpty(_login) && !string.IsNullOrEmpty(_password)
+                    ));
+            }
+        }
+
+        private RelayCommand _SelectRoleCommand;
+
+        public RelayCommand SelectRoleCommand
+        {
+            get
+            {
+                return _SelectRoleCommand ??
+                    (_SelectRoleCommand = new RelayCommand
+                    ((obj) =>
+                    {
+                        _selectedRoleId = (int)obj;
+                    }
                     ));
             }
         }

@@ -54,23 +54,37 @@ namespace WildberriesParser.ViewModel.Admin
             PagedCommands = new PagedListCommands<User>(Users);
         }
 
-        private AsyncRelayCommand _AddUserCommand;
+        private RelayCommand _AddUserCommand;
 
-        public AsyncRelayCommand AddUserCommand
+        public RelayCommand AddUserCommand
         {
             get
             {
                 return _AddUserCommand ??
-                    (_AddUserCommand = new AsyncRelayCommand
+                    (_AddUserCommand = new RelayCommand
                     ((obj) =>
                     {
-                        DBEntities.GetContext().User.Add(new User
+                        _navigationService.NavigateTo<UserAddViewModel>();
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _LoadedCommand;
+
+        public AsyncRelayCommand LoadedCommand
+        {
+            get
+            {
+                return _LoadedCommand ??
+                    (_LoadedCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            Login = Guid.NewGuid().ToString().Substring(0, 15),
-                            Password = Guid.NewGuid().ToString().Substring(0, 15),
-                            Role = DBEntities.GetContext().Role.First(x => x.Name == "staff")
-                        });
-                        return DBEntities.GetContext().SaveChangesAsync();
+                            Users = new PagedList<User>(DBEntities.GetContext().User.OrderBy(u => u.ID), _pageSizes[_selectedIndex]);
+                            PagedCommands = new PagedListCommands<User>(Users);
+                        }).Task;
                     }
                     ));
             }

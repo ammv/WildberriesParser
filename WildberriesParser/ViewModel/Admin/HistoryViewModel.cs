@@ -57,7 +57,7 @@ namespace WildberriesParser.ViewModel.Admin
             _excelService = excelService;
 
             Logs = new PagedList<Log>(DBEntities.GetContext()
-                                    .Log.OrderBy(u => u.ID).ToList(), 25);
+                                    .Log.OrderByDescending(x => x.ID).ToList(), _pageSizes[_selectedIndex]);
             PagedCommands = new PagedListCommands<Log>(Logs);
         }
 

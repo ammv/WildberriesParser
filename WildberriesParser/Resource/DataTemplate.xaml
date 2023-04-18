@@ -36,6 +36,10 @@
         <viewA:UsersView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vmA:UserAddViewModel}">
+        <viewA:UserAddView />
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vmA:SettingsViewModel}">
         <viewA:SettingsView />
     </DataTemplate>

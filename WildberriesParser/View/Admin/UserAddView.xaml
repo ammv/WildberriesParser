@@ -7,89 +7,160 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:intr="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:core="clr-namespace:WildberriesParser.Infastructure.Core"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="700"
              d:DesignWidth="980"
              Background="Transparent">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <materialDesign:Card UniformCornerRadius="10"
+                         materialDesign:ShadowAssist.ShadowDepth="Depth1">
+        <Grid HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="420" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Добавление пользователя"
-                   Grid.ColumnSpan="3"
-                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                   Foreground="Purple"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center" />
+            <Ellipse Fill="{StaticResource PrimaryHueMidBrush}"
+                     Height="100"
+                     Width="100"
+                     Grid.Column="1" />
+            <materialDesign:PackIcon Kind="Account"
+                                     x:Name="IconImage"
+                                     Height="64"
+                                     Grid.Column="1"
+                                     Width="64"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="White" />
 
-        <TextBox Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
-                 materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
-                 Grid.Column="1"
-                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                 Grid.Row="2">
-            <materialDesign:HintAssist.Hint>
-                <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="User" />
-                    <Line Width="10" />
-                    <TextBlock Text="Логин" />
-                </StackPanel>
-            </materialDesign:HintAssist.Hint>
-        </TextBox>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        Grid.Row="2">
+                <RadioButton BorderThickness="0 0 0 3"
+                             materialDesign:ButtonAssist.CornerRadius="1"
+                             Content="Сотрудник"
+                             Command="{Binding SelectRoleCommand}"
+                             Width="105"
+                             IsChecked="True"
+                             Background="Transparent"
+                             Style="{StaticResource MaterialDesignOutlinedButton}">
+                    <RadioButton.CommandParameter>
+                        <sys:Int32>2</sys:Int32>
+                    </RadioButton.CommandParameter>
+                    <intr:Interaction.Triggers>
+                        <intr:DataTrigger Value="True"
+                                          Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                            <intr:ChangePropertyAction PropertyName="BorderThickness"
+                                                       Value="0 0 0 3" />
+                            <intr:ChangePropertyAction PropertyName="Kind"
+                                                       TargetName="IconImage"
+                                                       Value="Account" />
+                            <intr:ChangePropertyAction PropertyName="Foreground"
+                                                       Value="{StaticResource PrimaryHueMidBrush}" />
+                        </intr:DataTrigger>
+                        <intr:DataTrigger Value="False"
+                                          Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                            <intr:ChangePropertyAction PropertyName="BorderThickness"
+                                                       Value="0 0 0 0" />
+                            <intr:ChangePropertyAction PropertyName="Kind"
+                                                       TargetName="IconImage"
+                                                       Value="Shield" />
+                            <intr:ChangePropertyAction PropertyName="Foreground"
+                                                       Value="#909090" />
+                        </intr:DataTrigger>
+                    </intr:Interaction.Triggers>
+                </RadioButton>
 
-        <TextBox materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
-                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                 Grid.Column="1"
-                 Grid.Row="4">
-            <materialDesign:HintAssist.Hint>
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Password" />
-                    <Line Width="10" />
-                    <TextBlock Text="Пароль" />
-                </StackPanel>
-            </materialDesign:HintAssist.Hint>
-        </TextBox>
+                <Line Width="20" />
 
-        <ComboBox Grid.Row="6"
-                  materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
-                  Grid.Column="1"
-                  SelectedItem="{Binding SelectedRole}"
-                  Style="{StaticResource MaterialDesignOutlinedComboBox}">
-            <materialDesign:HintAssist.Hint>
-                <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="AccountBox" />
-                    <Line Width="10" />
-                    <TextBlock Text="Роль" />
-                </StackPanel>
-            </materialDesign:HintAssist.Hint>
-        </ComboBox>
+                <RadioButton BorderThickness="0 0 0 3"
+                             materialDesign:ButtonAssist.CornerRadius="1"
+                             Content="Админ"
+                             IsChecked="False"
+                             Command="{Binding SelectRoleCommand}"
+                             Width="105"
+                             Background="Transparent"
+                             Style="{StaticResource MaterialDesignOutlinedButton}">
+                    <RadioButton.CommandParameter>
+                        <sys:Int32>1</sys:Int32>
+                    </RadioButton.CommandParameter>
+                    <intr:Interaction.Triggers>
+                        <intr:DataTrigger Value="True"
+                                          Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                            <intr:ChangePropertyAction PropertyName="BorderThickness"
+                                                       Value="0 0 0 3" />
+                            <intr:ChangePropertyAction PropertyName="Foreground"
+                                                       Value="{StaticResource PrimaryHueMidBrush}" />
+                        </intr:DataTrigger>
+                        <intr:DataTrigger Value="False"
+                                          Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                            <intr:ChangePropertyAction PropertyName="BorderThickness"
+                                                       Value="0 0 0 0" />
+                            <intr:ChangePropertyAction PropertyName="Foreground"
+                                                       Value="#909090" />
+                        </intr:DataTrigger>
+                    </intr:Interaction.Triggers>
+                </RadioButton>
+            </StackPanel>
 
-        <Button Command="{Binding AddUser}"
-                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                Grid.Row="8"
-                Height="40"
-                Grid.Column="1"
-                materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsWorking}"
-                materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                materialDesign:ButtonAssist.CornerRadius="10"
-                Style="{StaticResource MaterialDesignRaisedButton}"
-                ToolTip="MaterialDesignRaisedButton with Round Corners">
-            <TextBlock Text="Добавать" />
-        </Button>
-    </Grid>
+            <TextBox Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
+                     Grid.Column="1"
+                     Height="47"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Grid.Row="4">
+                <materialDesign:HintAssist.Hint>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="User"
+                                                 Margin="0 0 10 0" />
+                        <TextBlock Text="Логин" />
+                    </StackPanel>
+                </materialDesign:HintAssist.Hint>
+            </TextBox>
+
+            <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Grid.Column="1"
+                     Grid.Row="6">
+                <materialDesign:HintAssist.Hint>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Password"
+                                                 Margin="0 0 10 0" />
+
+                        <TextBlock Text="Пароль" />
+                    </StackPanel>
+                </materialDesign:HintAssist.Hint>
+            </TextBox>
+
+            <Button Command="{Binding AddUserCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                    Grid.Row="8"
+                    Grid.Column="1"
+                    Height="40"
+                    materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsWorking}"
+                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                    materialDesign:ButtonAssist.CornerRadius="10"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    ToolTip="MaterialDesignRaisedButton with Round Corners">
+                <TextBlock Text="Добавить" />
+            </Button>
+        </Grid>
+    </materialDesign:Card>
 </UserControl>

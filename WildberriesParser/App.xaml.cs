@@ -98,6 +98,7 @@ namespace WildberriesParser
             services.AddTransient<ViewModel.Admin.AdminMainViewModel>();
 
             services.AddSingleton<ViewModel.Admin.UsersViewModel>();
+            services.AddSingleton<ViewModel.Admin.UserAddViewModel>();
             services.AddSingleton<ViewModel.Admin.HistoryViewModel>();
             services.AddSingleton<ViewModel.Admin.SettingsViewModel>();
 
@@ -109,6 +110,11 @@ namespace WildberriesParser
             services.AddSingleton(provider => new View.Admin.UsersView
             {
                 DataContext = provider.GetRequiredService<ViewModel.Admin.UsersViewModel>()
+            });
+
+            services.AddSingleton(provider => new View.Admin.UserAddView
+            {
+                DataContext = provider.GetRequiredService<ViewModel.Admin.UserAddViewModel>()
             });
 
             services.AddSingleton(provider => new View.Admin.HistoryView

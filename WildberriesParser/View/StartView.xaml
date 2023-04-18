@@ -12,13 +12,14 @@
         WindowStyle="None"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Width="900"
-        Height="550"
+        Width="400"
+        Height="650"
         WindowStartupLocation="CenterScreen"
         d:DesignHeight="650"
         d:DesignWidth="400">
     <Border CornerRadius="10"
-            Margin="3">
+            Margin="3"
+            Background="White">
         <Border.Effect>
             <DropShadowEffect Color="#3F000000"
                               Direction="300"
@@ -32,55 +33,49 @@
                                        MethodName="DragMove" />
             </intr:EventTrigger>
         </intr:Interaction.Triggers>
-        <Border.Background>
-            <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/AuthorizationBackground.png" />
-        </Border.Background>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.25*" />
-                <ColumnDefinition Width="1*" />
-            </Grid.ColumnDefinitions>
+        <Grid Margin="20">
 
-            <Grid Grid.Column="1"
-                  Margin="30 20 20 30">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="35" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="80" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0"
-                            HorizontalAlignment="Right"
-                            Orientation="Horizontal"
-                            Opacity="1">
-                    <Button Style="{DynamicResource windowTopButton}">
-                        <intr:Interaction.Triggers>
-                            <intr:EventTrigger EventName="Click">
-                                <intr:InvokeCommandAction Command="{Binding WrapWindowCommand}"
-                                                          CommandParameter="{Binding RelativeSource={RelativeSource
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal"
+                        Opacity="1">
+                <Button Style="{DynamicResource windowTopButton}">
+                    <intr:Interaction.Triggers>
+                        <intr:EventTrigger EventName="Click">
+                            <intr:InvokeCommandAction Command="{Binding WrapWindowCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource
                                                       Mode=FindAncestor,
                                                       AncestorType=Window}}" />
-                            </intr:EventTrigger>
-                        </intr:Interaction.Triggers>
-                        <Button.Background>
-                            <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/wnd_wrap_btn.png" />
-                        </Button.Background>
-                    </Button>
-                    <Line Width="25" />
-                    <Button Style="{DynamicResource windowCloseButton}">
-                        <intr:Interaction.Triggers>
-                            <intr:EventTrigger EventName="Click">
-                                <intr:InvokeCommandAction Command="{Binding CloseWindowCommand}"
-                                                          CommandParameter="{Binding RelativeSource={RelativeSource
+                        </intr:EventTrigger>
+                    </intr:Interaction.Triggers>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/wnd_wrap_btn.png" />
+                    </Button.Background>
+                </Button>
+                <Line Width="25" />
+                <Button Style="{DynamicResource windowCloseButton}">
+                    <intr:Interaction.Triggers>
+                        <intr:EventTrigger EventName="Click">
+                            <intr:InvokeCommandAction Command="{Binding CloseWindowCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource
                                                       Mode=FindAncestor,
                                                       AncestorType=Window}}" />
-                            </intr:EventTrigger>
-                        </intr:Interaction.Triggers>
-                    </Button>
-                </StackPanel>
+                        </intr:EventTrigger>
+                    </intr:Interaction.Triggers>
+                </Button>
+            </StackPanel>
 
-                <ContentPresenter Content="{Binding NavigationService.CurrentView}"
-                                  Grid.Row="1" />
-            </Grid>
+            <Image Grid.Row="1"
+                   Source="/WildberriesParser;component/Resource/Images/AppLogoWithText.png" />
+
+            <ContentPresenter Content="{Binding NavigationService.CurrentView}"
+                              Grid.Row="2" />
         </Grid>
     </Border>
 </Window>

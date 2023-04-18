@@ -17,6 +17,8 @@ namespace UpdaterCLI
         private static void Main(string[] args)
         {
             string pathToDirectory;
+            string serverDirectory;
+
             Version version;
 
             Console.Clear();
@@ -25,14 +27,17 @@ namespace UpdaterCLI
 
             while (true)
             {
-                Console.WriteLine("Введите путь к папке: ");
+                Console.WriteLine("Введите путь к папку с новой версией приложения: ");
                 pathToDirectory = Console.ReadLine();
 
                 if (!Directory.Exists(pathToDirectory))
                 {
-                    Console.WriteLine("Указан неверный путь!");
+                    Console.WriteLine("Указан неверный или несуществующий путь!");
                 }
-                break;
+                else
+                {
+                    break;
+                }
             }
             while (true)
             {
@@ -41,40 +46,70 @@ namespace UpdaterCLI
                 {
                     Console.WriteLine("Указана неверная версия!");
                 }
-                break;
+                else
+                {
+                    break;
+                }
             }
+            string zipFileName = version.ToString() + ".zip";
+
+            Console.WriteLine($"Укажите путь к папке на сервере, где будет лежать {zipFileName}");
+            serverDirectory = Console.ReadLine();
 
             try
             {
                 _sftpClient = new SftpClient(_host, _port, _username, _password);
                 _sftpClient.Connect();
 
-                using (ZipArchive archive = ZipFile.Open($"{version}.zip", ZipArchiveMode.Create))
-                {
-                    string[] files = Directory.GetFiles(pathToDirectory);
-                    foreach (string file in files)
-                    {
-                        if (!file.Contains("Update.exe"))
-                        {
-                            archive.CreateEntryFromFile(file, Path.GetFileName(file));
-                        }
-                    }
-                }
+                Console.WriteLine("SFTP клиент подключен");
 
-                using (FileStream fs = File.Open($"{version}.zip", FileMode.Open))
+                try
                 {
-                    _sftpClient.UploadFile(fs, "WBParser");
-                    using (var versionFile = _sftpClient.OpenWrite(@"WBParser/version.txt"))
+                    File.Delete($"{version}.zip");
+                }
+                catch { }
+
+                ZipFile.CreateFromDirectory(pathToDirectory, zipFileName);
+
+                Console.WriteLine($"Архив {zipFileName} создан");
+
+                ZipArchive zipArchive = new ZipArchive(File.Open(zipFileName, FileMode.Open), ZipArchiveMode.Update);
+
+                zipArchive.GetEntry("Updater.exe").Delete();
+
+                zipArchive.Dispose();
+
+                Console.WriteLine("Из архива удален файл Updater.exe");
+
+                using (FileStream fs = new FileStream($"{version}.zip", FileMode.Open))
+                {
+                    //_sftpClient.ChangeDirectory(serverDirectory);
+                    _sftpClient.UploadFile(fs, $"{serverDirectory}/{Path.GetFileName(zipFileName)}");
+                    Console.WriteLine($"{zipFileName} загружен на сервер в папку {serverDirectory}!");
+                    using (var versionFile = _sftpClient.OpenWrite($"{serverDirectory}/version.txt"))
                     {
                         byte[] versionAsBytes = Encoding.ASCII.GetBytes(version.ToString());
                         versionFile.Write(versionAsBytes, 0, versionAsBytes.Length);
                     }
+                    Console.WriteLine($"Версия в файле version.txt обновлена на {version}");
                 }
+
+                File.Delete($"{version}.zip");
+
+                Console.WriteLine($"Удаление {zipFileName} на этом компьютере!");
 
                 _sftpClient.Disconnect();
                 _sftpClient.Dispose();
 
+                Console.WriteLine($"Отключение SFTP клиента");
+
+                var temp = Console.ForegroundColor;
+
+                Console.ForegroundColor = ConsoleColor.Green;
+
                 Console.WriteLine($"Обновление {version} залито!");
+
+                Console.ForegroundColor = temp;
                 Console.ReadLine();
             }
             catch (Exception ex)
