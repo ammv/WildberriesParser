@@ -182,6 +182,9 @@
     <Compile Include="Model\Data\Role.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\Data\SearchPatternType.cs">
+      <DependentUpon>DBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\Data\User.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>

@@ -12,17 +12,18 @@ namespace WildberriesParser.Model.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class WbProductPosChanges
+    public partial class SearchPatternType
     {
-        public int ID { get; set; }
-        public Nullable<int> WbProductID { get; set; }
-        public System.DateTime Date { get; set; }
-        public Nullable<int> SearchPatternTypeID { get; set; }
-        public string SearchPattern { get; set; }
-        public int Position { get; set; }
-        public int Page { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SearchPatternType()
+        {
+            this.WbProductPosChanges = new HashSet<WbProductPosChanges>();
+        }
     
-        public virtual SearchPatternType SearchPatternType { get; set; }
-        public virtual WbProduct WbProduct { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WbProductPosChanges> WbProductPosChanges { get; set; }
     }
 }

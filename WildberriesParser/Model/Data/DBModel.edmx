@@ -29,6 +29,13 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="SearchPatternType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="ID" />
@@ -73,6 +80,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="WbProductID" Type="int" />
           <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="SearchPatternTypeID" Type="int" />
           <Property Name="SearchPattern" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Position" Type="int" Nullable="false" />
           <Property Name="Page" Type="int" Nullable="false" />
@@ -113,6 +121,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__WbProduct__Searc__398D8EEE">
+          <End Role="SearchPatternType" Type="Self.SearchPatternType" Multiplicity="0..1" />
+          <End Role="WbProductPosChanges" Type="Self.WbProductPosChanges" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SearchPatternType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WbProductPosChanges">
+              <PropertyRef Name="SearchPatternTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__WbProduct__WbBra__30F848ED">
           <End Role="WbBrand" Type="Self.WbBrand" Multiplicity="0..1" />
           <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="*" />
@@ -137,7 +157,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__WbProduct__WbPro__36B12243">
+        <Association Name="FK__WbProduct__WbPro__38996AB5">
           <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="0..1" />
           <End Role="WbProductPosChanges" Type="Self.WbProductPosChanges" Multiplicity="*" />
           <ReferentialConstraint>
@@ -153,6 +173,7 @@
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LogType" EntityType="Self.LogType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SearchPatternType" EntityType="Self.SearchPatternType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WbBrand" EntityType="Self.WbBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WbProduct" EntityType="Self.WbProduct" Schema="dbo" store:Type="Tables" />
@@ -170,6 +191,10 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
+          <AssociationSet Name="FK__WbProduct__Searc__398D8EEE" Association="Self.FK__WbProduct__Searc__398D8EEE">
+            <End Role="SearchPatternType" EntitySet="SearchPatternType" />
+            <End Role="WbProductPosChanges" EntitySet="WbProductPosChanges" />
+          </AssociationSet>
           <AssociationSet Name="FK__WbProduct__WbBra__30F848ED" Association="Self.FK__WbProduct__WbBra__30F848ED">
             <End Role="WbBrand" EntitySet="WbBrand" />
             <End Role="WbProduct" EntitySet="WbProduct" />
@@ -178,7 +203,7 @@
             <End Role="WbProduct" EntitySet="WbProduct" />
             <End Role="WbProductChanges" EntitySet="WbProductChanges" />
           </AssociationSet>
-          <AssociationSet Name="FK__WbProduct__WbPro__36B12243" Association="Self.FK__WbProduct__WbPro__36B12243">
+          <AssociationSet Name="FK__WbProduct__WbPro__38996AB5" Association="Self.FK__WbProduct__WbPro__38996AB5">
             <End Role="WbProduct" EntitySet="WbProduct" />
             <End Role="WbProductPosChanges" EntitySet="WbProductPosChanges" />
           </AssociationSet>
@@ -216,6 +241,14 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.FK__User__RoleID__286302EC" FromRole="Role" ToRole="User" />
         </EntityType>
+        <EntityType Name="SearchPatternType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="WbProductPosChanges" Relationship="Self.FK__WbProduct__Searc__398D8EEE" FromRole="SearchPatternType" ToRole="WbProductPosChanges" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="ID" />
@@ -245,7 +278,7 @@
           <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="WbBrand" Relationship="Self.FK__WbProduct__WbBra__30F848ED" FromRole="WbProduct" ToRole="WbBrand" />
           <NavigationProperty Name="WbProductChanges" Relationship="Self.FK__WbProduct__WbPro__33D4B598" FromRole="WbProduct" ToRole="WbProductChanges" />
-          <NavigationProperty Name="WbProductPosChanges" Relationship="Self.FK__WbProduct__WbPro__36B12243" FromRole="WbProduct" ToRole="WbProductPosChanges" />
+          <NavigationProperty Name="WbProductPosChanges" Relationship="Self.FK__WbProduct__WbPro__38996AB5" FromRole="WbProduct" ToRole="WbProductPosChanges" />
         </EntityType>
         <EntityType Name="WbProductChanges">
           <Key>
@@ -267,10 +300,12 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="WbProductID" Type="Int32" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SearchPatternTypeID" Type="Int32" />
           <Property Name="SearchPattern" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="Page" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="WbProduct" Relationship="Self.FK__WbProduct__WbPro__36B12243" FromRole="WbProductPosChanges" ToRole="WbProduct" />
+          <NavigationProperty Name="SearchPatternType" Relationship="Self.FK__WbProduct__Searc__398D8EEE" FromRole="WbProductPosChanges" ToRole="SearchPatternType" />
+          <NavigationProperty Name="WbProduct" Relationship="Self.FK__WbProduct__WbPro__38996AB5" FromRole="WbProductPosChanges" ToRole="WbProduct" />
         </EntityType>
         <Association Name="FK__Log__Type__2C3393D0">
           <End Role="LogType" Type="Self.LogType" Multiplicity="0..1" />
@@ -308,6 +343,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__WbProduct__Searc__398D8EEE">
+          <End Role="SearchPatternType" Type="Self.SearchPatternType" Multiplicity="0..1" />
+          <End Role="WbProductPosChanges" Type="Self.WbProductPosChanges" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SearchPatternType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WbProductPosChanges">
+              <PropertyRef Name="SearchPatternTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__WbProduct__WbBra__30F848ED">
           <End Role="WbBrand" Type="Self.WbBrand" Multiplicity="0..1" />
           <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="*" />
@@ -332,7 +379,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__WbProduct__WbPro__36B12243">
+        <Association Name="FK__WbProduct__WbPro__38996AB5">
           <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="0..1" />
           <End Role="WbProductPosChanges" Type="Self.WbProductPosChanges" Multiplicity="*" />
           <ReferentialConstraint>
@@ -348,6 +395,7 @@
           <EntitySet Name="Log" EntityType="Self.Log" />
           <EntitySet Name="LogType" EntityType="Self.LogType" />
           <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="SearchPatternType" EntityType="Self.SearchPatternType" />
           <EntitySet Name="User" EntityType="Self.User" />
           <EntitySet Name="WbBrand" EntityType="Self.WbBrand" />
           <EntitySet Name="WbProduct" EntityType="Self.WbProduct" />
@@ -365,6 +413,10 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
+          <AssociationSet Name="FK__WbProduct__Searc__398D8EEE" Association="Self.FK__WbProduct__Searc__398D8EEE">
+            <End Role="SearchPatternType" EntitySet="SearchPatternType" />
+            <End Role="WbProductPosChanges" EntitySet="WbProductPosChanges" />
+          </AssociationSet>
           <AssociationSet Name="FK__WbProduct__WbBra__30F848ED" Association="Self.FK__WbProduct__WbBra__30F848ED">
             <End Role="WbBrand" EntitySet="WbBrand" />
             <End Role="WbProduct" EntitySet="WbProduct" />
@@ -373,7 +425,7 @@
             <End Role="WbProduct" EntitySet="WbProduct" />
             <End Role="WbProductChanges" EntitySet="WbProductChanges" />
           </AssociationSet>
-          <AssociationSet Name="FK__WbProduct__WbPro__36B12243" Association="Self.FK__WbProduct__WbPro__36B12243">
+          <AssociationSet Name="FK__WbProduct__WbPro__38996AB5" Association="Self.FK__WbProduct__WbPro__38996AB5">
             <End Role="WbProduct" EntitySet="WbProduct" />
             <End Role="WbProductPosChanges" EntitySet="WbProductPosChanges" />
           </AssociationSet>
@@ -406,6 +458,14 @@
           <EntitySetMapping Name="Role">
             <EntityTypeMapping TypeName="DBModel.Role">
               <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SearchPatternType">
+            <EntityTypeMapping TypeName="DBModel.SearchPatternType">
+              <MappingFragment StoreEntitySet="SearchPatternType">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
@@ -458,6 +518,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="WbProductID" ColumnName="WbProductID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="SearchPatternTypeID" ColumnName="SearchPatternTypeID" />
                 <ScalarProperty Name="SearchPattern" ColumnName="SearchPattern" />
                 <ScalarProperty Name="Position" ColumnName="Position" />
                 <ScalarProperty Name="Page" ColumnName="Page" />

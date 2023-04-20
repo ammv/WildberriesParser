@@ -72,7 +72,7 @@
                                                  Foreground="#909090"
                                                  VerticalAlignment="Center"
                                                  Margin="0 0 10 0" />
-                        <TextBox Text="{Binding SearchPattern, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Text="{Binding TracedValue, UpdateSourceTrigger=PropertyChanged}"
                                  FontWeight="Regular"
                                  BorderThickness="0"
                                  FontSize="14"
@@ -85,12 +85,12 @@
                 </materialDesign:Card>
                 <Button materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsSearchWorking}"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                        Command="{Binding SearchCommand}"
+                        Command="{Binding TraceCommand}"
                         Grid.Column="2"
                         materialDesign:ButtonAssist.CornerRadius="10"
                         Height="40">
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="TagSearch"
+                        <materialDesign:PackIcon Kind="RasterRemove"
                                                  Margin="0 0 10 0"
                                                  VerticalAlignment="Center" />
                         <TextBlock Text="Отследить"
@@ -152,8 +152,8 @@
                 <ComboBox Width="50"
                           Foreground="#909090"
                           HorizontalContentAlignment="Center"
-                          ItemsSource="{Binding PageSizes}"
-                          SelectedIndex="{Binding SelectedPageIndex, UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding TracePageCount}"
+                          SelectedIndex="{Binding SelectedTracePageIndex, UpdateSourceTrigger=PropertyChanged}"
                           Style="{StaticResource MaterialDesignComboBox}">
                 </ComboBox>
             </StackPanel>
@@ -174,7 +174,7 @@
                              Margin="0 0 20 0"
                              materialDesign:ButtonAssist.CornerRadius="1"
                              Content="имени бренда"
-                             Command="{Binding SelectRoleCommand}"
+                             Command="{Binding SelectTraceTypeCommand}"
                              IsChecked="True"
                              Background="Transparent"
                              Style="{StaticResource MaterialDesignOutlinedButton}">
@@ -208,6 +208,7 @@
                 <RadioButton BorderThickness="0 0 0 3"
                              materialDesign:ButtonAssist.CornerRadius="1"
                              Content="ID бренда"
+                             Command="{Binding SelectTraceTypeCommand}"
                              Margin="0 0 20 0"
                              IsChecked="False"
                              Background="Transparent"
@@ -242,7 +243,7 @@
                 <RadioButton BorderThickness="0 0 0 3"
                              materialDesign:ButtonAssist.CornerRadius="1"
                              Content="Артикулу товара"
-                             Command="{Binding SelectRoleCommand}"
+                             Command="{Binding SelectTraceTypeCommand}"
                              IsChecked="False"
                              Background="Transparent"
                              Style="{StaticResource MaterialDesignOutlinedButton}">
@@ -277,7 +278,7 @@
         <materialDesign:Card UniformCornerRadius="10"
                              materialDesign:ShadowAssist.ShadowDepth="Depth1"
                              Grid.Row="4">
-            <DataGrid ItemsSource="{Binding Products.DisplayedItems}"
+            <DataGrid ItemsSource="{Binding ProductPosChanges.DisplayedItems}"
                       IsReadOnly="True"
                       Background="White"
                       SelectionUnit="FullRow"

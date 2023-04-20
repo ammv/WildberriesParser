@@ -14,28 +14,45 @@ using WildberriesParser.ViewModel.Admin;
 
 namespace WildberriesParser.ViewModel.Staff
 {
+    public enum TraceType
+    {
+        BrandName = 1,
+        BrandID,
+        ProductID
+    }
+
     public class TraceProductViewModel : ViewModelBase
     {
-        public string Title { get; } = "Поиск по запросу";
+        public string Title { get; } = "Отследить товар";
+
+        private TraceType _selectedTraceType = TraceType.BrandID;
 
         private string _searchPattern;
+        private string _tracedValue;
         private bool _isExportWorking;
-        private string _result = "Htess";
-        private bool _isSearchWorking;
+        private bool _isTraceWorking;
+
         private ExcelService _excelService;
 
+        // Для пагинации
         private int _selectedIndex = 0;
+
         private int[] _pageSizes = new int[] { 25, 50, 100, 250 };
 
-        private ObservableCollection<WbProduct> _originalProducts = new ObservableCollection<WbProduct>();
+        // до какой страницы отслеживать
+        private int _selectedTracePageIndex = 0;
 
-        private PagedList<WbProduct> _products;
-        private PagedListCommands<WbProduct> _pagedCommands;
+        private int[] _tracePageCount = new int[] { 1, 3, 5, 10, 15 };
 
-        public PagedList<WbProduct> Products
+        private ObservableCollection<WbProductPosChanges> _originalProducts = new ObservableCollection<WbProductPosChanges>();
+
+        private PagedList<WbProductPosChanges> _productPosChanges;
+        private PagedListCommands<WbProductPosChanges> _pagedCommands;
+
+        public PagedList<WbProductPosChanges> ProductPosChanges
         {
-            get => _products;
-            set { Set(ref _products, value); }
+            get => _productPosChanges;
+            set { Set(ref _productPosChanges, value); }
         }
 
         public bool IsExportWorking
@@ -67,8 +84,8 @@ namespace WildberriesParser.ViewModel.Staff
             _wbParser = wbParser;
             _excelService = excelService;
 
-            _products = new PagedList<WbProduct>(_originalProducts, _pageSizes[_selectedIndex]);
-            _pagedCommands = new PagedListCommands<WbProduct>(_products);
+            _productPosChanges = new PagedList<WbProductPosChanges>(_originalProducts, _pageSizes[_selectedIndex]);
+            _pagedCommands = new PagedListCommands<WbProductPosChanges>(_productPosChanges);
         }
 
         private INavigationService _navigationService;
@@ -77,86 +94,75 @@ namespace WildberriesParser.ViewModel.Staff
         private readonly WbRequesterService _wbRequesterService;
         private readonly WbParser _wbParser;
 
-        private async Task<List<WbProduct>> _Search()
+        private async Task<List<WbProduct>> _GetProducts()
         {
+            var responsesJson = await _wbRequesterService.GetProductCardsBySearch(_searchPattern, _tracePageCount[_selectedTracePageIndex]);
             List<WbProduct> products = new List<WbProduct>();
-            var responsesJson = await _wbRequesterService.GetProductCardsBySearch(_searchPattern, 1);
+
             foreach (var responseJson in responsesJson)
             {
                 var response = _wbParser.ParseResponse(responseJson);
-                if (response.Data?.Products.Count > 0)
+                if (response.Data?.Products?.Count > 0)
                 {
-                    foreach (var product in response.Data.Products)
-                    {
-                        products.Insert(0, product);
-                    }
+                    products.AddRange(response.Data.Products);
                 }
             }
 
             return products;
         }
 
-        private async Task AddProductsToDB(IEnumerable<WbProduct> wbProducts)
+        private List<WbProductPosChanges> _Trace(List<WbProduct> products)
         {
+            List<WbProductPosChanges> wbProductPosChanges = new List<WbProductPosChanges>();
+
             DateTime now = DateTime.Now.Date;
 
-            foreach (var product in wbProducts)
+            for (int i = 0; i < products.Count; i++)
             {
-                if (await DBEntities.GetContext().WbBrand.FirstOrDefaultAsync(b => b.ID == product.WbBrandID) == null)
+                switch (_selectedTraceType)
                 {
-                    DBEntities.GetContext().WbBrand.Add(new WbBrand
-                    {
-                        Name = product.brand,
-                        ID = product.WbBrandID
-                    });
-                }
-
-                Model.Data.WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync(x => x.ID == product.id);
-                if (findProduct == null)
-                {
-                    var newProduct = new Model.Data.WbProduct
-                    {
-                        ID = product.id,
-                        Name = product.name,
-                        WbBrandID = product.WbBrandID,
-                        LastUpdate = now
-                    };
-
-                    DBEntities.GetContext().WbProduct.Add(newProduct);
-
-                    DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
-                    {
-                        WbProduct = newProduct,
-                        Date = now,
-                        Discount = product.sale,
-                        PriceWithDiscount = (int)product.salePriceU,
-                        PriceWithoutDiscount = (int)product.priceU,
-                        Quantity = product.Quantity ?? 0
-                    });
-                }
-                else
-                {
-                    if (findProduct.LastUpdate.Date < now)
-                    {
-                        findProduct.LastUpdate = now;
-
-                        DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
+                    case TraceType.BrandName:
+                        if (!products[i].brand.Equals(_tracedValue))
                         {
-                            WbProduct = findProduct,
-                            Date = now,
-                            Discount = product.sale,
-                            PriceWithDiscount = (int)product.salePriceU,
-                            PriceWithoutDiscount = (int)product.priceU,
-                            Quantity = product.Quantity ?? 0
-                        });
-                    }
+                            continue;
+                        }
+                        break;
+
+                    case TraceType.BrandID:
+                        if (products[i].WbBrandID != int.Parse(_tracedValue))
+                        {
+                            continue;
+                        }
+                        break;
+
+                    case TraceType.ProductID:
+                        if (products[i].id != int.Parse(_tracedValue))
+                        {
+                            continue;
+                        }
+                        break;
                 }
+
+                wbProductPosChanges.Add(new WbProductPosChanges
+                {
+                    WbProductID = products[i].id,
+                    Date = now,
+                    SearchPattern = _searchPattern,
+                    Page = (int)Math.Ceiling((i + 1.0) / 100),
+                    Position = (i + 1) % 100
+                });
             }
 
+            return wbProductPosChanges;
+        }
+
+        private async Task AddPosChangesToDB(IEnumerable<WbProductPosChanges> data)
+        {
+            DBEntities.GetContext().WbProductPosChanges.AddRange(data);
             await DBEntities.GetContext().SaveChangesAsync();
         }
 
-        public AsyncRelayCommand SearchCommand
+        public AsyncRelayCommand TraceCommand
         {
             get
             {
@@ -166,28 +172,34 @@ namespace WildberriesParser.ViewModel.Staff
                     {
                         return App.Current.Dispatcher.InvokeAsync(async () =>
                         {
-                            IsSearchWorking = true;
-                            var products = await _Search();
+                            IsTraceWorking = true;
+
+                            var products = await _GetProducts();
+                            List<WbProductPosChanges> result = null;
                             if (products.Count > 0)
                             {
-                                var responseJson = await _wbRequesterService.GetProductsByArticlesSite(products.Select(x => x.id).ToList());
+                                result = _Trace(products);
 
-                                var response = _wbParser.ParseResponse(responseJson);
-
-                                foreach (var product in response.Data.Products)
+                                foreach (var item in result)
                                 {
-                                    _originalProducts.Add(product);
+                                    _originalProducts.Add(item);
                                 }
 
-                                Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
-                                _pagedCommands.Instance = Products;
-
-                                await AddProductsToDB(response.Data.Products);
+                                ProductPosChanges = new PagedList<WbProductPosChanges>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                                _pagedCommands.Instance = ProductPosChanges;
                             }
-                            IsSearchWorking = false;
+
+                            IsTraceWorking = false;
+
+                            await AddPosChangesToDB(result);
                         }).Task;
                     },
-                    (obj) => !IsSearchWorking && !string.IsNullOrEmpty(_searchPattern)
+                    (obj) => !IsTraceWorking &&
+                        !string.IsNullOrEmpty(_searchPattern) &&
+                        !string.IsNullOrEmpty(_tracedValue) &&
+                        (_selectedTraceType == TraceType.BrandID ||
+                        _selectedTraceType == TraceType.ProductID ?
+                        int.TryParse(_tracedValue, out _) : true)
                     ));
             }
         }
@@ -203,8 +215,26 @@ namespace WildberriesParser.ViewModel.Staff
                     ((obj) =>
                     {
                         _originalProducts.Clear();
-                        Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
-                        PagedCommands.Instance = Products;
+                        ProductPosChanges = new PagedList<WbProductPosChanges>(_originalProducts, _pageSizes[_selectedIndex]);
+                        PagedCommands.Instance = ProductPosChanges;
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _selectTraceTypeCommand;
+
+        public AsyncRelayCommand SelectTraceTypeCommand
+        {
+            get
+            {
+                return _selectTraceTypeCommand ??
+                    (_selectTraceTypeCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                        }).Task;
                     }
                     ));
             }
@@ -231,26 +261,10 @@ namespace WildberriesParser.ViewModel.Staff
                             IsExportWorking = true;
                             Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
                             data.Add("Артикул", new List<object>());
-                            data.Add("Название", new List<object>());
-                            data.Add("Бренд", new List<object>());
-                            data.Add("Скидка", new List<object>());
-                            data.Add("Цена без скидки", new List<object>());
-                            data.Add("Цена со скидкой", new List<object>());
-                            data.Add("Рейтинг", new List<object>());
-                            data.Add("Отзывы", new List<object>());
-                            data.Add("Промо текст", new List<object>());
 
                             foreach (var product in _originalProducts)
                             {
-                                data["Артикул"].Add(product.id);
-                                data["Название"].Add(product.name);
-                                data["Бренд"].Add(product.brand);
-                                data["Скидка"].Add(product.sale);
-                                data["Цена без скидки"].Add(product.priceU);
-                                data["Цена со скидкой"].Add(product.salePriceU);
-                                data["Рейтинг"].Add(product.rating);
-                                data["Отзывы"].Add(product.feedbacks);
-                                data["Промо текст"].Add(product.promoTextCat);
+                                data["Артикул"].Add(product.WbProductID);
                             }
                             try
                             {
@@ -274,16 +288,10 @@ namespace WildberriesParser.ViewModel.Staff
             }
         }
 
-        public bool IsSearchWorking
+        public bool IsTraceWorking
         {
-            get => _isSearchWorking;
-            set => Set(ref _isSearchWorking, value);
-        }
-
-        public string Result
-        {
-            get => _result;
-            set => Set(ref _result, value);
+            get => _isTraceWorking;
+            set => Set(ref _isTraceWorking, value);
         }
 
         public int SelectedIndex
@@ -292,11 +300,11 @@ namespace WildberriesParser.ViewModel.Staff
             set
             {
                 Set(ref _selectedIndex, value);
-                Products.PageSize = _pageSizes[value];
+                ProductPosChanges.PageSize = _pageSizes[value];
             }
         }
 
-        public PagedListCommands<WbProduct> PagedCommands
+        public PagedListCommands<WbProductPosChanges> PagedCommands
         {
             get => _pagedCommands;
             set
@@ -309,6 +317,30 @@ namespace WildberriesParser.ViewModel.Staff
         {
             get => _pageSizes;
             set => _pageSizes = value;
+        }
+
+        public int SelectedTracePageIndex
+        {
+            get => _selectedTracePageIndex;
+            set => Set(ref _selectedTracePageIndex, value);
+        }
+
+        public int[] TracePageCount
+        {
+            get => _tracePageCount;
+            set => Set(ref _tracePageCount, value);
+        }
+
+        public string TracedValue
+        {
+            get => _tracedValue;
+            set => Set(ref _tracedValue, value);
+        }
+
+        public TraceType SelectedTraceType
+        {
+            get => _selectedTraceType;
+            set => Set(ref _selectedTraceType, value);
         }
     }
 }

@@ -28,6 +28,7 @@ namespace WildberriesParser.Model.Data
         public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<LogType> LogType { get; set; }
         public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<SearchPatternType> SearchPatternType { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<WbBrand> WbBrand { get; set; }
         public virtual DbSet<WbProduct> WbProduct { get; set; }
