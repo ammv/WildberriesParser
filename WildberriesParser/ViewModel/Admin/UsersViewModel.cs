@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using WildberriesParser.Infastructure.Core;
 using WildberriesParser.Model.Data;
 using WildberriesParser.Services;
 using System.Linq;
@@ -9,6 +8,7 @@ using WildberriesParser.Infastructure.Commands;
 using System;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using WildberriesParser.Infastructure.Core;
 
 namespace WildberriesParser.ViewModel.Admin
 {

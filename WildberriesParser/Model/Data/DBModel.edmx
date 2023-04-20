@@ -11,7 +11,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" />
-          <Property Name="TypeID" Type="int" />
+          <Property Name="Type" Type="int" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
           <Property Name="Date" Type="datetime" Nullable="false" />
         </EntityType>
@@ -29,16 +29,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="ID" />
@@ -53,65 +43,41 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="WbProduct">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="brandId" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="WbBrandID" Type="int" />
+          <Property Name="LastUpdate" Type="date" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "WBParser.dbo.WbProductChanges" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="WbProductChanges">
           <Key>
-            <PropertyRef Name="WbProductID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Discount" />
-            <PropertyRef Name="PriceWithDiscount" />
-            <PropertyRef Name="PriceWithoutDiscount" />
-            <PropertyRef Name="Quantity" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="WbProductID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WbProductID" Type="int" />
           <Property Name="Date" Type="date" Nullable="false" />
           <Property Name="Discount" Type="int" Nullable="false" />
           <Property Name="PriceWithDiscount" Type="int" Nullable="false" />
           <Property Name="PriceWithoutDiscount" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "WBParser.dbo.WbProductPosChanges" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="WbProductPosChanges">
           <Key>
-            <PropertyRef Name="WbProductID" />
-            <PropertyRef Name="Position" />
-            <PropertyRef Name="Page" />
-            <PropertyRef Name="SearchPattern" />
-            <PropertyRef Name="Date" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="WbProductID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WbProductID" Type="int" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="SearchPattern" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Position" Type="int" Nullable="false" />
           <Property Name="Page" Type="int" Nullable="false" />
-          <Property Name="SearchPattern" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "WBParser.dbo.WbProductSales" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
-        <EntityType Name="WbProductSales">
-          <Key>
-            <PropertyRef Name="WbProductID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Sales" />
-            <PropertyRef Name="Price" />
-          </Key>
-          <Property Name="WbProductID" Type="int" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="Sales" Type="int" Nullable="false" />
-          <Property Name="Price" Type="int" Nullable="false" />
-        </EntityType>
-        <Association Name="FK__Logs__Type__2C3393D0">
+        <Association Name="FK__Log__Type__2C3393D0">
           <End Role="LogType" Type="Self.LogType" Multiplicity="0..1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
@@ -119,11 +85,11 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Log">
-              <PropertyRef Name="TypeID" />
+              <PropertyRef Name="Type" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Logs__UserID__2B3F6F97">
+        <Association Name="FK__Log__UserID__2B3F6F97">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
@@ -147,20 +113,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_WbProduct_WbBrand">
-          <End Role="WbBrand" Type="Self.WbBrand" Multiplicity="1" />
+        <Association Name="FK__WbProduct__WbBra__30F848ED">
+          <End Role="WbBrand" Type="Self.WbBrand" Multiplicity="0..1" />
           <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WbBrand">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="WbProduct">
-              <PropertyRef Name="brandId" />
+              <PropertyRef Name="WbBrandID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_WbProductChanges_WbProduct">
-          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="1" />
+        <Association Name="FK__WbProduct__WbPro__33D4B598">
+          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="0..1" />
           <End Role="WbProductChanges" Type="Self.WbProductChanges" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WbProduct">
@@ -171,8 +137,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_WbProductPosChanges_WbProduct">
-          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="1" />
+        <Association Name="FK__WbProduct__WbPro__36B12243">
+          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="0..1" />
           <End Role="WbProductPosChanges" Type="Self.WbProductPosChanges" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WbProduct">
@@ -183,89 +149,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_WbProductSales_WbProduct">
-          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="1" />
-          <End Role="WbProductSales" Type="Self.WbProductSales" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="WbProduct">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="WbProductSales">
-              <PropertyRef Name="WbProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="Хранилище DBModelContainer">
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LogType" EntityType="Self.LogType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WbBrand" EntityType="Self.WbBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WbProduct" EntityType="Self.WbProduct" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="WbProductChanges" EntityType="Self.WbProductChanges" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [WbProductChanges].[WbProductID] AS [WbProductID], 
-    [WbProductChanges].[Date] AS [Date], 
-    [WbProductChanges].[Discount] AS [Discount], 
-    [WbProductChanges].[PriceWithDiscount] AS [PriceWithDiscount], 
-    [WbProductChanges].[PriceWithoutDiscount] AS [PriceWithoutDiscount], 
-    [WbProductChanges].[Quantity] AS [Quantity]
-    FROM [dbo].[WbProductChanges] AS [WbProductChanges]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="WbProductPosChanges" EntityType="Self.WbProductPosChanges" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [WbProductPosChanges].[WbProductID] AS [WbProductID], 
-    [WbProductPosChanges].[Position] AS [Position], 
-    [WbProductPosChanges].[Page] AS [Page], 
-    [WbProductPosChanges].[SearchPattern] AS [SearchPattern], 
-    [WbProductPosChanges].[Date] AS [Date]
-    FROM [dbo].[WbProductPosChanges] AS [WbProductPosChanges]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="WbProductSales" EntityType="Self.WbProductSales" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [WbProductSales].[WbProductID] AS [WbProductID], 
-    [WbProductSales].[Date] AS [Date], 
-    [WbProductSales].[Sales] AS [Sales], 
-    [WbProductSales].[Price] AS [Price]
-    FROM [dbo].[WbProductSales] AS [WbProductSales]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK__Logs__Type__2C3393D0" Association="Self.FK__Logs__Type__2C3393D0">
+          <EntitySet Name="WbProductChanges" EntityType="Self.WbProductChanges" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WbProductPosChanges" EntityType="Self.WbProductPosChanges" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Log__Type__2C3393D0" Association="Self.FK__Log__Type__2C3393D0">
             <End Role="LogType" EntitySet="LogType" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
-          <AssociationSet Name="FK__Logs__UserID__2B3F6F97" Association="Self.FK__Logs__UserID__2B3F6F97">
+          <AssociationSet Name="FK__Log__UserID__2B3F6F97" Association="Self.FK__Log__UserID__2B3F6F97">
             <End Role="User" EntitySet="User" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
@@ -273,21 +170,17 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
-          <AssociationSet Name="FK_WbProduct_WbBrand" Association="Self.FK_WbProduct_WbBrand">
+          <AssociationSet Name="FK__WbProduct__WbBra__30F848ED" Association="Self.FK__WbProduct__WbBra__30F848ED">
             <End Role="WbBrand" EntitySet="WbBrand" />
             <End Role="WbProduct" EntitySet="WbProduct" />
           </AssociationSet>
-          <AssociationSet Name="FK_WbProductChanges_WbProduct" Association="Self.FK_WbProductChanges_WbProduct">
+          <AssociationSet Name="FK__WbProduct__WbPro__33D4B598" Association="Self.FK__WbProduct__WbPro__33D4B598">
             <End Role="WbProduct" EntitySet="WbProduct" />
             <End Role="WbProductChanges" EntitySet="WbProductChanges" />
           </AssociationSet>
-          <AssociationSet Name="FK_WbProductPosChanges_WbProduct" Association="Self.FK_WbProductPosChanges_WbProduct">
+          <AssociationSet Name="FK__WbProduct__WbPro__36B12243" Association="Self.FK__WbProduct__WbPro__36B12243">
             <End Role="WbProduct" EntitySet="WbProduct" />
             <End Role="WbProductPosChanges" EntitySet="WbProductPosChanges" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WbProductSales_WbProduct" Association="Self.FK_WbProductSales_WbProduct">
-            <End Role="WbProduct" EntitySet="WbProduct" />
-            <End Role="WbProductSales" EntitySet="WbProductSales" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -301,11 +194,11 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" />
-          <Property Name="TypeID" Type="Int32" />
+          <Property Name="Type" Type="Int32" />
           <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="LogType" Relationship="Self.FK__Logs__Type__2C3393D0" FromRole="Log" ToRole="LogType" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Logs__UserID__2B3F6F97" FromRole="Log" ToRole="User" />
+          <NavigationProperty Name="LogType" Relationship="Self.FK__Log__Type__2C3393D0" FromRole="Log" ToRole="LogType" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Log__UserID__2B3F6F97" FromRole="Log" ToRole="User" />
         </EntityType>
         <EntityType Name="LogType">
           <Key>
@@ -313,7 +206,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Log" Relationship="Self.FK__Logs__Type__2C3393D0" FromRole="LogType" ToRole="Log" />
+          <NavigationProperty Name="Log" Relationship="Self.FK__Log__Type__2C3393D0" FromRole="LogType" ToRole="Log" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -323,16 +216,6 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.FK__User__RoleID__286302EC" FromRole="Role" ToRole="User" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="ID" />
@@ -341,7 +224,7 @@
           <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RoleID" Type="Int32" />
-          <NavigationProperty Name="Log" Relationship="Self.FK__Logs__UserID__2B3F6F97" FromRole="User" ToRole="Log" />
+          <NavigationProperty Name="Log" Relationship="Self.FK__Log__UserID__2B3F6F97" FromRole="User" ToRole="Log" />
           <NavigationProperty Name="Role" Relationship="Self.FK__User__RoleID__286302EC" FromRole="User" ToRole="Role" />
         </EntityType>
         <EntityType Name="WbBrand">
@@ -349,67 +232,47 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="WbProduct" Relationship="Self.FK_WbProduct_WbBrand" FromRole="WbBrand" ToRole="WbProduct" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="WbProduct" Relationship="Self.FK__WbProduct__WbBra__30F848ED" FromRole="WbBrand" ToRole="WbProduct" />
         </EntityType>
         <EntityType Name="WbProduct">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="brandId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="WbBrand" Relationship="Self.FK_WbProduct_WbBrand" FromRole="WbProduct" ToRole="WbBrand" />
-          <NavigationProperty Name="WbProductChanges" Relationship="Self.FK_WbProductChanges_WbProduct" FromRole="WbProduct" ToRole="WbProductChanges" />
-          <NavigationProperty Name="WbProductPosChanges" Relationship="Self.FK_WbProductPosChanges_WbProduct" FromRole="WbProduct" ToRole="WbProductPosChanges" />
-          <NavigationProperty Name="WbProductSales" Relationship="Self.FK_WbProductSales_WbProduct" FromRole="WbProduct" ToRole="WbProductSales" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="WbBrandID" Type="Int32" />
+          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="WbBrand" Relationship="Self.FK__WbProduct__WbBra__30F848ED" FromRole="WbProduct" ToRole="WbBrand" />
+          <NavigationProperty Name="WbProductChanges" Relationship="Self.FK__WbProduct__WbPro__33D4B598" FromRole="WbProduct" ToRole="WbProductChanges" />
+          <NavigationProperty Name="WbProductPosChanges" Relationship="Self.FK__WbProduct__WbPro__36B12243" FromRole="WbProduct" ToRole="WbProductPosChanges" />
         </EntityType>
         <EntityType Name="WbProductChanges">
           <Key>
-            <PropertyRef Name="WbProductID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Discount" />
-            <PropertyRef Name="PriceWithDiscount" />
-            <PropertyRef Name="PriceWithoutDiscount" />
-            <PropertyRef Name="Quantity" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="WbProductID" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WbProductID" Type="Int32" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Discount" Type="Int32" Nullable="false" />
           <Property Name="PriceWithDiscount" Type="Int32" Nullable="false" />
           <Property Name="PriceWithoutDiscount" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="WbProduct" Relationship="Self.FK_WbProductChanges_WbProduct" FromRole="WbProductChanges" ToRole="WbProduct" />
+          <NavigationProperty Name="WbProduct" Relationship="Self.FK__WbProduct__WbPro__33D4B598" FromRole="WbProductChanges" ToRole="WbProduct" />
         </EntityType>
         <EntityType Name="WbProductPosChanges">
           <Key>
-            <PropertyRef Name="WbProductID" />
-            <PropertyRef Name="Position" />
-            <PropertyRef Name="Page" />
-            <PropertyRef Name="SearchPattern" />
-            <PropertyRef Name="Date" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="WbProductID" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WbProductID" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SearchPattern" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="Page" Type="Int32" Nullable="false" />
-          <Property Name="SearchPattern" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="WbProduct" Relationship="Self.FK_WbProductPosChanges_WbProduct" FromRole="WbProductPosChanges" ToRole="WbProduct" />
+          <NavigationProperty Name="WbProduct" Relationship="Self.FK__WbProduct__WbPro__36B12243" FromRole="WbProductPosChanges" ToRole="WbProduct" />
         </EntityType>
-        <EntityType Name="WbProductSales">
-          <Key>
-            <PropertyRef Name="WbProductID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Sales" />
-            <PropertyRef Name="Price" />
-          </Key>
-          <Property Name="WbProductID" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Sales" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="WbProduct" Relationship="Self.FK_WbProductSales_WbProduct" FromRole="WbProductSales" ToRole="WbProduct" />
-        </EntityType>
-        <Association Name="FK__Logs__Type__2C3393D0">
+        <Association Name="FK__Log__Type__2C3393D0">
           <End Role="LogType" Type="Self.LogType" Multiplicity="0..1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
@@ -417,11 +280,11 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Log">
-              <PropertyRef Name="TypeID" />
+              <PropertyRef Name="Type" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Logs__UserID__2B3F6F97">
+        <Association Name="FK__Log__UserID__2B3F6F97">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
@@ -445,20 +308,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_WbProduct_WbBrand">
-          <End Role="WbBrand" Type="Self.WbBrand" Multiplicity="1" />
+        <Association Name="FK__WbProduct__WbBra__30F848ED">
+          <End Role="WbBrand" Type="Self.WbBrand" Multiplicity="0..1" />
           <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WbBrand">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="WbProduct">
-              <PropertyRef Name="brandId" />
+              <PropertyRef Name="WbBrandID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_WbProductChanges_WbProduct">
-          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="1" />
+        <Association Name="FK__WbProduct__WbPro__33D4B598">
+          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="0..1" />
           <End Role="WbProductChanges" Type="Self.WbProductChanges" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WbProduct">
@@ -469,8 +332,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_WbProductPosChanges_WbProduct">
-          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="1" />
+        <Association Name="FK__WbProduct__WbPro__36B12243">
+          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="0..1" />
           <End Role="WbProductPosChanges" Type="Self.WbProductPosChanges" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WbProduct">
@@ -481,34 +344,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_WbProductSales_WbProduct">
-          <End Role="WbProduct" Type="Self.WbProduct" Multiplicity="1" />
-          <End Role="WbProductSales" Type="Self.WbProductSales" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="WbProduct">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="WbProductSales">
-              <PropertyRef Name="WbProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Log" EntityType="Self.Log" />
           <EntitySet Name="LogType" EntityType="Self.LogType" />
           <EntitySet Name="Role" EntityType="Self.Role" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="User" EntityType="Self.User" />
           <EntitySet Name="WbBrand" EntityType="Self.WbBrand" />
           <EntitySet Name="WbProduct" EntityType="Self.WbProduct" />
           <EntitySet Name="WbProductChanges" EntityType="Self.WbProductChanges" />
           <EntitySet Name="WbProductPosChanges" EntityType="Self.WbProductPosChanges" />
-          <EntitySet Name="WbProductSales" EntityType="Self.WbProductSales" />
-          <AssociationSet Name="FK__Logs__Type__2C3393D0" Association="Self.FK__Logs__Type__2C3393D0">
+          <AssociationSet Name="FK__Log__Type__2C3393D0" Association="Self.FK__Log__Type__2C3393D0">
             <End Role="LogType" EntitySet="LogType" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
-          <AssociationSet Name="FK__Logs__UserID__2B3F6F97" Association="Self.FK__Logs__UserID__2B3F6F97">
+          <AssociationSet Name="FK__Log__UserID__2B3F6F97" Association="Self.FK__Log__UserID__2B3F6F97">
             <End Role="User" EntitySet="User" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
@@ -516,64 +365,19 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
-          <AssociationSet Name="FK_WbProduct_WbBrand" Association="Self.FK_WbProduct_WbBrand">
+          <AssociationSet Name="FK__WbProduct__WbBra__30F848ED" Association="Self.FK__WbProduct__WbBra__30F848ED">
             <End Role="WbBrand" EntitySet="WbBrand" />
             <End Role="WbProduct" EntitySet="WbProduct" />
           </AssociationSet>
-          <AssociationSet Name="FK_WbProductChanges_WbProduct" Association="Self.FK_WbProductChanges_WbProduct">
+          <AssociationSet Name="FK__WbProduct__WbPro__33D4B598" Association="Self.FK__WbProduct__WbPro__33D4B598">
             <End Role="WbProduct" EntitySet="WbProduct" />
             <End Role="WbProductChanges" EntitySet="WbProductChanges" />
           </AssociationSet>
-          <AssociationSet Name="FK_WbProductPosChanges_WbProduct" Association="Self.FK_WbProductPosChanges_WbProduct">
+          <AssociationSet Name="FK__WbProduct__WbPro__36B12243" Association="Self.FK__WbProduct__WbPro__36B12243">
             <End Role="WbProduct" EntitySet="WbProduct" />
             <End Role="WbProductPosChanges" EntitySet="WbProductPosChanges" />
           </AssociationSet>
-          <AssociationSet Name="FK_WbProductSales_WbProduct" Association="Self.FK_WbProductSales_WbProduct">
-            <End Role="WbProduct" EntitySet="WbProduct" />
-            <End Role="WbProductSales" EntitySet="WbProductSales" />
-          </AssociationSet>
-          <FunctionImport Name="sp_alterdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_creatediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(DBModel.sp_helpdiagramdefinition_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(DBModel.sp_helpdiagrams_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_renamediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
-        <ComplexType Name="sp_helpdiagramdefinition_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_helpdiagrams_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -585,7 +389,7 @@
               <MappingFragment StoreEntitySet="Log">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
               </MappingFragment>
@@ -604,17 +408,6 @@
               <MappingFragment StoreEntitySet="Role">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="DBModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -640,14 +433,16 @@
             <EntityTypeMapping TypeName="DBModel.WbProduct">
               <MappingFragment StoreEntitySet="WbProduct">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="brandId" ColumnName="brandId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="WbBrandID" ColumnName="WbBrandID" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WbProductChanges">
             <EntityTypeMapping TypeName="DBModel.WbProductChanges">
               <MappingFragment StoreEntitySet="WbProductChanges">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="WbProductID" ColumnName="WbProductID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
@@ -660,48 +455,15 @@
           <EntitySetMapping Name="WbProductPosChanges">
             <EntityTypeMapping TypeName="DBModel.WbProductPosChanges">
               <MappingFragment StoreEntitySet="WbProductPosChanges">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="WbProductID" ColumnName="WbProductID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="SearchPattern" ColumnName="SearchPattern" />
                 <ScalarProperty Name="Position" ColumnName="Position" />
                 <ScalarProperty Name="Page" ColumnName="Page" />
-                <ScalarProperty Name="SearchPattern" ColumnName="SearchPattern" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="WbProductSales">
-            <EntityTypeMapping TypeName="DBModel.WbProductSales">
-              <MappingFragment StoreEntitySet="WbProductSales">
-                <ScalarProperty Name="WbProductID" ColumnName="WbProductID" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Sales" ColumnName="Sales" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Хранилище DBModel.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="Хранилище DBModel.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="Хранилище DBModel.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="Хранилище DBModel.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DBModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="Хранилище DBModel.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DBModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Хранилище DBModel.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Хранилище DBModel.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

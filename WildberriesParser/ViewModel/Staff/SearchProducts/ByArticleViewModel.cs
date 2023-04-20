@@ -80,7 +80,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
 
         private async Task<WbProduct> _Search()
         {
-            string responseJson = await _wbRequesterService.GetProductByArticleBasket(Int32.Parse(_article));
+            string responseJson = await _wbRequesterService.GetProductByArticleSite(Int32.Parse(_article));
             var response = _wbParser.ParseResponse(responseJson);
             WbProduct product = null;
             if (response.Data.Products.Count > 0)
@@ -88,6 +88,67 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                 product = response.Data.Products[0];
             }
             return product;
+        }
+
+        private void AddProductToDB(WbProduct wbProduct)
+        {
+            if (DBEntities.GetContext().WbBrand.FirstOrDefault(b => b.ID == wbProduct.WbBrandID) == null)
+            {
+                DBEntities.GetContext().WbBrand.Add(new WbBrand
+                {
+                    Name = wbProduct.brand,
+                    ID = wbProduct.WbBrandID
+                });
+
+                DBEntities.GetContext().SaveChanges();
+            }
+
+            Model.Data.WbProduct findProduct = DBEntities.GetContext().WbProduct.FirstOrDefault(x => x.ID == wbProduct.id);
+            DateTime now = DateTime.Now.Date;
+
+            if (findProduct == null)
+            {
+                var newProduct = new Model.Data.WbProduct
+                {
+                    ID = wbProduct.id,
+                    Name = wbProduct.name,
+                    WbBrandID = wbProduct.WbBrandID,
+                    LastUpdate = now
+                };
+
+                DBEntities.GetContext().WbProduct.Add(newProduct);
+
+                DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
+                {
+                    WbProduct = newProduct,
+                    Date = now,
+                    Discount = wbProduct.sale,
+                    PriceWithDiscount = (int)wbProduct.salePriceU,
+                    PriceWithoutDiscount = (int)wbProduct.priceU,
+                    Quantity = wbProduct.Quantity ?? 0
+                });
+
+                DBEntities.GetContext().SaveChanges();
+            }
+            else
+            {
+                if (findProduct.LastUpdate.Date < now)
+                {
+                    findProduct.LastUpdate = now;
+
+                    DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
+                    {
+                        WbProduct = findProduct,
+                        Date = now,
+                        Discount = wbProduct.sale,
+                        PriceWithDiscount = (int)wbProduct.salePriceU,
+                        PriceWithoutDiscount = (int)wbProduct.priceU,
+                        Quantity = wbProduct.Quantity ?? 0
+                    });
+
+                    DBEntities.GetContext().SaveChanges();
+                }
+            }
         }
 
         public AsyncRelayCommand SearchCommand
@@ -99,18 +160,21 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     ((obj) =>
                     {
                         return App.Current.Dispatcher.InvokeAsync(async () =>
-                       {
-                           IsSearchWorking = true;
-                           WbProduct product = await _Search();
+                        {
+                            IsSearchWorking = true;
+                            WbProduct product = await _Search();
 
-                           if (product != null)
-                           {
-                               _originalProducts.Add(product);
-                               Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
-                               _pagedCommands.Instance = Products;
-                           }
-                           IsSearchWorking = false;
-                       }).Task;
+                            if (product != null)
+                            {
+                                _originalProducts.Add(product);
+
+                                Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                                _pagedCommands.Instance = Products;
+
+                                AddProductToDB(product);
+                            }
+                            IsSearchWorking = false;
+                        }).Task;
                     },
                     (obj) => !IsSearchWorking && !string.IsNullOrEmpty(_article) && Int32.TryParse(_article, out int _)
                     ));
@@ -159,6 +223,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                             data.Add("Артикул", new List<object>());
                             data.Add("Название", new List<object>());
                             data.Add("Бренд", new List<object>());
+                            data.Add("Остатки", new List<object>());
                             data.Add("Скидка", new List<object>());
                             data.Add("Цена без скидки", new List<object>());
                             data.Add("Цена со скидкой", new List<object>());
@@ -171,6 +236,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                                 data["Артикул"].Add(product.id);
                                 data["Название"].Add(product.name);
                                 data["Бренд"].Add(product.brand);
+                                data["Остатки"].Add(product.Quantity);
                                 data["Скидка"].Add(product.sale);
                                 data["Цена без скидки"].Add(product.priceU);
                                 data["Цена со скидкой"].Add(product.salePriceU);

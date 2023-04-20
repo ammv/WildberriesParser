@@ -4,24 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ecb1ced281854ef786e27d1e4139a89c" Name="Diagram1">
+      <Diagram DiagramId="9048f68b721843c3950a640bad52a9bc" Name="Diagram1">
         <EntityTypeShape EntityType="DBModel.Log" Width="1.5" PointX="12.25" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="DBModel.LogType" Width="1.5" PointX="10" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DBModel.Role" Width="1.5" PointX="7.75" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="10" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.WbBrand" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.WbProduct" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.WbProductChanges" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.WbBrand" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.WbProduct" Width="1.5" PointX="3" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.WbProductChanges" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DBModel.WbProductPosChanges" Width="1.5" PointX="5.25" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.WbProductSales" Width="1.5" PointX="5.25" PointY="7.25" IsExpanded="true" />
-        <AssociationConnector Association="DBModel.FK__Logs__Type__2C3393D0" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK__Logs__UserID__2B3F6F97" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK__Log__Type__2C3393D0" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK__Log__UserID__2B3F6F97" ManuallyRouted="false" />
         <AssociationConnector Association="DBModel.FK__User__RoleID__286302EC" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK_WbProduct_WbBrand" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK_WbProductChanges_WbProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK_WbProductPosChanges_WbProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK_WbProductSales_WbProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK__WbProduct__WbBra__30F848ED" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK__WbProduct__WbPro__33D4B598" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK__WbProduct__WbPro__36B12243" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

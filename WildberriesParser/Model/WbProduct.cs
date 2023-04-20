@@ -55,7 +55,7 @@ namespace WildberriesParser
 
         [Category("NotImportant")]
         [Description("ID бренда")]
-        public int brandId { get; set; }
+        public int WbBrandID { get; set; }
 
         [Description("ID сайта бренда")]
         [Category("NotImportant")]
@@ -134,5 +134,30 @@ namespace WildberriesParser
         [Category("Unknown")]
         [Description("Неизвестно")]
         public bool diffPrice { get; set; }
+
+        private int? _quantity = -1;
+
+        public int? Quantity
+        {
+            get
+            {
+                if (_quantity == -1)
+                {
+                    int quantity = 0;
+                    foreach (var size in sizes)
+                    {
+                        if (size.stocks != null)
+                        {
+                            foreach (var stock in size.stocks)
+                            {
+                                quantity += stock.qty;
+                            }
+                        }
+                    }
+                    _quantity = quantity;
+                }
+                return _quantity;
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace WildberriesParser.Services
                 {
                     User = App.CurrentUser,
                     Description = message,
-                    TypeID = (int)logType,
+                    Type = (int)logType,
                     Date = DateTime.Now
                 });
                 DBEntities.GetContext()?.SaveChanges();

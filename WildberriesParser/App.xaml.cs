@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OfficeOpenXml;
 using System;
+using System.Linq;
 using System.Windows;
 using WildberriesParser.Infastructure.Core;
 using WildberriesParser.Model.Data;
@@ -18,6 +19,7 @@ namespace WildberriesParser
 
         public App()
         {
+
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             IServiceCollection services = new ServiceCollection();
@@ -191,6 +193,59 @@ namespace WildberriesParser
             var LoadingView = ServiceProvider.GetService<View.LoadingView>();
             LoadingView.Show();
             base.OnStartup(e);
+        }
+
+        private void Test()
+        {
+            int id = 149785597;
+            Model.Data.WbProduct findProduct = DBEntities.GetContext().WbProduct.FirstOrDefault(x => x.ID == id);
+            DateTime now = DateTime.Now.Date;
+
+            if (findProduct == null)
+            {
+                var newProduct = new Model.Data.WbProduct
+                {
+                    ID = id,
+                    Name = "блузка",
+                    WbBrandID = 310498088,
+                    LastUpdate = now
+                };
+
+                DBEntities.GetContext().WbProduct.Add(newProduct);
+
+                var changes = new WbProductChanges
+                {
+                    WbProductID = id,
+                    Date = now,
+                    Discount = 24,
+                    PriceWithDiscount = 34534,
+                    PriceWithoutDiscount = 235345,
+                    Quantity = 345
+                };
+
+                DBEntities.GetContext().WbProductChanges.Add(changes);
+
+                DBEntities.GetContext().SaveChanges();
+            }
+            else
+            {
+                if (findProduct.LastUpdate.Date < now)
+                {
+                    findProduct.LastUpdate = now;
+
+                    DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
+                    {
+                        WbProduct = findProduct,
+                        Date = now,
+                        Discount = 2545,
+                        PriceWithDiscount = 34536,
+                        PriceWithoutDiscount = 23445,
+                        Quantity = 3455
+                    });
+
+                    DBEntities.GetContext().SaveChanges();
+                }
+            }
         }
     }
 }

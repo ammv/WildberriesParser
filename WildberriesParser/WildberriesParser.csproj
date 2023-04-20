@@ -73,6 +73,9 @@
     <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
     </Reference>
+    <Reference Include="JetBrains.Annotations, Version=4242.42.42.42, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.2022.3.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=2.0.9.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.2.0.9\lib\net462\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -148,6 +151,7 @@
     <Compile Include="Infastructure\Commands\RelayCommand.cs" />
     <Compile Include="Infastructure\Converters\StringToIntConverter.cs" />
     <Compile Include="Infastructure\Converters\TextBlockRunsConverter.cs" />
+    <Compile Include="Infastructure\Converters\WbProductQuantityToStringConverter.cs" />
     <Compile Include="Infastructure\Core\ObservableObject.cs" />
     <Compile Include="Infastructure\Core\PagedList.cs" />
     <Compile Include="Infastructure\Core\PagedListCommands.cs" />
@@ -178,15 +182,6 @@
     <Compile Include="Model\Data\Role.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Data\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Data\sp_helpdiagrams_Result.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Data\sysdiagrams.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model\Data\User.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -200,9 +195,6 @@
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Data\WbProductPosChanges.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Data\WbProductSales.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\LogTypeEnum.cs" />
@@ -507,6 +499,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resource\Images\AppLogo125x125.png" />
+    <Resource Include="Resource\Images\background.png" />
+    <Resource Include="Resource\Images\AppLogoWithText.png" />
     <Content Include="Model\Data\DBModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DBModel.edmx</DependentUpon>
@@ -517,9 +512,6 @@
       <DependentUpon>DBModel.edmx</DependentUpon>
       <LastGenOutput>DBModel.cs</LastGenOutput>
     </Content>
-    <Resource Include="Resource\Images\AppLogo125x125.png" />
-    <Resource Include="Resource\Images\background.png" />
-    <Resource Include="Resource\Images\AppLogoWithText.png" />
     <Content Include="Updater.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

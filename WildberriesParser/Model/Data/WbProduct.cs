@@ -19,19 +19,17 @@ namespace WildberriesParser.Model.Data
         {
             this.WbProductChanges = new HashSet<WbProductChanges>();
             this.WbProductPosChanges = new HashSet<WbProductPosChanges>();
-            this.WbProductSales = new HashSet<WbProductSales>();
         }
     
         public int ID { get; set; }
-        public int brandId { get; set; }
         public string Name { get; set; }
+        public Nullable<int> WbBrandID { get; set; }
+        public System.DateTime LastUpdate { get; set; }
     
         public virtual WbBrand WbBrand { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WbProductChanges> WbProductChanges { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WbProductPosChanges> WbProductPosChanges { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WbProductSales> WbProductSales { get; set; }
     }
 }

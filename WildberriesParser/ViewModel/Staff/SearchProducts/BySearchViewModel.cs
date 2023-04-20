@@ -100,6 +100,66 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             return products;
         }
 
+        private async Task AddProductsToDB(IEnumerable<WbProduct> wbProducts)
+        {
+            DateTime now = DateTime.Now.Date;
+
+            foreach (var product in wbProducts)
+            {
+                if (await DBEntities.GetContext().WbBrand.FirstOrDefaultAsync(b => b.ID == product.WbBrandID) == null)
+                {
+                    DBEntities.GetContext().WbBrand.Add(new WbBrand
+                    {
+                        Name = product.brand,
+                        ID = product.WbBrandID
+                    });
+                }
+
+                Model.Data.WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync(x => x.ID == product.id);
+                if (findProduct == null)
+                {
+                    var newProduct = new Model.Data.WbProduct
+                    {
+                        ID = product.id,
+                        Name = product.name,
+                        WbBrandID = product.WbBrandID,
+                        LastUpdate = now
+                    };
+
+                    DBEntities.GetContext().WbProduct.Add(newProduct);
+
+                    DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
+                    {
+                        WbProduct = newProduct,
+                        Date = now,
+                        Discount = product.sale,
+                        PriceWithDiscount = (int)product.salePriceU,
+                        PriceWithoutDiscount = (int)product.priceU,
+                        Quantity = product.Quantity ?? 0
+                    });
+                }
+                else
+                {
+                    if (findProduct.LastUpdate.Date < now)
+                    {
+                        findProduct.LastUpdate = now;
+
+                        DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
+                        {
+                            WbProduct = findProduct,
+                            Date = now,
+                            Discount = product.sale,
+                            PriceWithDiscount = (int)product.salePriceU,
+                            PriceWithoutDiscount = (int)product.priceU,
+                            Quantity = product.Quantity ?? 0
+                        });
+                    }
+                }
+            }
+
+            await DBEntities.GetContext().SaveChangesAsync();
+        }
+
         public AsyncRelayCommand SearchCommand
         {
             get
@@ -114,12 +174,19 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                            var products = await _Search();
                            if (products.Count > 0)
                            {
-                               foreach (var product in products)
+                               var responseJson = await _wbRequesterService.GetProductsByArticlesSite(products.Select(x => x.id).ToList());
+
+                               var response = _wbParser.ParseResponse(responseJson);
+
+                               foreach (var product in response.Data.Products)
                                {
                                    _originalProducts.Add(product);
                                }
+
                                Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
                                _pagedCommands.Instance = Products;
+
+                               await AddProductsToDB(response.Data.Products);
                            }
                            IsSearchWorking = false;
                        }).Task;

@@ -53,6 +53,25 @@ namespace WildberriesParser.Services
             }
         }
 
+        public async Task<string> GetProductsByArticlesSite(List<int> articles)
+        {
+            string url = $@"https://card.wb.ru/cards/detail?curr=rub&dest=-1257786&regions=80,64,38,4,115,83,33,68,70,69,30,86,75,40,1,66,48,110,22,31,71,114,111&spp=0&nm={string.Join(";", articles)}";
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Accept", "*/*");
+            client.DefaultRequestHeaders.Add("User-Agent", _GenerateUserAgent());
+
+            var response = await client.GetAsync(url);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                throw new HttpRequestException("Ошибка! Ответ от сервера: " + response.StatusCode);
+            }
+        }
+
         public async Task<List<string>> GetProductCardsBySearch(string search, int pages = 1)
         {
             string url = @"https://search.wb.ru/exactmatch/ru/common/v4/search?appType=1&couponsGeo=12,3,18,15,21&curr=rub&dest=-1257786&emp=0&lang=ru&locale=ru&page=PAGE&pricemarginCoeff=1.0&query=QUERY&reg=0&regions=80,64,38,4,115,83,33,68,70,69,30,86,75,40,1,66,31,48,110,22,71&resultset=catalog&sort=popular&spp=0&suppressSpellcheck=false";

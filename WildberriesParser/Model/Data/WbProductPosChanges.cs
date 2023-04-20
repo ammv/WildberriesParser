@@ -14,11 +14,12 @@ namespace WildberriesParser.Model.Data
     
     public partial class WbProductPosChanges
     {
-        public int WbProductID { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> WbProductID { get; set; }
+        public System.DateTime Date { get; set; }
+        public string SearchPattern { get; set; }
         public int Position { get; set; }
         public int Page { get; set; }
-        public string SearchPattern { get; set; }
-        public System.DateTime Date { get; set; }
     
         public virtual WbProduct WbProduct { get; set; }
     }

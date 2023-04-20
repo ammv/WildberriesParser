@@ -14,7 +14,8 @@ namespace WildberriesParser.Model.Data
     
     public partial class WbProductChanges
     {
-        public int WbProductID { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> WbProductID { get; set; }
         public System.DateTime Date { get; set; }
         public int Discount { get; set; }
         public int PriceWithDiscount { get; set; }
