@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,11 +22,11 @@ namespace WildberriesParser.ViewModel.Staff
         ProductID
     }
 
-    public class TraceProductViewModel : ViewModelBase
+    public class TraceProductsViewModel : ViewModelBase
     {
         public string Title { get; } = "Отследить товар";
 
-        private TraceType _selectedTraceType = TraceType.BrandID;
+        private TraceType _selectedTraceType = TraceType.BrandName;
 
         private string _searchPattern;
         private string _tracedValue;
@@ -76,7 +77,7 @@ namespace WildberriesParser.ViewModel.Staff
             }
         }
 
-        public TraceProductViewModel(INavigationService navigationService, WbParser wbParser,
+        public TraceProductsViewModel(INavigationService navigationService, WbParser wbParser,
             ExcelService excelService, WbRequesterService wbRequesterService)
         {
             NavigationService = navigationService;
@@ -115,7 +116,7 @@ namespace WildberriesParser.ViewModel.Staff
         {
             List<WbProductPosChanges> wbProductPosChanges = new List<WbProductPosChanges>();
 
-            DateTime now = DateTime.Now.Date;
+            DateTime now = DateTime.Now;
 
             for (int i = 0; i < products.Count; i++)
             {
@@ -149,7 +150,8 @@ namespace WildberriesParser.ViewModel.Staff
                     Date = now,
                     SearchPattern = _searchPattern,
                     Page = (int)Math.Ceiling((i + 1.0) / 100),
-                    Position = (i + 1) % 100
+                    Position = (i + 1) % 100,
+                    SearchPatternTypeID = (int)_selectedTraceType
                 });
             }
 
@@ -160,6 +162,84 @@ namespace WildberriesParser.ViewModel.Staff
         {
             DBEntities.GetContext().WbProductPosChanges.AddRange(data);
             await DBEntities.GetContext().SaveChangesAsync();
+        }
+
+        private async Task AddProductsToDB(IEnumerable<WbProduct> wbProducts)
+        {
+            DateTime now = DateTime.Now.Date;
+
+            foreach (var product in wbProducts)
+            {
+                if (await DBEntities.GetContext().WbBrand.FirstOrDefaultAsync(b => b.ID == product.WbBrandID) == null)
+                {
+                    DBEntities.GetContext().WbBrand.Add(new WbBrand
+                    {
+                        Name = product.brand,
+                        ID = product.WbBrandID
+                    });
+                }
+
+                Model.Data.WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync(x => x.ID == product.id);
+                if (findProduct == null)
+                {
+                    var newProduct = new Model.Data.WbProduct
+                    {
+                        ID = product.id,
+                        Name = product.name,
+                        WbBrandID = product.WbBrandID,
+                        LastUpdate = now
+                    };
+
+                    DBEntities.GetContext().WbProduct.Add(newProduct);
+
+                    DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
+                    {
+                        WbProduct = newProduct,
+                        Date = now,
+                        Discount = product.sale,
+                        PriceWithDiscount = (int)product.salePriceU,
+                        PriceWithoutDiscount = (int)product.priceU,
+                        Quantity = product.Quantity ?? 0
+                    });
+                }
+                else
+                {
+                    if (findProduct.LastUpdate.Date < now)
+                    {
+                        findProduct.LastUpdate = now;
+
+                        DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
+                        {
+                            WbProduct = findProduct,
+                            Date = now,
+                            Discount = product.sale,
+                            PriceWithDiscount = (int)product.salePriceU,
+                            PriceWithoutDiscount = (int)product.priceU,
+                            Quantity = product.Quantity ?? 0
+                        });
+                    }
+                }
+            }
+
+            try
+            {
+                DBEntities.GetContext().SaveChanges();
+
+                //DBEntities.GetContext().GetValidationErrors().ToList()[0].ValidationErrors.ToList()[0].
+            }
+            catch (Exception ex)
+            {
+                //List<string>
+                File.WriteAllText("ef_erros.txt",
+                    string.Join("\n",
+                    DBEntities.GetContext().GetValidationErrors().ToList().Select(x => x.ValidationErrors.Select(c => c.ErrorMessage))));
+
+                Helpers.MessageBoxHelper.Error(ex.Message);
+                if (Helpers.MessageBoxHelper.Question("Ошибки записаны в ef_erros.txt. Открыть?") == Helpers.MessageBoxHelperResult.YES)
+                {
+                    Process.Start("ef_erros.txt");
+                }
+            }
         }
 
         public AsyncRelayCommand TraceCommand
@@ -175,18 +255,27 @@ namespace WildberriesParser.ViewModel.Staff
                             IsTraceWorking = true;
 
                             var products = await _GetProducts();
+
+                            var responseJson = await _wbRequesterService.GetProductsByArticlesSite(products.Select(x => x.id).ToList());
+                            var response = _wbParser.ParseResponse(responseJson);
+
+                            await AddProductsToDB(response.Data.Products);
+
                             List<WbProductPosChanges> result = null;
                             if (products.Count > 0)
                             {
-                                result = _Trace(products);
+                                result = _Trace(response.Data.Products);
 
                                 foreach (var item in result)
                                 {
                                     _originalProducts.Add(item);
                                 }
 
-                                ProductPosChanges = new PagedList<WbProductPosChanges>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
-                                _pagedCommands.Instance = ProductPosChanges;
+                                if (result.Count > 0)
+                                {
+                                    ProductPosChanges = new PagedList<WbProductPosChanges>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                                    _pagedCommands.Instance = ProductPosChanges;
+                                }
                             }
 
                             IsTraceWorking = false;
@@ -234,6 +323,7 @@ namespace WildberriesParser.ViewModel.Staff
                     {
                         return App.Current.Dispatcher.InvokeAsync(() =>
                         {
+                            _selectedTraceType = (TraceType)(int)obj;
                         }).Task;
                     }
                     ));
@@ -258,13 +348,26 @@ namespace WildberriesParser.ViewModel.Staff
                                 Helpers.MessageBoxHelper.Error("Вы не выбрали файл!");
                                 return;
                             }
+                            DateTime now = DateTime.Now.Date;
                             IsExportWorking = true;
                             Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
                             data.Add("Артикул", new List<object>());
+                            data.Add("Дата", new List<object>());
+                            data.Add("Название", new List<object>());
+                            data.Add("Страница", new List<object>());
+                            data.Add("Позиция", new List<object>());
+                            data.Add("Поисковой запрос", new List<object>());
+                            data.Add("Тип поискового запроса", new List<object>());
 
                             foreach (var product in _originalProducts)
                             {
                                 data["Артикул"].Add(product.WbProductID);
+                                data["Дата"].Add(product.Date);
+                                data["Название"].Add(product.WbProduct.Name);
+                                data["Страница"].Add(product.Page);
+                                data["Позиция"].Add(product.Position);
+                                data["Поисковой запрос"].Add(product.SearchPattern);
+                                data["Тип поискового запроса"].Add(product.SearchPatternType.Name);
                             }
                             try
                             {

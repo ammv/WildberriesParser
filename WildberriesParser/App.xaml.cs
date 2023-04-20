@@ -19,7 +19,6 @@ namespace WildberriesParser
 
         public App()
         {
-
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             IServiceCollection services = new ServiceCollection();

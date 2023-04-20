@@ -14,7 +14,12 @@ namespace WildberriesParser.Services
             return @"Mozilla/5.0 (Linux; Android 10; SM-A205F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.111 Mobile Safari/537.36";
         }
 
-        public async Task<string> GetProductByArticleBasket(int article)
+        /// <summary>
+        /// Получает карточку товара с сервера Basket, без указания остатков
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns>Артикул товара</returns>
+        public async Task<string> GetProductByArticleFromBasket(int article)
         {
             string url = $@"https://card.wb.ru/cards/detail?nm={article}";
 
@@ -34,6 +39,11 @@ namespace WildberriesParser.Services
             }
         }
 
+        /// <summary>
+        /// Получает карточку товара напрямую с сайта Wildberries, с указанием остатков
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns>Артикул товара</returns>
         public async Task<string> GetProductByArticleSite(int article)
         {
             string url = $@"https://card.wb.ru/cards/detail?curr=rub&dest=-1257786&regions=80,64,38,4,115,83,33,68,70,69,30,86,75,40,1,66,48,110,22,31,71,114,111&spp=0&nm={article}";
@@ -53,6 +63,11 @@ namespace WildberriesParser.Services
             }
         }
 
+        /// <summary>
+        /// Получает карточки товаров по их артикулам с сайта Wildberries, с указанием остатков
+        /// </summary>
+        /// <param name="articles"></param>
+        /// <returns></returns>
         public async Task<string> GetProductsByArticlesSite(List<int> articles)
         {
             string url = $@"https://card.wb.ru/cards/detail?curr=rub&dest=-1257786&regions=80,64,38,4,115,83,33,68,70,69,30,86,75,40,1,66,48,110,22,31,71,114,111&spp=0&nm={string.Join(";", articles)}";
@@ -72,6 +87,12 @@ namespace WildberriesParser.Services
             }
         }
 
+        /// <summary>
+        /// Получает карточки из поисковой выдачи на сайте Wildberries
+        /// </summary>
+        /// <param name="search">Поисковой запрос</param>
+        /// <param name="pages">Количество страниц</param>
+        /// <returns></returns>
         public async Task<List<string>> GetProductCardsBySearch(string search, int pages = 1)
         {
             string url = @"https://search.wb.ru/exactmatch/ru/common/v4/search?appType=1&couponsGeo=12,3,18,15,21&curr=rub&dest=-1257786&emp=0&lang=ru&locale=ru&page=PAGE&pricemarginCoeff=1.0&query=QUERY&reg=0&regions=80,64,38,4,115,83,33,68,70,69,30,86,75,40,1,66,31,48,110,22,71&resultset=catalog&sort=popular&spp=0&suppressSpellcheck=false";

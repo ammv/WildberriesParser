@@ -72,7 +72,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_traceProductCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<NotImplementedViewModel>();
+                        NavigationService.NavigateTo<TraceProductsViewModel>();
                     }
                     ));
             }

@@ -13,7 +13,7 @@
              d:DesignWidth="980"
              Background="Transparent">
     <UserControl.InputBindings>
-        <KeyBinding Command="{Binding SearchCommand}"
+        <KeyBinding Command="{Binding TraceCommand}"
                     Key="Return" />
     </UserControl.InputBindings>
     <UserControl.Resources>
@@ -83,7 +83,7 @@
                         </TextBox>
                     </StackPanel>
                 </materialDesign:Card>
-                <Button materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsSearchWorking}"
+                <Button materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsTraceWorking}"
                         materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
                         Command="{Binding TraceCommand}"
                         Grid.Column="2"
@@ -179,7 +179,7 @@
                              Background="Transparent"
                              Style="{StaticResource MaterialDesignOutlinedButton}">
                     <RadioButton.CommandParameter>
-                        <sys:Int32>0</sys:Int32>
+                        <sys:Int32>1</sys:Int32>
                     </RadioButton.CommandParameter>
                     <intr:Interaction.Triggers>
                         <intr:DataTrigger Value="True"
@@ -214,7 +214,7 @@
                              Background="Transparent"
                              Style="{StaticResource MaterialDesignOutlinedButton}">
                     <RadioButton.CommandParameter>
-                        <sys:Int32>1</sys:Int32>
+                        <sys:Int32>2</sys:Int32>
                     </RadioButton.CommandParameter>
                     <intr:Interaction.Triggers>
                         <intr:DataTrigger Value="True"
@@ -248,7 +248,7 @@
                              Background="Transparent"
                              Style="{StaticResource MaterialDesignOutlinedButton}">
                     <RadioButton.CommandParameter>
-                        <sys:Int32>2</sys:Int32>
+                        <sys:Int32>3</sys:Int32>
                     </RadioButton.CommandParameter>
                     <intr:Interaction.Triggers>
                         <intr:DataTrigger Value="True"
@@ -287,37 +287,51 @@
                       Style="{StaticResource MaterialDesignDataGrid}"
                       FocusVisualStyle="{x:Null}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding ID}">
+                    <DataGridTextColumn Binding="{Binding WbProductID}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Артикул"
                                        FontSize="18"
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding Login}">
+                    <DataGridTextColumn Binding="{Binding Date}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Дата"
+                                       FontSize="18"
+                                       Foreground="#909090" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Name}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Название"
                                        FontSize="18"
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding Password}">
+                    <DataGridTextColumn Binding="{Binding Page}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Страница"
                                        FontSize="18"
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding Role.Name}">
+                    <DataGridTextColumn Binding="{Binding Position}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Позиция"
                                        FontSize="18"
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding Role.Name}">
+                    <DataGridTextColumn Binding="{Binding SearchPattern}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Поисковой запрос"
+                                       FontSize="18"
+                                       Foreground="#909090" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding SearchPatternType.Name}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Тип поиского запроса"
                                        FontSize="18"
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
@@ -345,8 +359,8 @@
                        Style="{StaticResource MaterialDesignBody2TextBlock}">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0} из {1}">
-                        <Binding Path="Products.CurrentPage" />
-                        <Binding Path="Products.TotalPages" />
+                        <Binding Path="ProductPosChanges.CurrentPage" />
+                        <Binding Path="ProductPosChanges.TotalPages" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
