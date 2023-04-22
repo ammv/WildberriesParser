@@ -5,9 +5,9 @@ namespace WildberriesParser.View.Admin
     /// <summary>
     /// Логика взаимодействия для UsersView.xaml
     /// </summary>
-    public partial class SettingsView : UserControl
+    public partial class ServerView : UserControl
     {
-        public SettingsView()
+        public ServerView()
         {
             InitializeComponent();
         }

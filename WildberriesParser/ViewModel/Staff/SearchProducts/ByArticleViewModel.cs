@@ -92,12 +92,12 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
 
         private void AddProductToDB(WbProduct wbProduct)
         {
-            if (DBEntities.GetContext().WbBrand.FirstOrDefault(b => b.ID == wbProduct.WbBrandID) == null)
+            if (DBEntities.GetContext().WbBrand.FirstOrDefault(b => b.ID == wbProduct.brandId) == null)
             {
                 DBEntities.GetContext().WbBrand.Add(new WbBrand
                 {
                     Name = wbProduct.brand,
-                    ID = wbProduct.WbBrandID
+                    ID = wbProduct.brandId
                 });
 
                 DBEntities.GetContext().SaveChanges();
@@ -112,7 +112,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                 {
                     ID = wbProduct.id,
                     Name = wbProduct.name,
-                    WbBrandID = wbProduct.WbBrandID,
+                    WbBrandID = wbProduct.brandId,
                     LastUpdate = now
                 };
 

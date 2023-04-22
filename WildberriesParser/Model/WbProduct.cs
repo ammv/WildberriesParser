@@ -55,7 +55,7 @@ namespace WildberriesParser
 
         [Category("NotImportant")]
         [Description("ID бренда")]
-        public int WbBrandID { get; set; }
+        public int brandId { get; set; }
 
         [Description("ID сайта бренда")]
         [Category("NotImportant")]

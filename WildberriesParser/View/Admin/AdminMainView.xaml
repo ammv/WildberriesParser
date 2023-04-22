@@ -184,12 +184,12 @@
                         </intr:Interaction.Triggers>
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Left">
-                            <materialDesign:PackIcon Kind="Settings"
+                            <materialDesign:PackIcon Kind="Server"
                                                      VerticalAlignment="Center"
                                                      Height="32"
                                                      Width="32"
                                                      Margin="0 0 10 0" />
-                            <TextBlock Text="Настройки"
+                            <TextBlock Text="Сервер"
                                        VerticalAlignment="Center"
                                        FontSize="16" />
                         </StackPanel>

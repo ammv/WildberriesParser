@@ -48,7 +48,6 @@ namespace WildberriesParser
             // Configurere Staff services
             services.AddTransient<ViewModel.Staff.StaffMainViewModel>();
 
-            services.AddSingleton<ViewModel.Staff.SettingsViewModel>();
             services.AddSingleton<ViewModel.Staff.SearchProductsViewModel>();
             services.AddSingleton<ViewModel.Staff.AutomatizationViewModel>();
             services.AddSingleton<ViewModel.Staff.TraceProductsViewModel>();
@@ -56,11 +55,6 @@ namespace WildberriesParser
             services.AddTransient(provider => new View.Staff.StaffMainView
             {
                 DataContext = provider.GetRequiredService<ViewModel.Staff.StaffMainViewModel>()
-            });
-
-            services.AddSingleton(provider => new View.Staff.SettingsView
-            {
-                DataContext = provider.GetRequiredService<ViewModel.Staff.SettingsViewModel>()
             });
 
             services.AddSingleton(provider => new View.Staff.SearchProductsView
@@ -101,7 +95,7 @@ namespace WildberriesParser
             services.AddSingleton<ViewModel.Admin.UsersViewModel>();
             services.AddSingleton<ViewModel.Admin.UserAddViewModel>();
             services.AddSingleton<ViewModel.Admin.HistoryViewModel>();
-            services.AddSingleton<ViewModel.Admin.SettingsViewModel>();
+            services.AddSingleton<ViewModel.Admin.ServerViewModel>();
 
             services.AddTransient(provider => new View.Admin.AdminMainView
             {
@@ -123,9 +117,9 @@ namespace WildberriesParser
                 DataContext = provider.GetRequiredService<ViewModel.Admin.HistoryViewModel>()
             });
 
-            services.AddSingleton(provider => new View.Admin.SettingsView
+            services.AddSingleton(provider => new View.Admin.ServerView
             {
-                DataContext = provider.GetRequiredService<ViewModel.Admin.SettingsViewModel>()
+                DataContext = provider.GetRequiredService<ViewModel.Admin.ServerViewModel>()
             });
         }
 

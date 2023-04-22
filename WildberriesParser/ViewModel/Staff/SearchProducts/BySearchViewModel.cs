@@ -15,6 +15,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Diagnostics;
+using System.IO;
 
 namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
@@ -104,15 +105,25 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         {
             DateTime now = DateTime.Now.Date;
 
+            List<int> checkedProductID = new List<int>();
+            List<int> checkedBrandID = new List<int>();
+
             foreach (var product in wbProducts)
             {
-                if (await DBEntities.GetContext().WbBrand.FirstOrDefaultAsync(b => b.ID == product.WbBrandID) == null)
+                if (checkedProductID.Contains(product.id))
+                {
+                    continue;
+                }
+
+                WbBrand brand = await DBEntities.GetContext().WbBrand.FirstOrDefaultAsync(b => b.ID == product.brandId);
+                if (!checkedBrandID.Contains(product.brandId) && brand == null)
                 {
                     DBEntities.GetContext().WbBrand.Add(new WbBrand
                     {
                         Name = product.brand,
-                        ID = product.WbBrandID
+                        ID = product.brandId
                     });
+                    checkedBrandID.Add(product.brandId);
                 }
 
                 Model.Data.WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync(x => x.ID == product.id);
@@ -122,11 +133,12 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     {
                         ID = product.id,
                         Name = product.name,
-                        WbBrandID = product.WbBrandID,
+                        WbBrandID = product.brandId,
                         LastUpdate = now
                     };
 
                     DBEntities.GetContext().WbProduct.Add(newProduct);
+                    checkedProductID.Add(product.id);
 
                     DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
                     {
@@ -157,7 +169,45 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                 }
             }
 
-            await DBEntities.GetContext().SaveChangesAsync();
+            try
+            {
+                DBEntities.GetContext().SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("ValidationErrors"))
+                {
+                    WriteEfErrosAndOpen(ex);
+                }
+                else
+                {
+                    Helpers.MessageBoxHelper.Error(ex.Message);
+                }
+            }
+        }
+
+        private static void WriteEfErrosAndOpen(Exception ex)
+        {
+            StringBuilder sb = new StringBuilder();
+            var errorsEntities = DBEntities.GetContext().GetValidationErrors().ToList();
+            foreach (var errorEntity in errorsEntities)
+            {
+                sb.Append($"Сущность: {errorEntity.Entry.Entity.GetType().Name}\n");
+                sb.Append($"Ошибки: \n");
+                foreach (var item in errorEntity.ValidationErrors)
+                {
+                    sb.Append($"\t - {item.ErrorMessage}\n");
+                }
+            }
+            //List<string>
+            File.WriteAllText("ef_erros.txt",
+                sb.ToString());
+
+            Helpers.MessageBoxHelper.Error(ex.Message);
+            if (Helpers.MessageBoxHelper.Question("Ошибки записаны в ef_erros.txt. Открыть?") == Helpers.MessageBoxHelperResult.YES)
+            {
+                Process.Start("ef_erros.txt");
+            }
         }
 
         public AsyncRelayCommand SearchCommand

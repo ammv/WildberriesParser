@@ -2,7 +2,7 @@
 
 namespace WildberriesParser.ViewModel.Admin
 {
-    public class SettingsViewModel : ViewModelBase
+    public class ServerViewModel : ViewModelBase
     {
         public string Title { get; } = "Настройки";
     }

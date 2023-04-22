@@ -301,7 +301,7 @@
                                        Foreground="#909090" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding Name}">
+                    <DataGridTextColumn Binding="{Binding WbProduct.Name}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="Название"
                                        FontSize="18"

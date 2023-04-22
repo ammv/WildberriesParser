@@ -40,8 +40,8 @@
         <viewA:UserAddView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vmA:SettingsViewModel}">
-        <viewA:SettingsView />
+    <DataTemplate DataType="{x:Type vmA:ServerViewModel}">
+        <viewA:ServerView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmA:HistoryViewModel}">
@@ -58,7 +58,7 @@
         <viewS:SearchProductsView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vmS:SettingsViewModel}">
+    <DataTemplate DataType="{x:Type vmS:ServerViewModel}">
         <viewS:SettingsView />
     </DataTemplate>
 

@@ -230,7 +230,7 @@
     <Compile Include="ViewModel\Admin\AdminMainViewModel.cs" />
     <Compile Include="ViewModel\Admin\UserAddViewModel.cs" />
     <Compile Include="ViewModel\Admin\HistoryViewModel.cs" />
-    <Compile Include="ViewModel\Admin\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\Admin\ServerViewModel.cs" />
     <Compile Include="ViewModel\Admin\UsersViewModel.cs" />
     <Compile Include="ViewModel\NeedSettingErrorViewModel.cs" />
     <Compile Include="ViewModel\NotImplementedViewModel.cs" />
@@ -242,7 +242,6 @@
     <Compile Include="ViewModel\Staff\SearchProductsViewModel.cs" />
     <Compile Include="ViewModel\Staff\SearchProducts\BySearchViewModel.cs" />
     <Compile Include="ViewModel\Staff\SearchProducts\ByArticleViewModel.cs" />
-    <Compile Include="ViewModel\Staff\SettingsViewModel.cs" />
     <Compile Include="ViewModel\Staff\StaffMainViewModel.cs" />
     <Compile Include="ViewModel\Staff\TraceProductsViewModel.cs" />
     <Compile Include="ViewModel\StartViewModel.cs" />
@@ -261,8 +260,8 @@
     <Compile Include="View\Admin\HistoryView.xaml.cs">
       <DependentUpon>HistoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Admin\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
+    <Compile Include="View\Admin\ServerView.xaml.cs">
+      <DependentUpon>ServerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Admin\UsersView.xaml.cs">
       <DependentUpon>UsersView.xaml</DependentUpon>
@@ -367,7 +366,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Admin\SettingsView.xaml">
+    <Page Include="View\Admin\ServerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

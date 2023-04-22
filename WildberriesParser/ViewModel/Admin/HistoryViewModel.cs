@@ -6,9 +6,6 @@ using System.Linq;
 using System.Data.Entity;
 using System.Collections.ObjectModel;
 using WildberriesParser.Infastructure.Commands;
-
-using WildberriesParser.Infastructure.Core;
-
 using System;
 using System.Threading.Tasks;
 using System.Diagnostics;

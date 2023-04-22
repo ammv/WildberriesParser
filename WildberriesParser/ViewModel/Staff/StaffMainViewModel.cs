@@ -46,22 +46,6 @@ namespace WildberriesParser.ViewModel.Staff
             }
         }
 
-        private RelayCommand _SettingsCommand;
-
-        public RelayCommand SettingsCommand
-        {
-            get
-            {
-                return _SettingsCommand ??
-                    (_SettingsCommand = new RelayCommand
-                    ((obj) =>
-                    {
-                        NavigationService.NavigateTo<NotImplementedViewModel>();
-                    }
-                    ));
-            }
-        }
-
         private RelayCommand _traceProductCommand;
 
         public RelayCommand TraceProductCommand
