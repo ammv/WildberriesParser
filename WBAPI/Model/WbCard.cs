@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace WildberriesParser
+namespace SimpleWbApi
 {
-    public class WbProduct
+    public class WbCard
     {
         [Category("Unknown")]
         [Description("Неизвестно")]

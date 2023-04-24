@@ -1,4 +1,4 @@
-﻿namespace WildberriesParser
+﻿namespace SimpleWbApi
 {
     public class WbParams
     {

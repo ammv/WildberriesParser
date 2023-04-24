@@ -1,6 +1,6 @@
-﻿namespace WildberriesParser
+﻿namespace SimpleWbApi
 {
-    public class WildberriesSearchResponse
+    public class WbResponse
     {
         public WbMetadata Metadata { get; set; }
         public int State { get; set; }

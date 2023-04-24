@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleWbApi;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
@@ -78,12 +79,13 @@ namespace WildberriesParser.ViewModel.Staff
             }
         }
 
-        public TraceProductsViewModel(INavigationService navigationService, WbParser wbParser,
-            ExcelService excelService, WbRequesterService wbRequesterService)
+        private WbAPI _wbApi;
+
+        public TraceProductsViewModel(INavigationService navigationService,
+            ExcelService excelService, WbAPI wbAPI)
         {
             NavigationService = navigationService;
-            _wbRequesterService = wbRequesterService;
-            _wbParser = wbParser;
+            _wbApi = wbAPI;
             _excelService = excelService;
 
             _productPosChanges = new PagedList<WbProductPosChanges>(_originalProducts, _pageSizes[_selectedIndex]);
@@ -99,52 +101,50 @@ namespace WildberriesParser.ViewModel.Staff
         private INavigationService _navigationService;
 
         private AsyncRelayCommand _SearchCommand;
-        private readonly WbRequesterService _wbRequesterService;
-        private readonly WbParser _wbParser;
 
-        private async Task<List<WbProduct>> _GetProducts()
+        private async Task<List<SimpleWbApi.WbCard>> _GetProducts()
         {
-            var responsesJson = await _wbRequesterService.GetProductCardsBySearch(_searchPattern, _tracePageCount[_selectedTracePageIndex]);
-            List<WbProduct> products = new List<WbProduct>();
+            var responses = await _wbApi.GetCardsFromSiteBySearch(_searchPattern, _tracePageCount[_selectedTracePageIndex]);
 
-            foreach (var responseJson in responsesJson)
+            List<WbCard> cards = new List<WbCard>();
+
+            foreach (var response in responses)
             {
-                var response = _wbParser.ParseResponse(responseJson);
                 if (response.Data?.Products?.Count > 0)
                 {
-                    products.AddRange(response.Data.Products);
+                    cards.AddRange(response.Data.Products);
                 }
             }
 
-            return products;
+            return cards;
         }
 
-        private List<WbProductPosChanges> _Trace(List<WbProduct> products)
+        private List<WbProductPosChanges> _Trace(List<WbCard> cards)
         {
             List<WbProductPosChanges> wbProductPosChanges = new List<WbProductPosChanges>();
 
             DateTime now = DateTime.Now;
 
-            for (int i = 0; i < products.Count; i++)
+            for (int i = 0; i < cards.Count; i++)
             {
                 switch (_selectedTraceType)
                 {
                     case TraceType.BrandName:
-                        if (!products[i].brand.Equals(_tracedValue))
+                        if (!cards[i].brand.Equals(_tracedValue))
                         {
                             continue;
                         }
                         break;
 
                     case TraceType.BrandID:
-                        if (products[i].brandId != int.Parse(_tracedValue))
+                        if (cards[i].brandId != int.Parse(_tracedValue))
                         {
                             continue;
                         }
                         break;
 
                     case TraceType.ProductID:
-                        if (products[i].id != int.Parse(_tracedValue))
+                        if (cards[i].id != int.Parse(_tracedValue))
                         {
                             continue;
                         }
@@ -153,7 +153,7 @@ namespace WildberriesParser.ViewModel.Staff
 
                 wbProductPosChanges.Add(new WbProductPosChanges
                 {
-                    WbProductID = products[i].id,
+                    WbProductID = cards[i].id,
                     Date = now,
                     SearchPattern = _searchPattern,
                     Page = (int)Math.Ceiling((i + 1.0) / 100),
@@ -171,14 +171,14 @@ namespace WildberriesParser.ViewModel.Staff
             await DBEntities.GetContext().SaveChangesAsync();
         }
 
-        private async Task AddProductsToDB(IEnumerable<WbProduct> wbProducts)
+        private async Task AddProductsToDB(IEnumerable<WbCard> cards)
         {
             DateTime now = DateTime.Now.Date;
 
             List<int> checkedProductID = new List<int>();
             List<int> checkedBrandID = new List<int>();
 
-            foreach (var product in wbProducts)
+            foreach (var product in cards)
             {
                 if (checkedProductID.Contains(product.id))
                 {
@@ -196,7 +196,7 @@ namespace WildberriesParser.ViewModel.Staff
                     checkedBrandID.Add(product.brandId);
                 }
 
-                Model.Data.WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync(x => x.ID == product.id);
+                Model.Data.WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync((System.Linq.Expressions.Expression<Func<WbProduct, bool>>)(x => x.ID == product.id));
                 if (findProduct == null)
                 {
                     var newProduct = new Model.Data.WbProduct
@@ -296,8 +296,7 @@ namespace WildberriesParser.ViewModel.Staff
 
                             var products = (await _GetProducts()).OrderBy(x => x.__sort);
 
-                            var responseJson = await _wbRequesterService.GetProductsByArticlesSite(products.Select(x => x.id).ToList());
-                            var response = _wbParser.ParseResponse(responseJson);
+                            var response = await _wbApi.GetCardsByArticleFromSite(products.Select(x => x.id).ToList());
 
                             await AddProductsToDB(response.Data.Products);
 

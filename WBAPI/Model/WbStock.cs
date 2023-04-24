@@ -1,4 +1,4 @@
-﻿namespace WildberriesParser.Model
+﻿namespace SimpleWbApi.Model
 {
     public class WbStock
     {

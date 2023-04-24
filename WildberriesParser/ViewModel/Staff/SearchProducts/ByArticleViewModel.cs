@@ -15,6 +15,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Diagnostics;
+using SimpleWbApi;
 
 namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
@@ -32,12 +33,12 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         private ExcelService _excelService;
         private ILoggerService _loggerService;
 
-        private ObservableCollection<WbProduct> _originalProducts = new ObservableCollection<WbProduct>();
+        private ObservableCollection<WbCard> _originalProducts = new ObservableCollection<WbCard>();
 
-        private PagedList<WbProduct> _products;
-        private PagedListCommands<WbProduct> _pagedCommands;
+        private PagedList<WbCard> _products;
+        private PagedListCommands<WbCard> _pagedCommands;
 
-        public PagedList<WbProduct> Products
+        public PagedList<WbCard> Products
         {
             get => _products;
             set { Set(ref _products, value); }
@@ -59,38 +60,35 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         }
 
         public ByArticleViewModel(INavigationService navigationService,
-            WbRequesterService wbRequesterService, WbParser wbParser,
+            WbAPI wbAPI,
             ExcelService excelService, ILoggerService loggerService)
         {
             NavigationService = navigationService;
-            _wbRequesterService = wbRequesterService;
-            _wbParser = wbParser;
+            _wbApi = wbAPI;
             _excelService = excelService;
             _loggerService = loggerService;
 
-            _products = new PagedList<WbProduct>(_originalProducts, _pageSizes[_selectedIndex]);
-            _pagedCommands = new PagedListCommands<WbProduct>(_products);
+            _products = new PagedList<WbCard>(_originalProducts, _pageSizes[_selectedIndex]);
+            _pagedCommands = new PagedListCommands<WbCard>(_products);
         }
 
         private INavigationService _navigationService;
 
         private AsyncRelayCommand _SearchCommand;
-        private readonly WbRequesterService _wbRequesterService;
-        private readonly WbParser _wbParser;
+        private readonly WbAPI _wbApi;
 
-        private async Task<WbProduct> _Search()
+        private async Task<WbCard> _Search()
         {
-            string responseJson = await _wbRequesterService.GetProductByArticleSite(Int32.Parse(_article));
-            var response = _wbParser.ParseResponse(responseJson);
-            WbProduct product = null;
-            if (response.Data.Products.Count > 0)
+            WbResponse response = await _wbApi.GetCardFromSiteByArticle(Int32.Parse(_article));
+            WbCard product = null;
+            if (response?.Data?.Products.Count > 0)
             {
                 product = response.Data.Products[0];
             }
             return product;
         }
 
-        private void AddProductToDB(WbProduct wbProduct)
+        private void AddProductToDB(WbCard wbProduct)
         {
             if (DBEntities.GetContext().WbBrand.FirstOrDefault(b => b.ID == wbProduct.brandId) == null)
             {
@@ -162,13 +160,13 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                         return App.Current.Dispatcher.InvokeAsync(async () =>
                         {
                             IsSearchWorking = true;
-                            WbProduct product = await _Search();
+                            WbCard product = await _Search();
 
                             if (product != null)
                             {
                                 _originalProducts.Add(product);
 
-                                Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                                Products = new PagedList<WbCard>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
                                 _pagedCommands.Instance = Products;
 
                                 AddProductToDB(product);
@@ -192,7 +190,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     ((obj) =>
                     {
                         _originalProducts.Clear();
-                        Products = new PagedList<WbProduct>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                        Products = new PagedList<WbCard>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
                         PagedCommands.Instance = Products;
                     }
                     ));
@@ -295,7 +293,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             set => Set(ref _isExportWorking, value);
         }
 
-        public PagedListCommands<WbProduct> PagedCommands
+        public PagedListCommands<WbCard> PagedCommands
         {
             get => _pagedCommands;
             set
