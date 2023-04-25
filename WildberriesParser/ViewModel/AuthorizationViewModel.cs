@@ -94,11 +94,10 @@ namespace WildberriesParser.ViewModel
             for (int i = 0; i < 6; i++)
             {
                 sb.Append(macAddress.Substring(i * 2, 2));
-                if(i != 5)
+                if (i != 5)
                 {
                     sb.Append(":");
                 }
-                
             }
 
             return sb.ToString();

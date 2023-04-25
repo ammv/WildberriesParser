@@ -116,7 +116,6 @@ namespace WildberriesParser.ViewModel.Staff
                     cards.AddRange(response.Data.Products);
                 }
             }
-
             return cards;
         }
 
