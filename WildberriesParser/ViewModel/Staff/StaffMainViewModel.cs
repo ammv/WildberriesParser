@@ -78,6 +78,22 @@ namespace WildberriesParser.ViewModel.Staff
             }
         }
 
+        private RelayCommand _reportCommand;
+
+        public RelayCommand ReportCommand
+        {
+            get
+            {
+                return _reportCommand ??
+                    (_reportCommand = new RelayCommand
+                    ((obj) =>
+                    {
+                        NavigationService.NavigateTo<NotImplementedViewModel>();
+                    }
+                    ));
+            }
+        }
+
         private RelayCommand _exitAccountCommand;
 
         public RelayCommand ExitAccountCommand

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SimpleWbApi.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace SimpleWbApi
 
         public WbAPI(string userAgent = @"Mozilla/5.0 (Linux; Android 10; SM-A205F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.111 Mobile Safari/537.36")
         {
+            _LoadUrl();
             _client = new HttpClient();
             _client.DefaultRequestHeaders.Add("Accept", "*/*");
             _client.DefaultRequestHeaders.Add("User-Agent", userAgent);

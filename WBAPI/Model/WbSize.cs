@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using WildberriesParser.Model;
 
-namespace SimpleWbApi
+namespace SimpleWbApi.Model
 {
     public class WbSize
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using WildberriesParser.Helpers;
 using WildberriesParser.Infastructure.Commands;
 using WildberriesParser.Model.Data;
 using WildberriesParser.Services;
@@ -37,8 +38,7 @@ namespace WildberriesParser.ViewModel
             get => _canCheck;
             set
             {
-                bool result = !string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(Password) &&
-                                !string.IsNullOrEmpty(Server) && !string.IsNullOrEmpty(DatabaseName);
+                bool result = !string.IsNullOrEmpty(Server) && !string.IsNullOrEmpty(DatabaseName);
                 Set(ref _canCheck, result);
             }
         }
@@ -103,58 +103,72 @@ namespace WildberriesParser.ViewModel
                     (
                         (obj) =>
                         {
-                            if (_isConnected)
-                            {
-                                if (!HasUsers())
+                            return App.Current.Dispatcher.InvokeAsync(async () =>
                                 {
-                                    NavigationService.NavigateTo<AdminRegistrationViewModel>();
-                                }
-                                else
-                                {
-                                    NavigationService.NavigateTo<AuthorizationViewModel>();
-                                }
-
-                                return Task.Delay(0);
-                            }
-                            else
-                            {
-                                CheckState = "Проверка подключения";
-                                return Task.Run(() =>
-                                {
-                                    string conn = Helpers.DBHelper.CreateConnectionString(_server, _databaseName, _login, _password);
-
-                                    Exception ex;
-                                    bool result = Helpers.DBHelper.CheckConnectionString(conn, out ex);
-
-                                    App.Current.Dispatcher.Invoke(() =>
+                                    if (_isConnected)
                                     {
-                                        if (result)
+                                        if (!HasUsers())
                                         {
-                                            Properties.Settings.Default.ConnectionString = Helpers.DBHelper.GetEntityConnectionString(conn);
-                                            Properties.Settings.Default.login = _login;
-                                            Properties.Settings.Default.password = _password;
-                                            Properties.Settings.Default.server = _server;
-                                            Properties.Settings.Default.database = _databaseName;
-                                            Properties.Settings.Default.Save();
-                                            IsConnected = true;
-                                            CheckState = "Готово";
-
-                                            _loggerService.AddLog($"Соеденение настроено с БД настроено:\n" +
-                                                $"Логин: {_login}" +
-                                                $"Пароль: {_password}\n" +
-                                                $"Сервер: {_server}\n" +
-                                                $"База данных: {_databaseName}", Model.LogTypeEnum.CHANGE_DB_SETTINGS);
+                                            NavigationService.NavigateTo<AdminRegistrationViewModel>();
                                         }
                                         else
                                         {
-                                            CheckState = "Проверить подключение";
-                                            Helpers.MessageBoxHelper.Error(ex.Message);
+                                            NavigationService.NavigateTo<AuthorizationViewModel>();
                                         }
-                                    });
-                                });
-                            }
+
+                                        return;
+                                    }
+
+                                    CheckState = "Проверка подключения";
+
+                                    string conn = DBHelper.CreateConnectionString(_server, _databaseName, _login, _password);
+                                    string connWithoutDB = DBHelper.CreateConnectionString(_server, string.Empty, _login, _password);
+
+                                    string efconn = DBHelper.CreateEFConnectionString(conn);
+
+                                    CheckResult result = await DBHelper.ServerIsAvailableSql(connWithoutDB);
+
+                                    if (result.Result)
+                                    {
+                                        DBEntities.SetContext(efconn);
+                                        bool databaseExists = DBEntities.GetContext().Database.Exists();
+                                        if (!databaseExists)
+                                        {
+                                            if (Helpers.MessageBoxHelperResult.YES == MessageBoxHelper.Question($"База данных \"{_databaseName}\" отсутствует на сервере.\n" +
+                                                $"Без базы данных программа работать не может. Создать ее прямо сейчас?"))
+                                            {
+                                                DBEntities.GetContext().Database.Create();
+                                            }
+                                            else
+                                            {
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        CheckState = "Проверить подключение";
+                                        MessageBoxHelper.Error(result.Exception.Message);
+                                        return;
+                                    }
+
+                                    Properties.Settings.Default.ConnectionString = efconn;
+                                    Properties.Settings.Default.login = _login;
+                                    Properties.Settings.Default.password = _password;
+                                    Properties.Settings.Default.server = _server;
+                                    Properties.Settings.Default.database = _databaseName;
+                                    Properties.Settings.Default.Save();
+                                    IsConnected = true;
+                                    CheckState = "Готово";
+
+                                    _loggerService.AddLog($"Соеденение настроено с БД настроено:\n" +
+                                        $"Логин: {_login}" +
+                                        $"Пароль: {_password}\n" +
+                                        $"Сервер: {_server}\n" +
+                                        $"База данных: {_databaseName}", Model.LogTypeEnum.CHANGE_DB_SETTINGS);
+                                }).Task;
                         },
-                        (obj) => !string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(Password) &&
+                        (obj) =>
                                 !string.IsNullOrEmpty(Server) && !string.IsNullOrEmpty(DatabaseName)
                     ));
             }

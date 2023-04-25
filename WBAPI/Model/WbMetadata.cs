@@ -1,4 +1,4 @@
-﻿namespace SimpleWbApi
+﻿namespace SimpleWbApi.Model
 {
     public class WbMetadata
     {

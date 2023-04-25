@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace SimpleWbApi
+namespace SimpleWbApi.Model
 {
     public class WbCard
     {

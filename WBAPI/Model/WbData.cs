@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SimpleWbApi
+namespace SimpleWbApi.Model
 {
     public class WbData
     {

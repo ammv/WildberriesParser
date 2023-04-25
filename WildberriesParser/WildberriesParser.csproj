@@ -225,6 +225,7 @@
     <Compile Include="ViewModel\AuthorizationViewModel.cs" />
     <Compile Include="ViewModel\LoadingViewModel.cs" />
     <Compile Include="ViewModel\Staff\AutomatizationViewModel.cs" />
+    <Compile Include="ViewModel\Staff\ReportViewModel.cs" />
     <Compile Include="ViewModel\Staff\SearchProductsViewModel.cs" />
     <Compile Include="ViewModel\Staff\SearchProducts\BySearchViewModel.cs" />
     <Compile Include="ViewModel\Staff\SearchProducts\ByArticleViewModel.cs" />
@@ -267,14 +268,14 @@
     <Compile Include="View\Staff\AutomatizationView.xaml.cs">
       <DependentUpon>AutomatizationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Staff\ReportView.xaml.cs">
+      <DependentUpon>ReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Staff\SearchProducts\BySearchView.xaml.cs">
       <DependentUpon>BySearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Staff\SearchProducts\ByArticleView.xaml.cs">
       <DependentUpon>ByArticleView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Staff\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Staff\TraceProductsView.xaml.cs">
       <DependentUpon>TraceProductsView.xaml</DependentUpon>
@@ -380,6 +381,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\Staff\ReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Staff\SearchProducts\BySearchView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -387,10 +392,6 @@
     <Page Include="View\Staff\SearchProducts\ByArticleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Staff\SettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Staff\TraceProductsView.xaml">
       <Generator>MSBuild:Compile</Generator>

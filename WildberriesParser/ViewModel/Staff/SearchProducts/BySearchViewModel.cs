@@ -17,6 +17,7 @@ using System.Windows.Controls;
 using System.Diagnostics;
 using System.IO;
 using SimpleWbApi;
+using SimpleWbApi.Model;
 
 namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
@@ -84,7 +85,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
         private async Task<List<WbCard>> _Search()
         {
             List<WbCard> products = new List<WbCard>();
-            var responses = await _wbApi.GetCardsFromSiteBySearch(_searchPattern, 1);
+            List<WbResponse> responses = await _wbApi.GetCardsFromSiteBySearch(_searchPattern, 1);
             foreach (var response in responses)
             {
                 if (response.Data?.Products.Count > 0)

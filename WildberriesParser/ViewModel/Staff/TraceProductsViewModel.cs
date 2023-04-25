@@ -1,4 +1,5 @@
 ﻿using SimpleWbApi;
+using SimpleWbApi.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -102,7 +103,7 @@ namespace WildberriesParser.ViewModel.Staff
 
         private AsyncRelayCommand _SearchCommand;
 
-        private async Task<List<SimpleWbApi.WbCard>> _GetProducts()
+        private async Task<List<WbCard>> _GetProducts()
         {
             var responses = await _wbApi.GetCardsFromSiteBySearch(_searchPattern, _tracePageCount[_selectedTracePageIndex]);
 
@@ -401,7 +402,7 @@ namespace WildberriesParser.ViewModel.Staff
                             foreach (var product in _originalProducts)
                             {
                                 data["Артикул"].Add(product.WbProductID);
-                                data["Дата"].Add(product.Date);
+                                data["Дата"].Add(product.Date.ToString("G"));
                                 data["Название"].Add(product.WbProduct.Name);
                                 data["Страница"].Add(product.Page);
                                 data["Позиция"].Add(product.Position);

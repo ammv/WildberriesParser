@@ -16,6 +16,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Diagnostics;
 using SimpleWbApi;
+using SimpleWbApi.Model;
 
 namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
