@@ -391,6 +391,7 @@ namespace WildberriesParser.ViewModel.Staff
                             IsExportWorking = true;
                             Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
                             data.Add("Артикул", new List<object>());
+                            data.Add("Ссылка", new List<object>());
                             data.Add("Дата", new List<object>());
                             data.Add("Название", new List<object>());
                             data.Add("Страница", new List<object>());
@@ -401,6 +402,7 @@ namespace WildberriesParser.ViewModel.Staff
                             foreach (var product in _originalProducts)
                             {
                                 data["Артикул"].Add(product.WbProductID);
+                                data["Ссылка"].Add($@"https://www.wildberries.ru/catalog/{product.WbProductID}/detail.aspx");
                                 data["Дата"].Add(product.Date.ToString("G"));
                                 data["Название"].Add(product.WbProduct.Name);
                                 data["Страница"].Add(product.Page);
@@ -410,7 +412,9 @@ namespace WildberriesParser.ViewModel.Staff
                             }
                             try
                             {
-                                _excelService.Export(data, path);
+                                var columns = ExcelColumn.FromDictionary(data);
+                                columns[1].CellFormatType = ExcelCellFormatType.Hyperlink;
+                                _excelService.Export(columns, path, "Карточки");
                                 if (Helpers.MessageBoxHelper.Question("Экcпортировано успешно! Открыть файл?") == Helpers.MessageBoxHelperResult.YES)
                                 {
                                     Process.Start(path);

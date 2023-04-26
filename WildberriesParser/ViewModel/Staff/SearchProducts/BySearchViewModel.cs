@@ -90,10 +90,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             {
                 if (response.Data?.Products.Count > 0)
                 {
-                    foreach (var product in response.Data.Products)
-                    {
-                        products.Insert(0, product);
-                    }
+                    products.AddRange(response.Data.Products);
                 }
             }
 
@@ -125,7 +122,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     checkedBrandID.Add(product.brandId);
                 }
 
-                Model.Data.WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync(x => x.ID == product.id);
+                WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync(x => x.ID == product.id);
                 if (findProduct == null)
                 {
                     var newProduct = new Model.Data.WbProduct
@@ -282,6 +279,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                             IsExportWorking = true;
                             Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
                             data.Add("Артикул", new List<object>());
+                            data.Add("Ссылка", new List<object>());
                             data.Add("Название", new List<object>());
                             data.Add("Бренд", new List<object>());
                             data.Add("Скидка", new List<object>());
@@ -294,6 +292,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                             foreach (var product in _originalProducts)
                             {
                                 data["Артикул"].Add(product.id);
+                                data["Ссылка"].Add($@"https://www.wildberries.ru/catalog/{product.id}/detail.aspx");
                                 data["Название"].Add(product.name);
                                 data["Бренд"].Add(product.brand);
                                 data["Скидка"].Add(product.sale);
@@ -305,7 +304,9 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                             }
                             try
                             {
-                                _excelService.Export(data, path);
+                                var columns = ExcelColumn.FromDictionary(data);
+                                columns[1].CellFormatType = ExcelCellFormatType.Hyperlink;
+                                _excelService.Export(columns, path, "Карточки");
                                 if (Helpers.MessageBoxHelper.Question("Экcпортировано успешно! Открыть файл?") == Helpers.MessageBoxHelperResult.YES)
                                 {
                                     Process.Start(path);

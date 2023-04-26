@@ -30,7 +30,7 @@ namespace SimpleWbApi
             _urls.Add("CardBasketArticle", @"https://card.wb.ru/cards/detail?nm={article}");
             _urls.Add("CardSiteArticle", @"https://card.wb.ru/cards/detail?curr=rub&dest=-1257786&regions=80,64,38,4,115,83,33,68,70,69,30,86,75,40,1,66,48,110,22,31,71,114,111&spp=0&nm={article}");
             _urls.Add("CardsSiteArticle", @"https://card.wb.ru/cards/detail?curr=rub&dest=-1257786&regions=80,64,38,4,115,83,33,68,70,69,30,86,75,40,1,66,48,110,22,31,71,114,111&spp=0&nm={articles}");
-            _urls.Add("CardsSiteSearch", @"https://search.wb.ru/exactmatch/ru/common/v4/search?appType=1&couponsGeo=12,3,18,15,21&curr=rub&dest=-1257786&emp=0&lang=ru&locale=ru&page={PAGE}&pricemarginCoeff=1.0&query={QUERY}&reg=0&regions=80,64,38,4,115,83,33,68,70,69,30,86,75,40,1,66,31,48,110,22,71&resultset=catalog&sort=popular&spp=0&suppressSpellcheck=false");
+            _urls.Add("CardsSiteSearch", @"https://search.wb.ru/exactmatch/ru/common/v4/search?appType=1&curr=rub&dest=-1257786&page={PAGE}&query={QUERY}&regions=80,64,38,4,115,83,33,68,70,69,30,86,75,40,1,66,48,110,31,22,71,114&resultset=catalog&sort=popular&spp=0&suppressSpellcheck=false");
         }
 
         /// <summary>

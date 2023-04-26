@@ -109,6 +109,7 @@ namespace WildberriesParser.ViewModel.Admin
                             }
 
                             IsExportWorking = true;
+
                             Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
                             data.Add("ID", new List<object>());
                             data.Add("Пользователь", new List<object>());
@@ -126,7 +127,7 @@ namespace WildberriesParser.ViewModel.Admin
                             }
                             try
                             {
-                                _excelService.Export(data, path, "Логи");
+                                _excelService.Export(ExcelColumn.FromDictionary(data), path, "Логи");
                                 if (Helpers.MessageBoxHelper.Question("Экcпортировано успешно! Открыть файл?") == Helpers.MessageBoxHelperResult.YES)
                                 {
                                     Process.Start(path);

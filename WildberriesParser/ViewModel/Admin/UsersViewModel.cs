@@ -159,7 +159,7 @@ namespace WildberriesParser.ViewModel.Admin
                             }
                             try
                             {
-                                _excelService.Export(data, path);
+                                _excelService.Export(ExcelColumn.FromDictionary(data), path);
                                 if (Helpers.MessageBoxHelper.Question("Экcпортировано успешно! Открыть файл?") == Helpers.MessageBoxHelperResult.YES)
                                 {
                                     Process.Start(path);

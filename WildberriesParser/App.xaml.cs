@@ -84,6 +84,20 @@ namespace WildberriesParser
             {
                 DataContext = provider.GetRequiredService<ViewModel.Staff.SearchProducts.BySearchViewModel>()
             });
+
+            // Configurere Staff.Reports services.
+            services.AddSingleton<ViewModel.Staff.Reports.ReportProductChangesViewModel>();
+            services.AddSingleton<ViewModel.Staff.Reports.ReportProductPosChangesViewModel>();
+
+            services.AddTransient(provider => new View.Staff.Reports.ReportProductChanges
+            {
+                DataContext = provider.GetRequiredService<ViewModel.Staff.Reports.ReportProductChangesViewModel>()
+            });
+
+            services.AddTransient(provider => new View.Staff.Reports.ReportProductPosChanges
+            {
+                DataContext = provider.GetRequiredService<ViewModel.Staff.Reports.ReportProductPosChangesViewModel>()
+            });
         }
 
         private static void ConfigureAdminServices(IServiceCollection services)
