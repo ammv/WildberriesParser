@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace WildberriesParser.View.Staff.Reports
+namespace WildberriesParser.View.Staff.Data
 {
     /// <summary>
     /// Логика взаимодействия для UsersView.xaml
     /// </summary>
-    public partial class ReportProductPosChanges : UserControl
+    public partial class DataProductPosChanges : UserControl
     {
-        public ReportProductPosChanges()
+        public DataProductPosChanges()
         {
             InitializeComponent();
         }

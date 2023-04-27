@@ -50,6 +50,7 @@ namespace WildberriesParser
             services.AddSingleton<ViewModel.Staff.SearchProductsViewModel>();
             services.AddSingleton<ViewModel.Staff.AutomatizationViewModel>();
             services.AddSingleton<ViewModel.Staff.TraceProductsViewModel>();
+            services.AddSingleton<ViewModel.Staff.DataViewModel>();
 
             services.AddTransient(provider => new View.Staff.StaffMainView
             {
@@ -85,18 +86,18 @@ namespace WildberriesParser
                 DataContext = provider.GetRequiredService<ViewModel.Staff.SearchProducts.BySearchViewModel>()
             });
 
-            // Configurere Staff.Reports services.
-            services.AddSingleton<ViewModel.Staff.Reports.ReportProductChangesViewModel>();
-            services.AddSingleton<ViewModel.Staff.Reports.ReportProductPosChangesViewModel>();
+            // Configurere Staff.Datas services.
+            services.AddSingleton<ViewModel.Staff.Data.DataProductChangesViewModel>();
+            services.AddSingleton<ViewModel.Staff.Data.DataProductPosChangesViewModel>();
 
-            services.AddTransient(provider => new View.Staff.Reports.ReportProductChanges
+            services.AddTransient(provider => new View.Staff.Data.DataProductChanges
             {
-                DataContext = provider.GetRequiredService<ViewModel.Staff.Reports.ReportProductChangesViewModel>()
+                DataContext = provider.GetRequiredService<ViewModel.Staff.Data.DataProductChangesViewModel>()
             });
 
-            services.AddTransient(provider => new View.Staff.Reports.ReportProductPosChanges
+            services.AddTransient(provider => new View.Staff.Data.DataProductPosChanges
             {
-                DataContext = provider.GetRequiredService<ViewModel.Staff.Reports.ReportProductPosChangesViewModel>()
+                DataContext = provider.GetRequiredService<ViewModel.Staff.Data.DataProductPosChangesViewModel>()
             });
         }
 

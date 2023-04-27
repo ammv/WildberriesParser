@@ -80,7 +80,7 @@ namespace WildberriesParser.ViewModel.Staff
 
         private RelayCommand _reportCommand;
 
-        public RelayCommand ReportCommand
+        public RelayCommand DataCommand
         {
             get
             {
@@ -88,7 +88,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_reportCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<NotImplementedViewModel>();
+                        NavigationService.NavigateTo<DataViewModel>();
                     }
                     ));
             }

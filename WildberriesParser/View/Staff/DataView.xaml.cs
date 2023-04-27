@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WildberriesParser.View.Staff
 {
     /// <summary>
-    /// Логика взаимодействия для ReportView.xaml
+    /// Логика взаимодействия для DataView.xaml
     /// </summary>
-    public partial class ReportView : UserControl
+    public partial class DataView : UserControl
     {
-        public ReportView()
+        public DataView()
         {
             InitializeComponent();
         }

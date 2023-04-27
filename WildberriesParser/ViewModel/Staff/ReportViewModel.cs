@@ -11,7 +11,7 @@ using WildberriesParser.Services;
 
 namespace WildberriesParser.ViewModel.Staff
 {
-    internal class ReportViewModel : ViewModelWithWindowButtonsBase
+    internal class DataViewModel : ViewModelWithWindowButtonsBase
     {
         private INavigationService _navigationService;
 
@@ -21,7 +21,7 @@ namespace WildberriesParser.ViewModel.Staff
             set => Set(ref _navigationService, value);
         }
 
-        public ReportViewModel(INavigationService navigationService)
+        public DataViewModel(INavigationService navigationService)
         {
             NavigationService = navigationService;
             //NavigationService.NavigateTo<SearchProductsViewModel>();
@@ -29,7 +29,7 @@ namespace WildberriesParser.ViewModel.Staff
 
         private RelayCommand _reportProductChanges;
 
-        public RelayCommand ReportProductChanges
+        public RelayCommand DataProductChanges
         {
             get
             {
@@ -37,7 +37,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_reportProductChanges = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<NotImplementedViewModel>();
+                        NavigationService.NavigateTo<Data.DataProductChangesViewModel>();
                     }
                     ));
             }
@@ -45,7 +45,7 @@ namespace WildberriesParser.ViewModel.Staff
 
         private RelayCommand _reportProductPosChanges;
 
-        public RelayCommand ReportProductPosChanges
+        public RelayCommand DataProductPosChanges
         {
             get
             {
@@ -53,7 +53,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_reportProductPosChanges = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<NotImplementedViewModel>();
+                        NavigationService.NavigateTo<Data.DataProductPosChangesViewModel>();
                     }
                     ));
             }

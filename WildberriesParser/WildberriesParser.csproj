@@ -245,8 +245,8 @@
     <Compile Include="ViewModel\AuthorizationViewModel.cs" />
     <Compile Include="ViewModel\LoadingViewModel.cs" />
     <Compile Include="ViewModel\Staff\AutomatizationViewModel.cs" />
-    <Compile Include="ViewModel\Staff\Reports\ReportProductChangesViewModel.cs" />
-    <Compile Include="ViewModel\Staff\Reports\ReportProductPosChangesViewModel.cs" />
+    <Compile Include="ViewModel\Staff\Data\DataProductChangesViewModel.cs" />
+    <Compile Include="ViewModel\Staff\Data\DataProductPosChangesViewModel.cs" />
     <Compile Include="ViewModel\Staff\ReportViewModel.cs" />
     <Compile Include="ViewModel\Staff\SearchProductsViewModel.cs" />
     <Compile Include="ViewModel\Staff\SearchProducts\BySearchViewModel.cs" />
@@ -290,14 +290,14 @@
     <Compile Include="View\Staff\AutomatizationView.xaml.cs">
       <DependentUpon>AutomatizationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Staff\Reports\ReportProductPosChanges.xaml.cs">
-      <DependentUpon>ReportProductPosChanges.xaml</DependentUpon>
+    <Compile Include="View\Staff\Data\DataProductPosChanges.xaml.cs">
+      <DependentUpon>DataProductPosChanges.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Staff\Reports\ReportProductChanges.xaml.cs">
-      <DependentUpon>ReportProductChanges.xaml</DependentUpon>
+    <Compile Include="View\Staff\Data\DataProductChanges.xaml.cs">
+      <DependentUpon>DataProductChanges.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Staff\ReportView.xaml.cs">
-      <DependentUpon>ReportView.xaml</DependentUpon>
+    <Compile Include="View\Staff\DataView.xaml.cs">
+      <DependentUpon>DataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Staff\SearchProducts\BySearchView.xaml.cs">
       <DependentUpon>BySearchView.xaml</DependentUpon>
@@ -409,15 +409,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Staff\Reports\ReportProductPosChanges.xaml">
+    <Page Include="View\Staff\Data\DataProductPosChanges.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Staff\Reports\ReportProductChanges.xaml">
+    <Page Include="View\Staff\Data\DataProductChanges.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Staff\ReportView.xaml">
+    <Page Include="View\Staff\DataView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

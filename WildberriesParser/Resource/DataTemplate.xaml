@@ -6,6 +6,8 @@
                     xmlns:viewA="clr-namespace:WildberriesParser.View.Admin"
                     xmlns:vmS="clr-namespace:WildberriesParser.ViewModel.Staff"
                     xmlns:viewS="clr-namespace:WildberriesParser.View.Staff"
+                    xmlns:vmSR="clr-namespace:WildberriesParser.ViewModel.Staff.Data"
+                    xmlns:viewSR="clr-namespace:WildberriesParser.View.Staff.Data"
                     xmlns:vmSS="clr-namespace:WildberriesParser.ViewModel.Staff.SearchProducts"
                     xmlns:viewSS="clr-namespace:WildberriesParser.View.Staff.SearchProducts">
 
@@ -62,6 +64,10 @@
         <viewS:TraceProductsView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vmS:DataViewModel}">
+        <viewS:DataView />
+    </DataTemplate>
+
     <!--Staff.SearchProduct-->
     <DataTemplate DataType="{x:Type vmSS:ByArticleViewModel}">
         <viewSS:ByArticleView />
@@ -69,5 +75,14 @@
 
     <DataTemplate DataType="{x:Type vmSS:BySearchViewModel}">
         <viewSS:BySearchView />
+    </DataTemplate>
+
+    <!--Staff.Data-->
+    <DataTemplate DataType="{x:Type vmSR:DataProductChangesViewModel}">
+        <viewSR:DataProductChanges />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmSR:DataProductPosChangesViewModel}">
+        <viewSR:DataProductPosChanges />
     </DataTemplate>
 </ResourceDictionary>
