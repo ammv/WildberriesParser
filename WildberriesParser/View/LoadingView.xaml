@@ -137,6 +137,12 @@
             <ImageBrush ImageSource="/WildberriesParser;component/Resource/Images/LoadingBackground.png"
                         Stretch="Uniform" />
         </Border.Background>
+        <intr:Interaction.Triggers>
+            <intr:EventTrigger EventName="MouseLeftButtonDown">
+                <intr:CallMethodAction MethodName="DragMove"
+                                       TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}" />
+            </intr:EventTrigger>
+        </intr:Interaction.Triggers>
 
         <Grid>
 

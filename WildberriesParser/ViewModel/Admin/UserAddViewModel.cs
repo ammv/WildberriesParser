@@ -48,7 +48,8 @@ namespace WildberriesParser.ViewModel.Admin
             {
                 Login = _login,
                 Password = _password,
-                RoleID = _selectedRoleId
+                RoleID = _selectedRoleId,
+                CanAuth = true
             };
 
             DBEntities.GetContext().User.Add(user);
@@ -58,6 +59,27 @@ namespace WildberriesParser.ViewModel.Admin
                 $"Пароль: {_password}\n" +
                 $"Роль: {DBEntities.GetContext().Role.FirstOrDefault(r => r.ID == _selectedRoleId).Name}",
                 Model.LogTypeEnum.CREATE_USER);
+
+            DBEntities.GetContext().SaveChanges();
+        }
+
+        private AsyncRelayCommand _ToUserViewCommand;
+
+        public AsyncRelayCommand ToUserViewCommand
+        {
+            get
+            {
+                return _ToUserViewCommand ??
+                    (_ToUserViewCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            _navigationService.NavigateTo<UsersViewModel>();
+                        }).Task;
+                    }
+                    ));
+            }
         }
 
         private AsyncRelayCommand _addUserCommand;
@@ -81,7 +103,7 @@ namespace WildberriesParser.ViewModel.Admin
                                         _addUser();
                                         IsWorking = false;
                                         Helpers.MessageBoxHelper.Information("Пользватель добавлен");
-                                        _navigationService.NavigateTo<UsersViewModel>();
+                                        //_navigationService.NavigateTo<UsersViewModel>();
                                     }
                                     else
                                     {

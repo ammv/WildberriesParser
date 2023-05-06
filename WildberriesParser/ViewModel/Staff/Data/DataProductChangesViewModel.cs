@@ -20,9 +20,6 @@ namespace WildberriesParser.ViewModel.Staff.Data
     {
         public string Title { get; } = "Отчет по изменению товара";
 
-        private TraceType _selectedTraceType = TraceType.BrandName;
-        private Dictionary<TraceType, SearchPatternType> _dbSearchTraceTypes = new Dictionary<TraceType, SearchPatternType>();
-
         private string _article;
         private string _tracedValue;
         private bool _isExportWorking;
@@ -89,30 +86,6 @@ namespace WildberriesParser.ViewModel.Staff.Data
 
         private AsyncRelayCommand _ShowCommand;
 
-        private static void WriteEfErrosAndOpen(Exception ex)
-        {
-            StringBuilder sb = new StringBuilder();
-            var errorsEntities = DBEntities.GetContext().GetValidationErrors().ToList();
-            foreach (var errorEntity in errorsEntities)
-            {
-                sb.Append($"Сущность: {errorEntity.Entry.Entity.GetType().Name}\n");
-                sb.Append($"Ошибки: \n");
-                foreach (var item in errorEntity.ValidationErrors)
-                {
-                    sb.Append($"\t - {item.ErrorMessage}\n");
-                }
-            }
-            //List<string>
-            File.WriteAllText("ef_erros.txt",
-                sb.ToString());
-
-            Helpers.MessageBoxHelper.Error(ex.Message);
-            if (Helpers.MessageBoxHelper.Question("Ошибки записаны в ef_erros.txt. Открыть?") == Helpers.MessageBoxHelperResult.YES)
-            {
-                Process.Start("ef_erros.txt");
-            }
-        }
-
         public AsyncRelayCommand ShowCommand
         {
             get
@@ -121,89 +94,71 @@ namespace WildberriesParser.ViewModel.Staff.Data
                     (_ShowCommand = new AsyncRelayCommand
                     ((obj) =>
                     {
-                        return App.Current.Dispatcher.InvokeAsync(async () =>
-                        {
-                            IsShowWorking = true;
-
-                            DateTime? startTimeTemp = _startDate;
-                            DateTime? endTimeTemp = _endDate;
-
-                            if (string.IsNullOrEmpty(_article) && !startTimeTemp.HasValue && !endTimeTemp.HasValue)
-                            {
-                                _originalProducts = await DBEntities.GetContext().WbProductChanges
-                                .OrderByDescending(x => x.Date)
-                                .ToListAsync();
-                            }
-                            else
-                            {
-                                if (_startDate == null)
-                                {
-                                    startTimeTemp = DateTime.MinValue;
-                                }
-
-                                if (_endDate == null)
-                                {
-                                    endTimeTemp = DateTime.MaxValue;
-                                }
-
-                                if (int.TryParse(_article, out int article))
-                                {
-                                    _originalProducts = await DBEntities.GetContext().WbProductChanges
-                                    .Where(x => x.WbProductID == article && x.Date >= startTimeTemp && x.Date <= endTimeTemp)
-                                    .OrderByDescending(x => x.Date)
-                                    .ToListAsync();
-                                }
-                                else
-                                {
-                                    if (string.IsNullOrEmpty(_article))
-                                    {
-                                        _originalProducts = await DBEntities.GetContext().WbProductChanges
-                                        .Where(x => x.Date >= startTimeTemp && x.Date <= endTimeTemp)
-                                        .OrderByDescending(x => x.Date)
-                                        .ToListAsync();
-                                    }
-                                    else
-                                    {
-                                        _originalProducts = await DBEntities.GetContext().WbProductChanges
-                                        .Where(x => x.WbProduct.Name.Contains(_article) && x.Date >= startTimeTemp && x.Date <= endTimeTemp)
-                                        .OrderByDescending(x => x.Date)
-                                        .ToListAsync();
-                                    }
-                                }
-                            }
-
-                            ProductPosChanges = new PagedList<WbProductChanges>(_originalProducts, _pageSizes[_selectedIndex]);
-                            PagedCommands.Instance = ProductPosChanges;
-
-                            IsShowWorking = false;
-
-                            //await AddPosChangesToDB(result);
-                        }).Task;
-                    }));
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                       {
+                           IsShowWorking = true;
+                           try
+                           {
+                               updateData();
+                           }
+                           catch (Exception ex)
+                           {
+                               Helpers.MessageBoxHelper.Information(ex.Message);
+                           }
+                           IsShowWorking = false;
+                       }).Task;
+                    },
+                    (obj) => (int.TryParse(_article, out _) || string.IsNullOrEmpty(_article)) && _isShowWorking == false));
             }
+        }
+
+        public void updateData()
+        {
+            DateTime? startTimeTemp = _startDate;
+            DateTime? endTimeTemp = _endDate;
+
+            if (string.IsNullOrEmpty(_article) && !startTimeTemp.HasValue && !endTimeTemp.HasValue)
+            {
+                _originalProducts = DBEntities.GetContext().WbProductChanges
+                .OrderByDescending(x => x.Date)
+                .ToList();
+            }
+            else
+            {
+                if (_startDate == null)
+                {
+                    startTimeTemp = DateTime.MinValue;
+                }
+
+                if (_endDate == null)
+                {
+                    endTimeTemp = DateTime.MaxValue;
+                }
+
+                if (int.TryParse(_article, out int article))
+                {
+                    // Поиск по артикулу без поискового запроса
+                    _originalProducts = DBEntities.GetContext().WbProductChanges
+                    .Where(x => x.WbProductID == article && x.Date >= startTimeTemp && x.Date <= endTimeTemp)
+                    .OrderByDescending(x => x.Date)
+                    .ToList();
+                }
+                else
+                {
+                    // Поиск по артикулу без поискового запроса
+                    _originalProducts = DBEntities.GetContext().WbProductChanges
+                    .Where(x => x.Date >= startTimeTemp && x.Date <= endTimeTemp)
+                    .OrderByDescending(x => x.Date)
+                    .ToList();
+                }
+            }
+
+            ProductPosChanges = new PagedList<WbProductChanges>(_originalProducts, _pageSizes[_selectedIndex]);
+            PagedCommands.Instance = ProductPosChanges;
         }
 
         private DateTime? _startDate;
         private DateTime? _endDate;
-
-        private AsyncRelayCommand _selectTraceTypeCommand;
-
-        public AsyncRelayCommand SelectTraceTypeCommand
-        {
-            get
-            {
-                return _selectTraceTypeCommand ??
-                    (_selectTraceTypeCommand = new AsyncRelayCommand
-                    ((obj) =>
-                    {
-                        return App.Current.Dispatcher.InvokeAsync(() =>
-                        {
-                            _selectedTraceType = (TraceType)(int)obj;
-                        }).Task;
-                    }
-                    ));
-            }
-        }
 
         private AsyncRelayCommand _exportCommand;
 
@@ -223,26 +178,33 @@ namespace WildberriesParser.ViewModel.Staff.Data
                                 Helpers.MessageBoxHelper.Error("Вы не выбрали файл!");
                                 return;
                             }
-                            DateTime now = DateTime.Now.Date;
-                            IsExportWorking = true;
                             Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
                             data.Add("Артикул", new List<object>());
                             data.Add("Ссылка", new List<object>());
-                            data.Add("Дата", new List<object>());
                             data.Add("Название", new List<object>());
+                            data.Add("Дата", new List<object>());
+                            data.Add("Бренд", new List<object>());
+                            data.Add("Скидка", new List<object>());
+                            data.Add("Цена без скидки", new List<object>());
+                            data.Add("Цена со скидкой", new List<object>());
 
                             foreach (var product in _originalProducts)
                             {
                                 data["Артикул"].Add(product.WbProductID);
                                 data["Ссылка"].Add($@"https://www.wildberries.ru/catalog/{product.WbProductID}/detail.aspx");
-                                data["Дата"].Add(product.Date.ToString("G"));
                                 data["Название"].Add(product.WbProduct.Name);
+                                data["Дата"].Add(product.Date.ToString(@"dd/MM/yy"));
+                                data["Бренд"].Add(product.WbProduct.WbBrand.Name);
+                                data["Скидка"].Add(product.Discount);
+                                data["Цена без скидки"].Add(product.PriceWithoutDiscount);
+                                data["Цена со скидкой"].Add(product.PriceWithDiscount);
                             }
                             try
                             {
                                 var columns = ExcelColumn.FromDictionary(data);
                                 columns[1].CellFormatType = ExcelCellFormatType.Hyperlink;
                                 _excelService.Export(columns, path, "Карточки");
+
                                 if (Helpers.MessageBoxHelper.Question("Экcпортировано успешно! Открыть файл?") == Helpers.MessageBoxHelperResult.YES)
                                 {
                                     Process.Start(path);
@@ -255,6 +217,122 @@ namespace WildberriesParser.ViewModel.Staff.Data
                             finally
                             {
                                 IsExportWorking = false;
+                            }
+                        }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private WbProductChanges _selectedEntity;
+
+        public WbProductChanges SelectedEntity
+        {
+            get => _selectedEntity;
+            set => Set(ref _selectedEntity, value);
+        }
+
+        private AsyncRelayCommand _PriceDynamicCommand;
+
+        public AsyncRelayCommand PriceDynamicCommand
+        {
+            get
+            {
+                return _PriceDynamicCommand ??
+                    (_PriceDynamicCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            try
+                            {
+                                if (SelectedEntity != null)
+                                {
+                                    var vm = App.ServiceProvider.GetService(typeof(DataProductChangesViewModel)) as DataProductChangesViewModel;
+                                    vm.Article = SelectedEntity.WbProductID.ToString();
+                                    vm.updateData();
+                                    NavigationService.NavigateTo<Data.DataProductChangesViewModel>();
+                                }
+                                else
+                                {
+                                    Helpers.MessageBoxHelper.Error("Вы не выбрали данные!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
+                            }
+                        }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _SalesCommand;
+
+        public AsyncRelayCommand SalesCommand
+        {
+            get
+            {
+                return _SalesCommand ??
+                    (_SalesCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            try
+                            {
+                                if (SelectedEntity != null)
+                                {
+                                    var vm = App.ServiceProvider.GetService(typeof(SellingProductViewModel)) as SellingProductViewModel;
+                                    vm.Article = SelectedEntity.WbProductID.ToString();
+                                    vm.updateData();
+                                    NavigationService.NavigateTo<Data.SellingProductViewModel>();
+                                }
+                                else
+                                {
+                                    Helpers.MessageBoxHelper.Error("Вы не выбрали данные!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
+                            }
+                        }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _TracecxCommand;
+
+        public AsyncRelayCommand TraceCxCommand
+        {
+            get
+            {
+                return _TracecxCommand ??
+                    (_TracecxCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            try
+                            {
+                                if (SelectedEntity != null)
+                                {
+                                    var vm = App.ServiceProvider.GetService(typeof(DataProductPosChangesViewModel)) as DataProductPosChangesViewModel;
+                                    vm.Article = SelectedEntity.WbProductID.ToString();
+                                    vm.updateData();
+                                    NavigationService.NavigateTo<Data.DataProductPosChangesViewModel>();
+                                }
+                                else
+                                {
+                                    Helpers.MessageBoxHelper.Error("Вы не выбрали данные!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
                             }
                         }).Task;
                     }
@@ -291,18 +369,6 @@ namespace WildberriesParser.ViewModel.Staff.Data
         {
             get => _pageSizes;
             set => _pageSizes = value;
-        }
-
-        public string TracedValue
-        {
-            get => _tracedValue;
-            set => Set(ref _tracedValue, value);
-        }
-
-        public TraceType SelectedTraceType
-        {
-            get => _selectedTraceType;
-            set => Set(ref _selectedTraceType, value);
         }
 
         public DateTime? StartDate

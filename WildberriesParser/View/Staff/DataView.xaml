@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WildberriesParser.View.Staff"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="700"
              d:DesignWidth="980"
@@ -84,7 +85,7 @@
                                    Style="{StaticResource MaterialDesignHeadline6TextBlock}">Какая цена была вчера</TextBlock>
 
                         <Button Grid.Row="1"
-                                Command="{Binding DataProductChanges}"
+                                Command="{Binding ToDataViewCommand}"
                                 Grid.RowSpan="2"
                                 Grid.Column="3"
                                 HorizontalAlignment="Right"
@@ -92,6 +93,9 @@
                                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                                 ToolTip="MaterialDesignFloatingActionMiniLightButton"
                                 Margin="0,20">
+                            <Button.CommandParameter>
+                                <sys:Int32>0</sys:Int32>
+                            </Button.CommandParameter>
                             <materialDesign:PackIcon Width="32"
                                                      Height="32"
                                                      Foreground="White"
@@ -164,7 +168,7 @@
                         </TextBlock>
 
                         <Button Grid.Row="1"
-                                Command="{Binding DataProductPosChanges}"
+                                Command="{Binding ToDataViewCommand}"
                                 Grid.RowSpan="2"
                                 Grid.Column="3"
                                 HorizontalAlignment="Right"
@@ -172,6 +176,9 @@
                                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                                 ToolTip="MaterialDesignFloatingActionMiniLightButton"
                                 Margin="0,20">
+                            <Button.CommandParameter>
+                                <sys:Int32>1</sys:Int32>
+                            </Button.CommandParameter>
                             <materialDesign:PackIcon Width="32"
                                                      Height="32"
                                                      Foreground="White"
@@ -244,7 +251,7 @@
                         </TextBlock>
 
                         <Button Grid.Row="1"
-                                Command="{Binding DataProductPosChanges}"
+                                Command="{Binding ToDataViewCommand}"
                                 Grid.RowSpan="2"
                                 Grid.Column="3"
                                 HorizontalAlignment="Right"
@@ -252,6 +259,9 @@
                                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                                 ToolTip="MaterialDesignFloatingActionMiniLightButton"
                                 Margin="0,20">
+                            <Button.CommandParameter>
+                                <sys:Int32>2</sys:Int32>
+                            </Button.CommandParameter>
                             <materialDesign:PackIcon Width="32"
                                                      Height="32"
                                                      Foreground="White"
@@ -323,7 +333,7 @@
                         </TextBlock>
 
                         <Button Grid.Row="1"
-                                Command="{Binding DataProductPosChanges}"
+                                Command="{Binding ToDataViewCommand}"
                                 Grid.RowSpan="2"
                                 Grid.Column="3"
                                 HorizontalAlignment="Right"
@@ -331,6 +341,9 @@
                                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                                 ToolTip="MaterialDesignFloatingActionMiniLightButton"
                                 Margin="0,20">
+                            <Button.CommandParameter>
+                                <sys:Int32>3</sys:Int32>
+                            </Button.CommandParameter>
                             <materialDesign:PackIcon Width="32"
                                                      Height="32"
                                                      Foreground="White"

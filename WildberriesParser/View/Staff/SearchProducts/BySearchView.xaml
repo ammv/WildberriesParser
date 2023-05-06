@@ -114,10 +114,24 @@
                       IsReadOnly="True"
                       Background="White"
                       SelectionUnit="FullRow"
+                      SelectedItem="{Binding SelectedEntity, UpdateSourceTrigger=PropertyChanged}"
                       AutoGenerateColumns="False"
                       AlternatingRowBackground="#44CCCCCC"
                       Style="{StaticResource MaterialDesignDataGrid}"
                       FocusVisualStyle="{x:Null}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Icon="{materialDesign:PackIcon Kind=ChartLineVariant}"
+                                  Header="Динамика цены"
+                                  Command="{Binding PriceDynamicCommand}" />
+                        <MenuItem Icon="{materialDesign:PackIcon Kind=Sale}"
+                                  Header="Продажи"
+                                  Command="{Binding SalesCommand}" />
+                        <MenuItem Icon="{materialDesign:PackIcon Kind=ShoePrint}"
+                                  Header="Позиции в поиске"
+                                  Command="{Binding TraceCxCommand}" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Артикул"
                                         Binding="{Binding id}" />

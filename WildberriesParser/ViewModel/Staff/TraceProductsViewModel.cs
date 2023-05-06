@@ -14,6 +14,7 @@ using WildberriesParser.Infastructure.Core;
 using WildberriesParser.Model.Data;
 using WildberriesParser.Services;
 using WildberriesParser.ViewModel.Admin;
+using WildberriesParser.ViewModel.Staff.Data;
 
 namespace WildberriesParser.ViewModel.Staff
 {
@@ -167,8 +168,15 @@ namespace WildberriesParser.ViewModel.Staff
 
         private async Task AddPosChangesToDB(IEnumerable<WbProductPosChanges> data)
         {
-            DBEntities.GetContext().WbProductPosChanges.AddRange(data);
-            await DBEntities.GetContext().SaveChangesAsync();
+            try
+            {
+                DBEntities.GetContext().WbProductPosChanges.AddRange(data);
+                await DBEntities.GetContext().SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Helpers.MessageBoxHelper.Error(ex.Message);
+            }
         }
 
         private async Task AddProductsToDB(IEnumerable<WbCard> cards)
@@ -196,14 +204,17 @@ namespace WildberriesParser.ViewModel.Staff
                     checkedBrandID.Add(product.brandId);
                 }
 
-                Model.Data.WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync((System.Linq.Expressions.Expression<Func<WbProduct, bool>>)(x => x.ID == product.id));
+                WbProduct findProduct = await DBEntities.GetContext().WbProduct.FirstOrDefaultAsync(x => x.ID == product.id);
                 if (findProduct == null)
                 {
-                    var newProduct = new Model.Data.WbProduct
+                    var newProduct = new WbProduct
                     {
                         ID = product.id,
                         Name = product.name,
                         WbBrandID = product.brandId,
+                        LastDiscount = product.sale,
+                        LastPriceWithDiscount = product.salePriceU,
+                        LastPriceWithoutDiscount = product.priceU,
                         LastUpdate = now
                     };
 
@@ -215,8 +226,8 @@ namespace WildberriesParser.ViewModel.Staff
                         WbProduct = newProduct,
                         Date = now,
                         Discount = product.sale,
-                        PriceWithDiscount = (int)product.salePriceU,
-                        PriceWithoutDiscount = (int)product.priceU,
+                        PriceWithDiscount = product.salePriceU,
+                        PriceWithoutDiscount = product.priceU,
                         Quantity = product.Quantity ?? 0
                     });
                 }
@@ -225,14 +236,17 @@ namespace WildberriesParser.ViewModel.Staff
                     if (findProduct.LastUpdate.Date < now)
                     {
                         findProduct.LastUpdate = now;
+                        findProduct.LastDiscount = product.sale;
+                        findProduct.LastPriceWithDiscount = product.salePriceU;
+                        findProduct.LastPriceWithoutDiscount = product.priceU;
 
                         DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
                         {
                             WbProduct = findProduct,
                             Date = now,
                             Discount = product.sale,
-                            PriceWithDiscount = (int)product.salePriceU,
-                            PriceWithoutDiscount = (int)product.priceU,
+                            PriceWithDiscount = product.salePriceU,
+                            PriceWithoutDiscount = product.priceU,
                             Quantity = product.Quantity ?? 0
                         });
                     }
@@ -282,11 +296,7 @@ namespace WildberriesParser.ViewModel.Staff
             }
         }
 
-        public AsyncRelayCommand TraceCommand
-        {
-            get
-            {
-                return _SearchCommand ??
+        public AsyncRelayCommand TraceCommand => _SearchCommand ??
                     (_SearchCommand = new AsyncRelayCommand
                     ((obj) =>
                     {
@@ -294,27 +304,42 @@ namespace WildberriesParser.ViewModel.Staff
                         {
                             IsTraceWorking = true;
 
-                            var products = (await _GetProducts()).OrderBy(x => x.__sort);
-
-                            var response = await _wbApi.GetCardsByArticleFromSite(products.Select(x => x.id).ToList());
-
-                            await AddProductsToDB(response.Data.Products);
-
                             List<WbProductPosChanges> result = null;
-                            if (products.Count() > 0)
+
+                            try
                             {
-                                result = _Trace(response.Data.Products);
+                                IOrderedEnumerable<WbCard> products = (await _GetProducts()).OrderBy(x => x.__sort);
 
-                                foreach (var item in result)
+                                WbResponse response = await _wbApi.GetCardsByArticleFromSite(products.Select(x => x.id).ToList());
+
+                                if (response == null)
                                 {
-                                    _originalProducts.Add(item);
+                                    Helpers.MessageBoxHelper.Information("Поиск не вернул результатов. Попробуйте подождать 1 минуту");
+                                    IsTraceWorking = false;
+                                    return;
                                 }
 
-                                if (result.Count > 0)
+                                await AddProductsToDB(response.Data?.Products);
+
+                                if (products.Count() > 0)
                                 {
-                                    ProductPosChanges = new PagedList<WbProductPosChanges>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
-                                    _pagedCommands.Instance = ProductPosChanges;
+                                    result = _Trace(response.Data.Products);
+
+                                    foreach (var item in result)
+                                    {
+                                        _originalProducts.Add(item);
+                                    }
+
+                                    if (result.Count > 0)
+                                    {
+                                        ProductPosChanges = new PagedList<WbProductPosChanges>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                                        _pagedCommands.Instance = ProductPosChanges;
+                                    }
                                 }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
                             }
 
                             IsTraceWorking = false;
@@ -329,8 +354,6 @@ namespace WildberriesParser.ViewModel.Staff
                         _selectedTraceType == TraceType.ProductID ?
                         int.TryParse(_tracedValue, out _) : true)
                     ));
-            }
-        }
 
         private RelayCommand _clearCommand;
 
@@ -363,6 +386,122 @@ namespace WildberriesParser.ViewModel.Staff
                         return App.Current.Dispatcher.InvokeAsync(() =>
                         {
                             _selectedTraceType = (TraceType)(int)obj;
+                        }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private WbProductPosChanges _selectedEntity;
+
+        public WbProductPosChanges SelectedEntity
+        {
+            get => _selectedEntity;
+            set => Set(ref _selectedEntity, value);
+        }
+
+        private AsyncRelayCommand _PriceDynamicCommand;
+
+        public AsyncRelayCommand PriceDynamicCommand
+        {
+            get
+            {
+                return _PriceDynamicCommand ??
+                    (_PriceDynamicCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            try
+                            {
+                                if (SelectedEntity != null)
+                                {
+                                    var vm = App.ServiceProvider.GetService(typeof(DataProductChangesViewModel)) as DataProductChangesViewModel;
+                                    vm.Article = SelectedEntity.WbProductID.ToString();
+                                    vm.updateData();
+                                    _navigationService.NavigateTo<Data.DataProductChangesViewModel>();
+                                }
+                                else
+                                {
+                                    Helpers.MessageBoxHelper.Error("Вы не выбрали данные!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
+                            }
+                        }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _SalesCommand;
+
+        public AsyncRelayCommand SalesCommand
+        {
+            get
+            {
+                return _SalesCommand ??
+                    (_SalesCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            try
+                            {
+                                if (SelectedEntity != null)
+                                {
+                                    var vm = App.ServiceProvider.GetService(typeof(SellingProductViewModel)) as SellingProductViewModel;
+                                    vm.Article = SelectedEntity.WbProductID.ToString();
+                                    vm.updateData();
+                                    _navigationService.NavigateTo<Data.SellingProductViewModel>();
+                                }
+                                else
+                                {
+                                    Helpers.MessageBoxHelper.Error("Вы не выбрали данные!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
+                            }
+                        }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _TracecxCommand;
+
+        public AsyncRelayCommand TraceCxCommand
+        {
+            get
+            {
+                return _TracecxCommand ??
+                    (_TracecxCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            try
+                            {
+                                if (SelectedEntity != null)
+                                {
+                                    var vm = App.ServiceProvider.GetService(typeof(DataProductPosChangesViewModel)) as DataProductPosChangesViewModel;
+                                    vm.Article = SelectedEntity.WbProductID.ToString();
+                                    vm.updateData();
+                                    _navigationService.NavigateTo<Data.DataProductPosChangesViewModel>();
+                                }
+                                else
+                                {
+                                    Helpers.MessageBoxHelper.Error("Вы не выбрали данные!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
+                            }
                         }).Task;
                     }
                     ));

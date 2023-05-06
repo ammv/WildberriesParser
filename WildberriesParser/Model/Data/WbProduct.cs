@@ -24,6 +24,9 @@ namespace WildberriesParser.Model.Data
         public int ID { get; set; }
         public string Name { get; set; }
         public Nullable<int> WbBrandID { get; set; }
+        public Nullable<int> LastDiscount { get; set; }
+        public Nullable<decimal> LastPriceWithDiscount { get; set; }
+        public Nullable<decimal> LastPriceWithoutDiscount { get; set; }
         public System.DateTime LastUpdate { get; set; }
     
         public virtual WbBrand WbBrand { get; set; }

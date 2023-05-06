@@ -90,7 +90,7 @@
                         materialDesign:ButtonAssist.CornerRadius="10"
                         Height="40">
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="RasterRemove"
+                        <materialDesign:PackIcon Kind="ShoePrint"
                                                  Margin="0 0 10 0"
                                                  VerticalAlignment="Center" />
                         <TextBlock Text="Отследить"
@@ -283,9 +283,23 @@
                       Background="White"
                       SelectionUnit="FullRow"
                       AutoGenerateColumns="False"
+                      SelectedItem="{Binding SelectedEntity, UpdateSourceTrigger=PropertyChanged}"
                       AlternatingRowBackground="#44CCCCCC"
                       Style="{StaticResource MaterialDesignDataGrid}"
                       FocusVisualStyle="{x:Null}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Icon="{materialDesign:PackIcon Kind=ChartLineVariant}"
+                                  Header="Динамика цены"
+                                  Command="{Binding PriceDynamicCommand}" />
+                        <MenuItem Icon="{materialDesign:PackIcon Kind=Sale}"
+                                  Header="Продажи"
+                                  Command="{Binding SalesCommand}" />
+                        <MenuItem Icon="{materialDesign:PackIcon Kind=ShoePrint}"
+                                  Header="Позиции в поиске"
+                                  Command="{Binding TraceCxCommand}" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding WbProductID}">
                         <DataGridTextColumn.Header>

@@ -85,158 +85,164 @@
                 </Button>
             </StackPanel>
 
-            <Grid Grid.RowSpan="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="52" />
-                    <RowDefinition />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
+            <materialDesign:Card Grid.RowSpan="2"
+                                 UniformCornerRadius="10"
+                                 materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                 Background="Transparent">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="52" />
+                        <RowDefinition />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
 
-                <TextBlock Text="WBParser"
-                           TextAlignment="Center"
-                           FontSize="20"
-                           Foreground="{StaticResource PrimaryHueMidBrush}"
-                           VerticalAlignment="Center" />
+                    <TextBlock Text="WBParser"
+                               FontWeight="SemiBold"
+                               TextAlignment="Center"
+                               FontSize="20"
+                               Foreground="{StaticResource PrimaryHueMidBrush}"
+                               VerticalAlignment="Center" />
 
-                <StackPanel Grid.Row="1"
-                            materialDesign:ShadowAssist.ShadowDepth="Depth5">
+                    <StackPanel Grid.Row="1"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5">
 
-                    <RadioButton materialDesign:ButtonAssist.CornerRadius="10"
-                                 Command="{Binding SearchProductsMainCommand}"
-                                 IsChecked="True"
-                                 Height="40"
-                                 HorizontalAlignment="Stretch"
-                                 Margin="0 0 0 15"
-                                 HorizontalContentAlignment="Left"
-                                 Style="{StaticResource MaterialDesignFlatButton}">
-                        <intr:Interaction.Triggers>
-                            <intr:DataTrigger Value="True"
-                                              Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
-                                <intr:ChangePropertyAction PropertyName="Style"
-                                                           Value="{StaticResource MaterialDesignFlatMidBgButton}" />
-                            </intr:DataTrigger>
-                            <intr:DataTrigger Value="False"
-                                              Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
-                                <intr:ChangePropertyAction PropertyName="Style"
-                                                           Value="{StaticResource MaterialDesignFlatButton}" />
-                            </intr:DataTrigger>
-                        </intr:Interaction.Triggers>
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Left">
-                            <materialDesign:PackIcon Kind="ShoppingSearch"
-                                                     VerticalAlignment="Center"
-                                                     Height="32"
-                                                     Width="32"
-                                                     Margin="0 0 10 0" />
-                            <TextBlock Text="Поиск товаров"
-                                       VerticalAlignment="Center"
-                                       FontSize="16" />
-                        </StackPanel>
-                    </RadioButton>
-                    <RadioButton Command="{Binding TraceProductCommand}"
-                                 materialDesign:ButtonAssist.CornerRadius="10"
-                                 Height="40"
-                                 HorizontalAlignment="Stretch"
-                                 Margin="0 0 0 15"
-                                 HorizontalContentAlignment="Left"
-                                 Style="{StaticResource MaterialDesignFlatButton}">
-                        <intr:Interaction.Triggers>
-                            <intr:DataTrigger Value="True"
-                                              Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
-                                <intr:ChangePropertyAction PropertyName="Style"
-                                                           Value="{StaticResource MaterialDesignFlatMidBgButton}" />
-                            </intr:DataTrigger>
-                            <intr:DataTrigger Value="False"
-                                              Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
-                                <intr:ChangePropertyAction PropertyName="Style"
-                                                           Value="{StaticResource MaterialDesignFlatButton}" />
-                            </intr:DataTrigger>
-                        </intr:Interaction.Triggers>
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Left">
-                            <materialDesign:PackIcon Kind="ShoePrint"
-                                                     VerticalAlignment="Center"
-                                                     Height="32"
-                                                     Width="32"
-                                                     Margin="0 0 10 0" />
-                            <TextBlock Text="Слежка товаров"
-                                       VerticalAlignment="Center"
-                                       FontSize="16" />
-                        </StackPanel>
-                    </RadioButton>
+                        <RadioButton materialDesign:ButtonAssist.CornerRadius="10"
+                                     Command="{Binding SearchProductsMainCommand}"
+                                     IsChecked="True"
+                                     Height="40"
+                                     HorizontalAlignment="Stretch"
+                                     Margin="0 0 0 15"
+                                     HorizontalContentAlignment="Left"
+                                     Style="{StaticResource MaterialDesignFlatButton}">
+                            <intr:Interaction.Triggers>
+                                <intr:DataTrigger Value="True"
+                                                  Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                                    <intr:ChangePropertyAction PropertyName="Style"
+                                                               Value="{StaticResource MaterialDesignFlatMidBgButton}" />
+                                </intr:DataTrigger>
+                                <intr:DataTrigger Value="False"
+                                                  Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                                    <intr:ChangePropertyAction PropertyName="Style"
+                                                               Value="{StaticResource MaterialDesignFlatButton}" />
+                                </intr:DataTrigger>
+                            </intr:Interaction.Triggers>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="ShoppingSearch"
+                                                         VerticalAlignment="Center"
+                                                         Height="32"
+                                                         Width="32"
+                                                         Margin="0 0 10 0" />
+                                <TextBlock Text="Поиск товаров"
+                                           VerticalAlignment="Center"
+                                           FontSize="16" />
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Command="{Binding TraceProductCommand}"
+                                     materialDesign:ButtonAssist.CornerRadius="10"
+                                     Height="40"
+                                     HorizontalAlignment="Stretch"
+                                     Margin="0 0 0 15"
+                                     HorizontalContentAlignment="Left"
+                                     Style="{StaticResource MaterialDesignFlatButton}">
+                            <intr:Interaction.Triggers>
+                                <intr:DataTrigger Value="True"
+                                                  Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                                    <intr:ChangePropertyAction PropertyName="Style"
+                                                               Value="{StaticResource MaterialDesignFlatMidBgButton}" />
+                                </intr:DataTrigger>
+                                <intr:DataTrigger Value="False"
+                                                  Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                                    <intr:ChangePropertyAction PropertyName="Style"
+                                                               Value="{StaticResource MaterialDesignFlatButton}" />
+                                </intr:DataTrigger>
+                            </intr:Interaction.Triggers>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="ShoePrint"
+                                                         VerticalAlignment="Center"
+                                                         Height="32"
+                                                         Width="32"
+                                                         Margin="0 0 10 0" />
+                                <TextBlock Text="Слежка товаров"
+                                           VerticalAlignment="Center"
+                                           FontSize="16" />
+                            </StackPanel>
+                        </RadioButton>
 
-                    <RadioButton materialDesign:ButtonAssist.CornerRadius="10"
-                                 Command="{Binding AutomatizationCommand}"
-                                 Height="40"
-                                 HorizontalAlignment="Stretch"
-                                 Margin="0 0 0 15"
-                                 HorizontalContentAlignment="Left"
-                                 Style="{StaticResource MaterialDesignFlatButton}">
-                        <intr:Interaction.Triggers>
-                            <intr:DataTrigger Value="True"
-                                              Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
-                                <intr:ChangePropertyAction PropertyName="Style"
-                                                           Value="{StaticResource MaterialDesignFlatMidBgButton}" />
-                            </intr:DataTrigger>
-                            <intr:DataTrigger Value="False"
-                                              Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
-                                <intr:ChangePropertyAction PropertyName="Style"
-                                                           Value="{StaticResource MaterialDesignFlatButton}" />
-                            </intr:DataTrigger>
-                        </intr:Interaction.Triggers>
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Left">
-                            <materialDesign:PackIcon Kind="RobotIndustrial"
-                                                     VerticalAlignment="Center"
-                                                     Height="32"
-                                                     Width="32"
-                                                     Margin="0 0 10 0" />
-                            <TextBlock Text="Автоматизация"
-                                       VerticalAlignment="Center"
-                                       FontSize="16" />
-                        </StackPanel>
-                    </RadioButton>
+                        <RadioButton materialDesign:ButtonAssist.CornerRadius="10"
+                                     Command="{Binding AutomatizationCommand}"
+                                     Height="40"
+                                     HorizontalAlignment="Stretch"
+                                     Margin="0 0 0 15"
+                                     HorizontalContentAlignment="Left"
+                                     Style="{StaticResource MaterialDesignFlatButton}">
+                            <intr:Interaction.Triggers>
+                                <intr:DataTrigger Value="True"
+                                                  Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                                    <intr:ChangePropertyAction PropertyName="Style"
+                                                               Value="{StaticResource MaterialDesignFlatMidBgButton}" />
+                                </intr:DataTrigger>
+                                <intr:DataTrigger Value="False"
+                                                  Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                                    <intr:ChangePropertyAction PropertyName="Style"
+                                                               Value="{StaticResource MaterialDesignFlatButton}" />
+                                </intr:DataTrigger>
+                            </intr:Interaction.Triggers>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="RobotIndustrial"
+                                                         VerticalAlignment="Center"
+                                                         Height="32"
+                                                         Width="32"
+                                                         Margin="0 0 10 0" />
+                                <TextBlock Text="Автоматизация"
+                                           VerticalAlignment="Center"
+                                           FontSize="16" />
+                            </StackPanel>
+                        </RadioButton>
 
-                    <RadioButton materialDesign:ButtonAssist.CornerRadius="10"
-                                 Command="{Binding DataCommand}"
-                                 Height="40"
-                                 HorizontalAlignment="Stretch"
-                                 Margin="0 0 0 15"
-                                 HorizontalContentAlignment="Left"
-                                 Style="{StaticResource MaterialDesignFlatButton}">
-                        <intr:Interaction.Triggers>
-                            <intr:DataTrigger Value="True"
-                                              Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
-                                <intr:ChangePropertyAction PropertyName="Style"
-                                                           Value="{StaticResource MaterialDesignFlatMidBgButton}" />
-                            </intr:DataTrigger>
-                            <intr:DataTrigger Value="False"
-                                              Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
-                                <intr:ChangePropertyAction PropertyName="Style"
-                                                           Value="{StaticResource MaterialDesignFlatButton}" />
-                            </intr:DataTrigger>
-                        </intr:Interaction.Triggers>
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Left">
-                            <materialDesign:PackIcon Kind="FileDocument"
-                                                     VerticalAlignment="Center"
-                                                     Height="32"
-                                                     Width="32"
-                                                     Margin="0 0 10 0" />
-                            <TextBlock Text="Данные"
-                                       VerticalAlignment="Center"
-                                       FontSize="16" />
-                        </StackPanel>
-                    </RadioButton>
-                </StackPanel>
+                        <RadioButton materialDesign:ButtonAssist.CornerRadius="10"
+                                     Command="{Binding DataCommand}"
+                                     Height="40"
+                                     HorizontalAlignment="Stretch"
+                                     Margin="0 0 0 15"
+                                     HorizontalContentAlignment="Left"
+                                     Style="{StaticResource MaterialDesignFlatButton}">
+                            <intr:Interaction.Triggers>
+                                <intr:DataTrigger Value="True"
+                                                  Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                                    <intr:ChangePropertyAction PropertyName="Style"
+                                                               Value="{StaticResource MaterialDesignFlatMidBgButton}" />
+                                </intr:DataTrigger>
+                                <intr:DataTrigger Value="False"
+                                                  Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton, Mode=FindAncestor}}">
+                                    <intr:ChangePropertyAction PropertyName="Style"
+                                                               Value="{StaticResource MaterialDesignFlatButton}" />
+                                </intr:DataTrigger>
+                            </intr:Interaction.Triggers>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="FileDocument"
+                                                         VerticalAlignment="Center"
+                                                         Height="32"
+                                                         Width="32"
+                                                         Margin="0 0 10 0" />
+                                <TextBlock Text="Данные"
+                                           VerticalAlignment="Center"
+                                           FontSize="16" />
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
 
-                <Button Grid.Row="2"
-                        Command="{Binding ExitAccountCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"
-                        Height="40"
-                        Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialDesign:PackIcon Kind=ExitToApp,Size=32}" />
-            </Grid>
+                    <Button Grid.Row="2"
+                            Command="{Binding ExitAccountCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"
+                            Height="40"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Content="{materialDesign:PackIcon Kind=ExitToApp,Size=32}" />
+                </Grid>
+            </materialDesign:Card>
 
             <TextBlock Grid.Column="1"
                        Text="{Binding NavigationService.CurrentView.Title}"

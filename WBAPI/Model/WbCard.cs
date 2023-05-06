@@ -69,29 +69,29 @@ namespace SimpleWbApi.Model
         [Category("Important")]
         public int sale { get; set; }
 
-        private double _priceU;
+        private decimal _priceU;
 
         [Category("Important")]
         [Description("Цена без скидки")]
-        public double priceU
+        public decimal priceU
         {
             get => _priceU;
             set
             {
-                _priceU = value / 10;
+                _priceU = value / 100;
             }
         }
 
-        private double _salePriceU;
+        private decimal _salePriceU;
 
         [Category("Important")]
         [Description("Цена со скидкой")]
-        public double salePriceU
+        public decimal salePriceU
         {
             get => _salePriceU;
             set
             {
-                _salePriceU = value / 10;
+                _salePriceU = value / 100;
             }
         }
 

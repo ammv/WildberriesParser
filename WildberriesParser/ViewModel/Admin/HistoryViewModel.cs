@@ -54,36 +54,48 @@ namespace WildberriesParser.ViewModel.Admin
             _excelService = excelService;
 
             Logs = new PagedList<Log>(DBEntities.GetContext()
-                                    .Log.OrderByDescending(x => x.ID).ToList(), _pageSizes[_selectedIndex]);
+                                    .Log.OrderByDescending(x => x.Date).ToList(), _pageSizes[_selectedIndex]);
             PagedCommands = new PagedListCommands<Log>(Logs);
         }
 
-        private AsyncRelayCommand _SearchTextChangedCommand;
+        private AsyncRelayCommand _SearchCommand;
 
-        public AsyncRelayCommand SearchTextChangedCommand
+        public AsyncRelayCommand SearchCommand
         {
             get
             {
-                return _SearchTextChangedCommand ??
-                    (_SearchTextChangedCommand = new AsyncRelayCommand
+                return _SearchCommand ??
+                    (_SearchCommand = new AsyncRelayCommand
                     ((obj) =>
                     {
-                        Task task2 = App.Current.Dispatcher.InvokeAsync(() =>
+                        return App.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            if (string.IsNullOrEmpty(_searchText))
+                            try
                             {
-                                Logs = new PagedList<Log>(DBEntities.GetContext()
-                                    .Log.OrderBy(u => u.ID).ToList(), 25);
+                                if (string.IsNullOrEmpty(_searchText))
+                                {
+                                    Logs = new PagedList<Log>(DBEntities.GetContext()
+                                        .Log.OrderByDescending(u => u.ID).ToList(), 25);
+                                }
+                                else if (int.TryParse(SearchText, out int userID))
+                                {
+                                    Logs = new PagedList<Log>(DBEntities.GetContext()
+                                        .Log.Where(u => u.UserID == userID)
+                                        .OrderByDescending(l => l.Date).ToList(), 25);
+                                }
+                                else
+                                {
+                                    Logs = new PagedList<Log>(DBEntities.GetContext()
+                                       .Log.Where(u => u.User.Login.ToLower().Contains(_searchText.ToLower()))
+                                       .OrderByDescending(l => l.Date).ToList(), 25);
+                                }
+                                PagedCommands.Instance = Logs;
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                Logs = new PagedList<Log>(DBEntities.GetContext()
-                                    .Log.Where(u => u.User.Login.Contains(_searchText))
-                                    .OrderBy(l => l.Date).ToList(), 25);
+                                Helpers.MessageBoxHelper.Error(ex.Message);
                             }
-                            PagedCommands.Instance = Logs;
                         }).Task;
-                        return Task.WhenAll(task2);
                     }
                     ));
             }

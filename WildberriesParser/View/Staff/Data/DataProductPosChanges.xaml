@@ -23,8 +23,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="45" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="45" />
-            <RowDefinition Height="20" />
             <RowDefinition />
             <RowDefinition Height="20" />
             <RowDefinition Height="32" />
@@ -37,12 +35,37 @@
             <StackPanel Orientation="Horizontal">
                 <materialDesign:Card VerticalContentAlignment="Center"
                                      UniformCornerRadius="10"
-                                     Width="150"
+                                     Width="125"
                                      materialDesign:ShadowAssist.ShadowDepth="Depth1"
                                      Padding="10"
                                      Margin="0 0 20 0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Tag"
+                                                 Width="24"
+                                                 Height="24"
+                                                 Foreground="#909090"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0 0 10 0" />
+                        <TextBox Text="{Binding Article, UpdateSourceTrigger=PropertyChanged}"
+                                 FontWeight="Regular"
+                                 BorderThickness="0"
+                                 FontSize="14"
+                                 Foreground="#909090"
+                                 materialDesign:TransitionAssist.DisableTransitions="True"
+                                 Style="{StaticResource MaterialDesignTextBox}"
+                                 materialDesign:HintAssist.Hint="Артикул">
+                        </TextBox>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card VerticalContentAlignment="Center"
+                                     UniformCornerRadius="10"
+                                     Width="200"
+                                     materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                     Padding="10"
+                                     Margin="0 0 20 0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="TextSearch"
                                                  Width="24"
                                                  Height="24"
                                                  Foreground="#909090"
@@ -55,86 +78,10 @@
                                  Foreground="#909090"
                                  materialDesign:TransitionAssist.DisableTransitions="True"
                                  Style="{StaticResource MaterialDesignTextBox}"
-                                 materialDesign:HintAssist.Hint="Артикул">
+                                 materialDesign:HintAssist.Hint="Поисковой запрос">
                         </TextBox>
                     </StackPanel>
                 </materialDesign:Card>
-
-                <TextBlock Text="Поисковой запрос:"
-                           Margin="0 0 10 0"
-                           Foreground="#909090"
-                           TextAlignment="Center"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Style="{StaticResource MaterialDesignTextBlock}">
-                </TextBlock>
-
-                <ComboBox Width="250"
-                          IsEditable="True"
-                          Margin="0 0 20 0"
-                          Foreground="#909090"
-                          HorizontalContentAlignment="Center"
-                          ItemsSource="{Binding TracePageCount}"
-                          SelectedIndex="{Binding SelectedTracePageIndex, UpdateSourceTrigger=PropertyChanged}"
-                          Style="{StaticResource MaterialDesignComboBox}">
-                </ComboBox>
-
-                <Button materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsTraceWorking}"
-                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                        Command="{Binding TraceCommand}"
-                        Grid.Column="2"
-                        Height="40">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Search"
-                                                 Margin="0 0 10 0"
-                                                 VerticalAlignment="Center" />
-                        <TextBlock Text="Показать"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal"
-                        Grid.Column="1"
-                        HorizontalAlignment="Right">
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Height="40"
-                        Margin="0 0 20 0"
-                        Command="{Binding ClearCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Remove"
-                                                 Margin="0 0 10 0"
-                                                 VerticalAlignment="Center"
-                                                 Width="20"
-                                                 Height="20" />
-                        <TextBlock Text="Очистить"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
-                        materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsExportWorking}"
-                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                        Height="40"
-                        Command="{Binding ExportCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="FileImport"
-                                                 Margin="0 0 10 0"
-                                                 VerticalAlignment="Center"
-                                                 Width="20"
-                                                 Height="20" />
-                        <TextBlock Text="Импорт"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-        </Grid>
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Left">
 
                 <TextBlock Text="За период c:"
                            Margin="0 0 20 0"
@@ -147,10 +94,12 @@
 
                 <DatePicker Foreground="#909090"
                             FontSize="14"
-                            Width="75"
+                            SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}"
+                            Width="85"
                             Margin="0 0 20 0"
                             HorizontalAlignment="Stretch"
-                            materialDesign:HintAssist.Hint="Дата" />
+                            materialDesign:HintAssist.Hint="Дата">
+                </DatePicker>
 
                 <TextBlock Text="по"
                            Margin="0 0 20 0"
@@ -163,11 +112,88 @@
 
                 <DatePicker Foreground="#909090"
                             FontSize="14"
-                            Width="75"
+                            SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}"
+                            Width="85"
                             Margin="0 0 20 0"
                             HorizontalAlignment="Stretch"
-                            materialDesign:HintAssist.Hint="Дата" />
+                            materialDesign:HintAssist.Hint="Дата">
+                </DatePicker>
+
+                <!--<TextBlock Text="Поисковой запрос:"
+                           Margin="0 0 10 0"
+                           Foreground="#909090"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Style="{StaticResource MaterialDesignTextBlock}">
+                </TextBlock>
+
+                <ComboBox Width="185"
+                          Margin="0 0 5 0"
+                          Foreground="#909090"
+                          FontSize="14"
+                          HorizontalContentAlignment="Center"
+                          IsSynchronizedWithCurrentItem="True"
+                          ItemsSource="{Binding SearchPatterns}"
+                          SelectedIndex="{Binding SelectedSearchPatternIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                          Style="{StaticResource MaterialDesignComboBox}">
+                    <intr:Interaction.Triggers>
+                        <intr:EventTrigger EventName="SelectionChanged">
+                            <intr:InvokeCommandAction Command="{Binding ShowCommand}" />
+                        </intr:EventTrigger>
+                    </intr:Interaction.Triggers>
+                </ComboBox>-->
+
+                <!--<Button Style="{x:Null}"
+                        Margin="0 0 20 0"
+                        Command="{Binding ClearSelectedSearchPatternCommand}"
+                        BorderThickness="0"
+                        Background="Transparent">
+                    <materialDesign:PackIcon Kind="Remove"
+                                             Foreground="#909090" />
+                </Button>-->
+
+                <Button Command="{Binding ShowCommand}"
+                        Grid.Column="2"
+                        materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsShowWorking}"
+                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                        materialDesign:ButtonAssist.CornerRadius="3"
+                        Height="40">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Search"
+                                                 Margin="0 0 10 0"
+                                                 VerticalAlignment="Center" />
+                        <TextBlock Text="Искать"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
             </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right">
+
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                        materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsExportWorking}"
+                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                        Height="40"
+                        Command="{Binding ExportCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FileExport"
+                                                 Margin="0 0 10 0"
+                                                 VerticalAlignment="Center"
+                                                 Width="20"
+                                                 Height="20" />
+                        <TextBlock Text="Экспорт"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
             <!--<StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Left"
@@ -288,15 +314,29 @@
         </Grid>
         <materialDesign:Card UniformCornerRadius="10"
                              materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                             Grid.Row="4">
+                             Grid.Row="2">
             <DataGrid ItemsSource="{Binding ProductPosChanges.DisplayedItems}"
                       IsReadOnly="True"
                       Background="White"
                       SelectionUnit="FullRow"
+                      SelectedItem="{Binding SelectedEntity, UpdateSourceTrigger=PropertyChanged}"
                       AutoGenerateColumns="False"
                       AlternatingRowBackground="#44CCCCCC"
                       Style="{StaticResource MaterialDesignDataGrid}"
                       FocusVisualStyle="{x:Null}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Icon="{materialDesign:PackIcon Kind=ChartLineVariant}"
+                                  Header="Динамика цены"
+                                  Command="{Binding PriceDynamicCommand}" />
+                        <MenuItem Icon="{materialDesign:PackIcon Kind=Sale}"
+                                  Header="Продажи"
+                                  Command="{Binding SalesCommand}" />
+                        <MenuItem Icon="{materialDesign:PackIcon Kind=ShoePrint}"
+                                  Header="Позиции в поиске"
+                                  Command="{Binding TraceCxCommand}" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding WbProductID}">
                         <DataGridTextColumn.Header>

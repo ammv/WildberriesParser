@@ -17,6 +17,7 @@ namespace WildberriesParser.Model.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
+            this.CollectorTask = new HashSet<CollectorTask>();
             this.Log = new HashSet<Log>();
         }
     
@@ -26,6 +27,8 @@ namespace WildberriesParser.Model.Data
         public Nullable<int> RoleID { get; set; }
         public bool CanAuth { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CollectorTask> CollectorTask { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Log> Log { get; set; }
         public virtual Role Role { get; set; }

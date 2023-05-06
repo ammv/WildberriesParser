@@ -25,6 +25,14 @@ namespace WildberriesParser.ViewModel.Admin
         private string _searchText;
         private INavigationService _navigationService;
 
+        private User _selectedUser;
+
+        public User SelectedUser
+        {
+            get => _selectedUser;
+            set => Set(ref _selectedUser, value);
+        }
+
         public PagedList<User> Users
         {
             get => _users;
@@ -54,8 +62,74 @@ namespace WildberriesParser.ViewModel.Admin
 
         private void LoadUsers()
         {
-            Users = new PagedList<User>(DBEntities.GetContext().User.OrderBy(u => u.ID), _pageSizes[_selectedIndex]);
+            Users = new PagedList<User>(DBEntities.GetContext().User.OrderByDescending(u => u.ID), _pageSizes[_selectedIndex]);
             PagedCommands = new PagedListCommands<User>(Users);
+        }
+
+        private AsyncRelayCommand _RemoveCommand;
+
+        public AsyncRelayCommand RemoveCommand
+        {
+            get
+            {
+                return _RemoveCommand ??
+                    (_RemoveCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(async () =>
+                       {
+                           if (SelectedUser != null)
+                           {
+                               if (Helpers.MessageBoxHelper.Question($"Вы уверены, что хотите удалить пользователя {SelectedUser.Login}?") ==
+                                   Helpers.MessageBoxHelperResult.YES)
+                               {
+                                   DBEntities.GetContext().User.Remove(SelectedUser);
+                                   await DBEntities.GetContext().SaveChangesAsync();
+                                   updateUsers();
+                               }
+                           }
+                       }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _EditCommand;
+
+        public AsyncRelayCommand EditCommand
+        {
+            get
+            {
+                return _EditCommand ??
+                    (_EditCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                       {
+                           Helpers.MessageBoxHelper.Error("Еще не реализовано!");
+                       }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _HistoryCommand;
+
+        public AsyncRelayCommand HistoryCommand
+        {
+            get
+            {
+                return _HistoryCommand ??
+                    (_HistoryCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            Helpers.MessageBoxHelper.Error("Еще не реализовано!");
+                        }).Task;
+                    }
+                    ));
+            }
         }
 
         private RelayCommand _AddUserCommand;
@@ -103,25 +177,36 @@ namespace WildberriesParser.ViewModel.Admin
                     (_SearchTextChangedCommand = new AsyncRelayCommand
                     ((obj) =>
                     {
-                        Task task2 = App.Current.Dispatcher.InvokeAsync(() =>
+                        return System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            if (string.IsNullOrEmpty(_searchText))
+                            try
                             {
-                                Users = new PagedList<User>(DBEntities.GetContext()
-                                    .User.OrderByDescending(u => u.ID), _pageSizes[_selectedIndex]);
+                                updateUsers();
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                Users = new PagedList<User>(DBEntities.GetContext()
-                                    .User.Where(u => u.Login.Contains(_searchText))
-                                    .OrderByDescending(l => l.ID), _pageSizes[_selectedIndex]);
+                                Helpers.MessageBoxHelper.Error(ex.Message);
                             }
-                            PagedCommands.Instance = Users;
                         }).Task;
-                        return Task.WhenAll(task2);
                     }
                     ));
             }
+        }
+
+        private void updateUsers()
+        {
+            if (string.IsNullOrEmpty(_searchText))
+            {
+                Users = new PagedList<User>(DBEntities.GetContext()
+                    .User.OrderByDescending(u => u.ID), _pageSizes[_selectedIndex]);
+            }
+            else
+            {
+                Users = new PagedList<User>(DBEntities.GetContext()
+                    .User.Where(u => u.Login.Contains(_searchText))
+                    .OrderByDescending(l => l.ID), _pageSizes[_selectedIndex]);
+            }
+            PagedCommands.Instance = Users;
         }
 
         private AsyncRelayCommand _exportCommand;

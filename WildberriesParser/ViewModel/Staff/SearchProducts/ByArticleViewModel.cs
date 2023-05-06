@@ -17,6 +17,7 @@ using System.Windows.Controls;
 using System.Diagnostics;
 using SimpleWbApi;
 using SimpleWbApi.Model;
+using WildberriesParser.ViewModel.Staff.Data;
 
 namespace WildberriesParser.ViewModel.Staff.SearchProducts
 {
@@ -89,6 +90,122 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
             return product;
         }
 
+        private WbCard _selectedEntity;
+
+        public WbCard SelectedEntity
+        {
+            get => _selectedEntity;
+            set => Set(ref _selectedEntity, value);
+        }
+
+        private AsyncRelayCommand _PriceDynamicCommand;
+
+        public AsyncRelayCommand PriceDynamicCommand
+        {
+            get
+            {
+                return _PriceDynamicCommand ??
+                    (_PriceDynamicCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            try
+                            {
+                                if (SelectedEntity != null)
+                                {
+                                    var vm = App.ServiceProvider.GetService(typeof(DataProductChangesViewModel)) as DataProductChangesViewModel;
+                                    vm.Article = SelectedEntity.id.ToString();
+                                    vm.updateData();
+                                    _navigationService.NavigateTo<Data.DataProductChangesViewModel>();
+                                }
+                                else
+                                {
+                                    Helpers.MessageBoxHelper.Error("Вы не выбрали данные!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
+                            }
+                        }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _SalesCommand;
+
+        public AsyncRelayCommand SalesCommand
+        {
+            get
+            {
+                return _SalesCommand ??
+                    (_SalesCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            try
+                            {
+                                if (SelectedEntity != null)
+                                {
+                                    var vm = App.ServiceProvider.GetService(typeof(SellingProductViewModel)) as SellingProductViewModel;
+                                    vm.Article = SelectedEntity.id.ToString();
+                                    vm.updateData();
+                                    _navigationService.NavigateTo<Data.SellingProductViewModel>();
+                                }
+                                else
+                                {
+                                    Helpers.MessageBoxHelper.Error("Вы не выбрали данные!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
+                            }
+                        }).Task;
+                    }
+                    ));
+            }
+        }
+
+        private AsyncRelayCommand _TracecxCommand;
+
+        public AsyncRelayCommand TraceCxCommand
+        {
+            get
+            {
+                return _TracecxCommand ??
+                    (_TracecxCommand = new AsyncRelayCommand
+                    ((obj) =>
+                    {
+                        return App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            try
+                            {
+                                if (SelectedEntity != null)
+                                {
+                                    var vm = App.ServiceProvider.GetService(typeof(DataProductPosChangesViewModel)) as DataProductPosChangesViewModel;
+                                    vm.Article = SelectedEntity.id.ToString();
+                                    vm.updateData();
+                                    _navigationService.NavigateTo<Data.DataProductPosChangesViewModel>();
+                                }
+                                else
+                                {
+                                    Helpers.MessageBoxHelper.Error("Вы не выбрали данные!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
+                            }
+                        }).Task;
+                    }
+                    ));
+            }
+        }
+
         private void AddProductToDB(WbCard wbProduct)
         {
             if (DBEntities.GetContext().WbBrand.FirstOrDefault(b => b.ID == wbProduct.brandId) == null)
@@ -102,7 +219,7 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                 DBEntities.GetContext().SaveChanges();
             }
 
-            Model.Data.WbProduct findProduct = DBEntities.GetContext().WbProduct.FirstOrDefault(x => x.ID == wbProduct.id);
+            WbProduct findProduct = DBEntities.GetContext().WbProduct.FirstOrDefault(x => x.ID == wbProduct.id);
             DateTime now = DateTime.Now.Date;
 
             if (findProduct == null)
@@ -112,6 +229,9 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     ID = wbProduct.id,
                     Name = wbProduct.name,
                     WbBrandID = wbProduct.brandId,
+                    LastDiscount = wbProduct.sale,
+                    LastPriceWithDiscount = wbProduct.salePriceU,
+                    LastPriceWithoutDiscount = wbProduct.priceU,
                     LastUpdate = now
                 };
 
@@ -122,8 +242,8 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     WbProduct = newProduct,
                     Date = now,
                     Discount = wbProduct.sale,
-                    PriceWithDiscount = (int)wbProduct.salePriceU,
-                    PriceWithoutDiscount = (int)wbProduct.priceU,
+                    PriceWithDiscount = wbProduct.salePriceU,
+                    PriceWithoutDiscount = wbProduct.priceU,
                     Quantity = wbProduct.Quantity ?? 0
                 });
 
@@ -134,6 +254,9 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                 if (findProduct.LastUpdate.Date < now)
                 {
                     findProduct.LastUpdate = now;
+                    findProduct.LastDiscount = wbProduct.sale;
+                    findProduct.LastPriceWithDiscount = wbProduct.salePriceU;
+                    findProduct.LastPriceWithoutDiscount = wbProduct.priceU;
 
                     DBEntities.GetContext().WbProductChanges.Add(new WbProductChanges
                     {
@@ -161,17 +284,25 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                         return App.Current.Dispatcher.InvokeAsync(async () =>
                         {
                             IsSearchWorking = true;
-                            WbCard product = await _Search();
-
-                            if (product != null)
+                            try
                             {
-                                _originalProducts.Add(product);
+                                WbCard product = await _Search();
 
-                                Products = new PagedList<WbCard>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
-                                _pagedCommands.Instance = Products;
+                                if (product != null)
+                                {
+                                    _originalProducts.Add(product);
 
-                                AddProductToDB(product);
+                                    Products = new PagedList<WbCard>(_originalProducts.Reverse(), _pageSizes[_selectedIndex]);
+                                    _pagedCommands.Instance = Products;
+
+                                    AddProductToDB(product);
+                                }
                             }
+                            catch (Exception ex)
+                            {
+                                Helpers.MessageBoxHelper.Error(ex.Message);
+                            }
+
                             IsSearchWorking = false;
                         }).Task;
                     },
@@ -210,63 +341,67 @@ namespace WildberriesParser.ViewModel.Staff.SearchProducts
                     {
                         return App.Current.Dispatcher.InvokeAsync(() =>
                         {
-                            string path = _excelService.ShowSaveAsFileDialog();
-                            if (path == null)
-                            {
-                                Helpers.MessageBoxHelper.Error("Вы не выбрали файл!");
-                                return;
-                            }
-
                             IsExportWorking = true;
-                            Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
-                            data.Add("Артикул", new List<object>());
-                            data.Add("Ссылка", new List<object>());
-                            data.Add("Название", new List<object>());
-                            data.Add("Бренд", new List<object>());
-                            data.Add("Остатки", new List<object>());
-                            data.Add("Скидка", new List<object>());
-                            data.Add("Цена без скидки", new List<object>());
-                            data.Add("Цена со скидкой", new List<object>());
-                            data.Add("Рейтинг", new List<object>());
-                            data.Add("Отзывы", new List<object>());
-                            data.Add("Промо текст", new List<object>());
 
-                            foreach (var product in _originalProducts)
-                            {
-                                data["Артикул"].Add(product.id);
-                                data["Ссылка"].Add($@"https://www.wildberries.ru/catalog/{product.id}/detail.aspx");
-                                data["Название"].Add(product.name);
-                                data["Бренд"].Add(product.brand);
-                                data["Остатки"].Add(product.Quantity);
-                                data["Скидка"].Add(product.sale);
-                                data["Цена без скидки"].Add(product.priceU);
-                                data["Цена со скидкой"].Add(product.salePriceU);
-                                data["Рейтинг"].Add(product.rating);
-                                data["Отзывы"].Add(product.feedbacks);
-                                data["Промо текст"].Add(product.promoTextCat);
-                            }
                             try
                             {
-                                var columns = ExcelColumn.FromDictionary(data);
-                                columns[1].CellFormatType = ExcelCellFormatType.Hyperlink;
-                                _excelService.Export(columns, path, "Карточки");
-                                if (Helpers.MessageBoxHelper.Question("Экcпортировано успешно! Открыть файл?") == Helpers.MessageBoxHelperResult.YES)
-                                {
-                                    Process.Start(path);
-                                }
+                                _exportWork();
                             }
                             catch (Exception ex)
                             {
                                 Helpers.MessageBoxHelper.Error($"Во время экспорта произошла ошибка:\n{ex.Message}");
                             }
-                            finally
-                            {
-                                IsExportWorking = false;
-                            }
+                            IsExportWorking = false;
                         }).Task;
                     },
                     (obj) => !IsExportWorking
                     ));
+            }
+        }
+
+        private void _exportWork()
+        {
+            string path = _excelService.ShowSaveAsFileDialog();
+            if (path == null)
+            {
+                Helpers.MessageBoxHelper.Error("Вы не выбрали файл!");
+                return;
+            }
+
+            Dictionary<string, List<object>> data = new Dictionary<string, List<object>>();
+            data.Add("Артикул", new List<object>());
+            data.Add("Ссылка", new List<object>());
+            data.Add("Название", new List<object>());
+            data.Add("Бренд", new List<object>());
+            data.Add("Остатки", new List<object>());
+            data.Add("Скидка", new List<object>());
+            data.Add("Цена без скидки", new List<object>());
+            data.Add("Цена со скидкой", new List<object>());
+            data.Add("Рейтинг", new List<object>());
+            data.Add("Отзывы", new List<object>());
+            data.Add("Промо текст", new List<object>());
+
+            foreach (var product in _originalProducts)
+            {
+                data["Артикул"].Add(product.id);
+                data["Ссылка"].Add($@"https://www.wildberries.ru/catalog/{product.id}/detail.aspx");
+                data["Название"].Add(product.name);
+                data["Бренд"].Add(product.brand);
+                data["Остатки"].Add(product.Quantity);
+                data["Скидка"].Add(product.sale);
+                data["Цена без скидки"].Add(product.priceU);
+                data["Цена со скидкой"].Add(product.salePriceU);
+                data["Рейтинг"].Add(product.rating);
+                data["Отзывы"].Add(product.feedbacks);
+                data["Промо текст"].Add(product.promoTextCat);
+            }
+
+            var columns = ExcelColumn.FromDictionary(data);
+            columns[1].CellFormatType = ExcelCellFormatType.Hyperlink;
+            _excelService.Export(columns, path, "Карточки");
+            if (Helpers.MessageBoxHelper.Question("Экcпортировано успешно! Открыть файл?") == Helpers.MessageBoxHelperResult.YES)
+            {
+                Process.Start(path);
             }
         }
 

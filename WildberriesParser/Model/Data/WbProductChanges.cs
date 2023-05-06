@@ -18,8 +18,8 @@ namespace WildberriesParser.Model.Data
         public Nullable<int> WbProductID { get; set; }
         public System.DateTime Date { get; set; }
         public int Discount { get; set; }
-        public int PriceWithDiscount { get; set; }
-        public int PriceWithoutDiscount { get; set; }
+        public decimal PriceWithDiscount { get; set; }
+        public decimal PriceWithoutDiscount { get; set; }
         public int Quantity { get; set; }
     
         public virtual WbProduct WbProduct { get; set; }

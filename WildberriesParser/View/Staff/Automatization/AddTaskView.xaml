@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="WildberriesParser.View.Staff.Automatization.AddTaskView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WildberriesParser.View.Staff.Automatization"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:intr="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:core="clr-namespace:WildberriesParser.Infastructure.Core"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             d:DesignHeight="700"
+             d:DesignWidth="980"
+             Background="Transparent">
+    <materialDesign:Card UniformCornerRadius="10"
+                         materialDesign:ShadowAssist.ShadowDepth="Depth1">
+        <Grid HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="350" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Ellipse Fill="{StaticResource PrimaryHueMidBrush}"
+                     Height="100"
+                     Width="100"
+                     Grid.Column="1" />
+            <materialDesign:PackIcon Kind="{Binding CurrentIcon, UpdateSourceTrigger=PropertyChanged}"
+                                     x:Name="IconImage"
+                                     Height="64"
+                                     Grid.Column="1"
+                                     Width="64"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="White" />
+
+            <ComboBox Grid.Column="1"
+                      HorizontalAlignment="Stretch"
+                      ItemsSource="{Binding CollectorTaskTypes}"
+                      SelectedItem="{Binding SelectedCollectorTaskType, UpdateSourceTrigger=PropertyChanged}"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="ID"
+                      Grid.Row="2"
+                      materialDesign:HintAssist.Hint="Выберите тип задачи">
+            </ComboBox>
+
+            <ContentControl Content="{Binding TaskNavigationService.CurrentView}"
+                            Grid.Column="1"
+                            Grid.Row="4" />
+
+            <Button Grid.Row="10"
+                    Command="{Binding BackCommand}"
+                    Grid.Column="1"
+                    VerticalAlignment="Bottom"
+                    Content="Назад"
+                    Style="{StaticResource MaterialDesignFlatButton}" />
+        </Grid>
+    </materialDesign:Card>
+</UserControl>

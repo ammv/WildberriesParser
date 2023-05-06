@@ -38,7 +38,7 @@
                                                  VerticalAlignment="Center"
                                                  Margin="0 0 10 0" />
                         <TextBox Width="250"
-                                 Height="40"
+                                 Height="25"
                                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                  FontWeight="Regular"
                                  BorderThickness="0"
@@ -46,10 +46,22 @@
                                  Foreground="#909090"
                                  materialDesign:TransitionAssist.DisableTransitions="True"
                                  Style="{StaticResource MaterialDesignTextBox}"
-                                 materialDesign:HintAssist.Hint="Поиск логов">
+                                 materialDesign:HintAssist.Hint="ID или имя пользователя">
                         </TextBox>
                     </StackPanel>
                 </materialDesign:Card>
+                <Button Command="{Binding SearchCommand}"
+                        Grid.Column="2"
+                        materialDesign:ButtonAssist.CornerRadius="3"
+                        Height="40">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Search"
+                                                 Margin="0 0 10 0"
+                                                 VerticalAlignment="Center" />
+                        <TextBlock Text="Искать"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         Grid.Column="1"

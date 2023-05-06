@@ -72,7 +72,7 @@ namespace WildberriesParser.ViewModel.Staff
                     (_automatizationCommand = new RelayCommand
                     ((obj) =>
                     {
-                        NavigationService.NavigateTo<NotImplementedViewModel>();
+                        NavigationService.NavigateTo<AutomatizationViewModel>();
                     }
                     ));
             }

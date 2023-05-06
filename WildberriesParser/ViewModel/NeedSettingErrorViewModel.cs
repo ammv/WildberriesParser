@@ -23,17 +23,24 @@ namespace WildberriesParser.ViewModel
                     (_runAsAdminCommand = new RelayCommand
                     ((obj) =>
                     {
-                        Process proc = new Process();
-                        proc.StartInfo.FileName = System.Reflection.Assembly.GetEntryAssembly().Location;
-                        proc.StartInfo.UseShellExecute = true;
-                        proc.StartInfo.Verb = "runas";
-                        if (proc.Start())
+                        try
                         {
-                            System.Windows.Application.Current.Shutdown();
+                            Process proc = new Process();
+                            proc.StartInfo.FileName = System.Reflection.Assembly.GetEntryAssembly().Location;
+                            proc.StartInfo.UseShellExecute = true;
+                            proc.StartInfo.Verb = "runas";
+                            if (proc.Start())
+                            {
+                                System.Windows.Application.Current.Shutdown();
+                            }
+                            else
+                            {
+                                Helpers.MessageBoxHelper.Error("Не удалось перезапустить программу от имени администратора");
+                            }
                         }
-                        else
+                        catch (System.Exception ex)
                         {
-                            Helpers.MessageBoxHelper.Error("Не удалось перезапустить программу от имени администратора");
+                            Helpers.MessageBoxHelper.Error(ex.Message);
                         }
                     }
                     ));
