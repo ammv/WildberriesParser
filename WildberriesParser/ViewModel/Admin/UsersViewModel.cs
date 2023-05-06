@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WildberriesParser.Model.Data;
+using DataLayer;
 using WildberriesParser.Services;
 using System.Linq;
 using System.Data.Entity;

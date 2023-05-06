@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Windows;
 using WildberriesParser.Infastructure.Core;
-using WildberriesParser.Model.Data;
+using DataLayer;
 using WildberriesParser.Services;
 
 namespace WildberriesParser

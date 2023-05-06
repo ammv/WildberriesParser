@@ -4,17 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using WildberriesParser.Helpers;
 using WildberriesParser.Infastructure.Commands;
-using WildberriesParser.Model.Data;
+using DataLayer;
 using WildberriesParser.Services;
 
 namespace WildberriesParser.ViewModel
 {
     public class SettingDatabaseServerViewModel : Infastructure.Core.ViewModelBase
     {
-        private string _login = Properties.Settings.Default.login;
-        private string _password = Properties.Settings.Default.password;
-        private string _server = Properties.Settings.Default.server;
-        private string _databaseName = Properties.Settings.Default.database;
+        private string _login = DataLayer.Properties.Settings.Default.login;
+        private string _password = DataLayer.Properties.Settings.Default.password;
+        private string _server = DataLayer.Properties.Settings.Default.server;
+        private string _databaseName = DataLayer.Properties.Settings.Default.database;
         private string _checkState = "Проверить подключение";
         private bool _isConnected = false;
         private bool _canCheck = false;
@@ -164,12 +164,12 @@ namespace WildberriesParser.ViewModel
                 return;
             }
 
-            Properties.Settings.Default.ConnectionString = efconn;
-            Properties.Settings.Default.login = _login;
-            Properties.Settings.Default.password = _password;
-            Properties.Settings.Default.server = _server;
-            Properties.Settings.Default.database = _databaseName;
-            Properties.Settings.Default.Save();
+            DataLayer.Properties.Settings.Default.ConnectionString = efconn;
+            DataLayer.Properties.Settings.Default.login = _login;
+            DataLayer.Properties.Settings.Default.password = _password;
+            DataLayer.Properties.Settings.Default.server = _server;
+            DataLayer.Properties.Settings.Default.database = _databaseName;
+            DataLayer.Properties.Settings.Default.Save();
             IsConnected = true;
             CheckState = "Готово";
 

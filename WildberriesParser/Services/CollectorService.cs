@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using WildberriesParser.Model.Data;
+using DataLayer;
 
 namespace WildberriesParser.Services
 {

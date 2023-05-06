@@ -3,16 +3,10 @@ using System.Data;
 using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-using WildberriesParser.Model.Data;
+using DataLayer;
 
 namespace WildberriesParser.Helpers
 {
-    internal enum SQLProvider
-    {
-        MSSQL,
-        MySQL
-    }
-
     public struct CheckResult
     {
         public bool Result;
@@ -79,20 +73,11 @@ namespace WildberriesParser.Helpers
             return builder.ConnectionString;
         }
 
-        public static string CreateEFConnectionString(string connectionString, SQLProvider provider = SQLProvider.MSSQL)
+        public static string CreateEFConnectionString(string connectionString)
         {
             var entityBuilder = new EntityConnectionStringBuilder();
 
-            if (provider == SQLProvider.MSSQL)
-            {
-                // WARNING
-                // Check app config and set the appropriate DBModel
-                entityBuilder.Provider = "System.Data.SqlClient";
-            }
-            else if (provider == SQLProvider.MySQL)
-            {
-                entityBuilder.Provider = "MySql.Data.MySqlClient";
-            }
+            entityBuilder.Provider = "System.Data.SqlClient";
 
             entityBuilder.ProviderConnectionString = connectionString + ";App=EntityFramework;";
             entityBuilder.Metadata = @"res://*/Model.Data.DBModel.csdl|res://*/Model.Data.DBModel.ssdl|res://*/Model.Data.DBModel.msl";

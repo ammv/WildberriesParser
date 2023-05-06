@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using WildberriesParser.Infastructure.Commands;
-using WildberriesParser.Model.Data;
+using DataLayer;
 using WildberriesParser.Services;
 
 namespace WildberriesParser.ViewModel
@@ -105,18 +105,18 @@ namespace WildberriesParser.ViewModel
             await PrettyIncrementValue(12);
 
             State = "Проверка настроек...";
-            bool hasDbConnectionString = !(string.IsNullOrEmpty(Properties.Settings.Default.ConnectionString) ||
-                string.IsNullOrWhiteSpace(Properties.Settings.Default.ConnectionString));
+            bool hasDbConnectionString = !(string.IsNullOrEmpty(DataLayer.Properties.Settings.Default.ConnectionString) ||
+                string.IsNullOrWhiteSpace(DataLayer.Properties.Settings.Default.ConnectionString));
             await PrettyIncrementValue(12);
 
             State = "Проверка подключения к базе данных...";
-            bool hasDbConnection = hasDbConnectionString && DBEntities.CheckConnectionString(Properties.Settings.Default.ConnectionString);
+            bool hasDbConnection = hasDbConnectionString && DBEntities.CheckConnectionString(DataLayer.Properties.Settings.Default.ConnectionString);
             await PrettyIncrementValue(36);
 
             State = "Соеденение с базой данных...";
             if (hasDbConnection)
             {
-                DBEntities.SetContext(Properties.Settings.Default.ConnectionString);
+                DBEntities.SetContext(DataLayer.Properties.Settings.Default.ConnectionString);
             }
             await PrettyIncrementValue(36);
 

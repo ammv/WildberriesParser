@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WildberriesParser.Model;
-using WildberriesParser.Model.Data;
+using DataLayer;
 
 namespace WildberriesParser.Services
 {

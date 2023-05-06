@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WildberriesParser.Infastructure.Commands;
 using WildberriesParser.Infastructure.Core;
-using WildberriesParser.Model.Data;
+using DataLayer;
 using WildberriesParser.Services;
 
 namespace WildberriesParser.ViewModel.Staff.Data

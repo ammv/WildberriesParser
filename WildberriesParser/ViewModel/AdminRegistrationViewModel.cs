@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using WildberriesParser.Infastructure.Commands;
-using WildberriesParser.Model.Data;
+using DataLayer;
 using WildberriesParser.Services;
 
 namespace WildberriesParser.ViewModel

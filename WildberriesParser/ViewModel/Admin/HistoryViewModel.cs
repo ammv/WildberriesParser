@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using WildberriesParser.Infastructure.Core;
-using WildberriesParser.Model.Data;
+using DataLayer;
 using WildberriesParser.Services;
 using System.Linq;
 using System.Data.Entity;

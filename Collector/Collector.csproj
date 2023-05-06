@@ -52,13 +52,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj">
+      <Project>{32a500a9-8e44-4d18-bb79-637d652dbd88}</Project>
+      <Name>DataLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WBAPI\SimpleWbApi.csproj">
       <Project>{d2256de4-5fef-4c13-82fe-79be4923d485}</Project>
       <Name>SimpleWbApi</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
